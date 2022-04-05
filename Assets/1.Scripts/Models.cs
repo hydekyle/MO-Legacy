@@ -7,9 +7,21 @@ using Sirenix.OdinInspector;
 
 public enum TriggerType { player, other }
 
+public class Entity : MonoBehaviour
+{
+    public Sprite sprite;
+    public float movementSpeed;
+
+    public void Move(Vector2 dir)
+    {
+        transform.position = Vector2.MoveTowards(transform.position, transform.position + new Vector3(dir.x, dir.y, 0), Time.deltaTime * movementSpeed);
+    }
+}
+
 [Serializable]
 public struct Item
 {
+    [PreviewField(50, ObjectFieldAlignment.Right)]
     public Sprite sprite;
     public string name;
     public string description;

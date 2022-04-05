@@ -7,18 +7,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using UnityObservables;
 using UnityEngine.Events;
+using Sirenix.OdinInspector;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    [OnValueChanged("OnGameDataChanged")]
     public GameData gameData;
     [HideInInspector]
     public UnityEvent onGameDataChanged;
-
-    void OnValidate()
-    {
-        onGameDataChanged.Invoke();
-    }
 
     void Awake()
     {
@@ -67,12 +64,17 @@ public class GameManager : MonoBehaviour
     public void SetSwitch(string switchName, bool value)
     {
         gameData.switches[switchName] = value;
-        onGameDataChanged.Invoke();
+        OnGameDataChanged();
     }
 
     public void SetVariable(string variableName, int value)
     {
         gameData.variables[variableName] = value;
+        OnGameDataChanged();
+    }
+
+    void OnGameDataChanged()
+    {
         onGameDataChanged.Invoke();
     }
 
@@ -100,6 +102,7 @@ public class GameManager : MonoBehaviour
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(savePath, FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
+            OnGameDataChanged(); // Calling event manually since loading can't do it
         }
         else
         {

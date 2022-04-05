@@ -49,7 +49,3 @@ MonoBehaviour:
     name: 
     description: 
     isUsable: 0
-  - sprite: {fileID: 0}
-    name: 
-    description: 
-    isUsable: 0
