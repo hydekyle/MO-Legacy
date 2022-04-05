@@ -16,7 +16,21 @@ public class TriggerZone : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        switch (triggerType)
+        {
+            case TriggerType.player: PlayerEnter(); break;
+            case TriggerType.other: OtherEnter(other.gameObject); break;
+        }
+    }
+
+    void PlayerEnter()
+    {
         if (other.CompareTag("Player")) onEnter.Invoke();
+    }
+
+    void OtherEnter(GameObject other)
+    {
+        if (this.other == other) onEnter.Invoke();
     }
 
 }

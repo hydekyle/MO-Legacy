@@ -25,6 +25,20 @@ public struct GameData
 }
 
 [Serializable]
+public class Switch
+{
+    public string ID;
+    public bool value;
+}
+
+[Serializable]
+public class Variable
+{
+    public string ID;
+    public int value;
+}
+
+[Serializable]
 public class Switches : UnitySerializedDictionary<string, bool> { }
 
 [Serializable]

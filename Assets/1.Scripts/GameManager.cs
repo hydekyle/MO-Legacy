@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameData gameData;
+    [HideInInspector]
     public UnityEvent onGameDataChanged;
 
     void OnValidate()
@@ -30,10 +31,10 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F6)) SaveGameDataSlot(0);
         if (Input.GetKeyDown(KeyCode.F9)) LoadGameDataSlot(0);
-        if (Input.GetKeyDown(KeyCode.Space)) Test();
+        if (Input.GetKeyDown(KeyCode.Space)) SwitchTest();
     }
 
-    void Test()
+    void SwitchTest()
     {
         SetSwitch("test2", !GetSwitch("test2"));
     }
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
         gameData.variables[variableName] = value;
         onGameDataChanged.Invoke();
     }
+
     /// <summary>Saves GameManager Data in the user system</summary>
     public void SaveGameDataSlot(int slotIndex)
     {
@@ -84,6 +86,7 @@ public class GameManager : MonoBehaviour
         FileStream file = File.Create(savePath);
         bf.Serialize(file, saveData);
         file.Close();
+        print("Game Save Success");
     }
 
     /// <summary>Load previous GameManager Data if exist</summary>
@@ -93,7 +96,7 @@ public class GameManager : MonoBehaviour
         var savePath = string.Concat(Application.persistentDataPath, fileName);
         if (File.Exists(savePath))
         {
-            Debug.Log("Loading Saved Game");
+            print("Game Load Success");
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(savePath, FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
