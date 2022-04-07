@@ -12,9 +12,9 @@ public class Entity : MonoBehaviour
     public Sprite sprite;
     public float movementSpeed;
 
-    public void Move(Vector2 dir)
+    public void Move(Vector3 dir)
     {
-        transform.position = Vector2.MoveTowards(transform.position, transform.position + new Vector3(dir.x, dir.y, 0), Time.deltaTime * movementSpeed);
+        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(dir.x, dir.y, 0), Time.deltaTime * movementSpeed);
     }
 }
 

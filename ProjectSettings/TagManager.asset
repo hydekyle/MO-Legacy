@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Light1
+    uniqueID: 102742699
+    locked: 0
+  - name: Light2
+    uniqueID: 1952970847
+    locked: 0
+  - name: No Light
+    uniqueID: 1598042183
+    locked: 0
