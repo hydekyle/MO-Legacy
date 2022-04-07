@@ -26,5 +26,13 @@ public class Helpers
         }
     }
 
+    public static FaceDirection GetFaceDirectionByDir(Vector3 dir)
+    {
+        if (dir.y < 0) return FaceDirection.South;
+        else if (dir.x < 0) return FaceDirection.West;
+        else if (dir.x > 0) return FaceDirection.East;
+        else return FaceDirection.North;
+    }
+
 }
 
