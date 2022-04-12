@@ -10,19 +10,21 @@ public class Conditionality : MonoBehaviour
     public Switch[] requiredSwitchList;
     public Variable[] requiredVariableList;
 
-    void OnEnable()
+    void Awake()
     {
         SubscribeToRequiredConditions();
+        SetActiveIfAllConditionsOK();
     }
 
-    void OnDisable()
+    void SetActiveIfAllConditionsOK()
     {
-        UnSubscribeToRequiredConditions();
+        gameObject.SetActive(isAllConditionsOK());
     }
 
-    void OnChangedValues()
+    // Called every time a required switch or variable changes the value
+    void OnRequiredConditionValueChanged()
     {
-        transform.GetChild(0).gameObject.SetActive(isAllConditionsOK());
+        SetActiveIfAllConditionsOK();
     }
 
     void SubscribeToRequiredConditions()
@@ -33,7 +35,7 @@ public class Conditionality : MonoBehaviour
             {
                 GameManager.Instance.SetSwitch(s.ID, false);
             }
-            GameManager.Instance.gameData.switches[s.ID].OnChanged += OnChangedValues;
+            GameManager.Instance.gameData.switches[s.ID].OnChanged += OnRequiredConditionValueChanged;
         }
         foreach (var v in requiredVariableList)
         {
@@ -41,7 +43,7 @@ public class Conditionality : MonoBehaviour
             {
                 GameManager.Instance.SetVariable(v.ID, 0);
             }
-            GameManager.Instance.gameData.variables[v.ID].OnChanged += OnChangedValues;
+            GameManager.Instance.gameData.variables[v.ID].OnChanged += OnRequiredConditionValueChanged;
         }
     }
 
@@ -49,11 +51,11 @@ public class Conditionality : MonoBehaviour
     {
         foreach (var s in requiredSwitchList)
         {
-            GameManager.Instance.gameData.switches[s.ID].OnChanged -= OnChangedValues;
+            GameManager.Instance.gameData.switches[s.ID].OnChanged -= OnRequiredConditionValueChanged;
         }
         foreach (var v in requiredVariableList)
         {
-            GameManager.Instance.gameData.variables[v.ID].OnChanged -= OnChangedValues;
+            GameManager.Instance.gameData.variables[v.ID].OnChanged -= OnRequiredConditionValueChanged;
         }
     }
 

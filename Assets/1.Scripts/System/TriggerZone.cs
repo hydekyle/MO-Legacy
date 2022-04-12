@@ -14,16 +14,16 @@ public class TriggerZone : MonoBehaviour
     [Space(10)]
     public UnityEvent onEnter;
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D col)
     {
         switch (triggerType)
         {
-            case TriggerType.player: PlayerEnter(); break;
-            case TriggerType.other: OtherEnter(other.gameObject); break;
+            case TriggerType.player: PlayerEnter(col.gameObject); break;
+            case TriggerType.other: OtherEnter(col.gameObject); break;
         }
     }
 
-    void PlayerEnter()
+    void PlayerEnter(GameObject other)
     {
         if (other.CompareTag("Player")) onEnter.Invoke();
     }

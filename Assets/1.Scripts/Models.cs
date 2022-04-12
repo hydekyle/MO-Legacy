@@ -17,16 +17,8 @@ public enum FaceDirection { North, West, East, South }
 // 6 (right) walking
 // 9 (up) walking
 
-[Serializable]
-public struct Page
-{
-    public Switch[] requiredSwitchList;
-    public Variable[] requiredVariableList;
-}
-
 public class Entity : MonoBehaviour
 {
-    public List<Page> pages;
     public Sprite[] spriteList;
     public float movementSpeed;
     public float animationFrameTime = 0.1f;
