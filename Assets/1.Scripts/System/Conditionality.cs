@@ -12,12 +12,12 @@ public class Conditionality : MonoBehaviour
 
     void OnEnable()
     {
-        SubscribeToGameDataChanges();
+        SubscribeToRequiredConditions();
     }
 
     void OnDisable()
     {
-        UnsubscribeToGameDataChanges();
+        UnSubscribeToRequiredConditions();
     }
 
     void OnChangedValues()
@@ -25,17 +25,36 @@ public class Conditionality : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(isAllConditionsOK());
     }
 
-    void SubscribeToGameDataChanges()
+    void SubscribeToRequiredConditions()
     {
-        if (requiredSwitchList.Length > 0 || requiredVariableList.Length > 0)
+        foreach (var s in requiredSwitchList)
         {
-            GameManager.Instance.onGameDataChanged.AddListener(OnChangedValues);
+            if (!GameManager.Instance.gameData.switches.ContainsKey(s.ID))
+            {
+                GameManager.Instance.SetSwitch(s.ID, false);
+            }
+            GameManager.Instance.gameData.switches[s.ID].OnChanged += OnChangedValues;
+        }
+        foreach (var v in requiredVariableList)
+        {
+            if (!GameManager.Instance.gameData.variables.ContainsKey(v.ID))
+            {
+                GameManager.Instance.SetVariable(v.ID, 0);
+            }
+            GameManager.Instance.gameData.variables[v.ID].OnChanged += OnChangedValues;
         }
     }
 
-    void UnsubscribeToGameDataChanges()
+    void UnSubscribeToRequiredConditions()
     {
-        GameManager.Instance.onGameDataChanged.RemoveListener(OnChangedValues);
+        foreach (var s in requiredSwitchList)
+        {
+            GameManager.Instance.gameData.switches[s.ID].OnChanged -= OnChangedValues;
+        }
+        foreach (var v in requiredVariableList)
+        {
+            GameManager.Instance.gameData.variables[v.ID].OnChanged -= OnChangedValues;
+        }
     }
 
     bool isAllConditionsOK()

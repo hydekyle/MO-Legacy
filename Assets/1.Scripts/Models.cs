@@ -13,15 +13,20 @@ public enum FaceDirection { North, West, East, South }
 // 0 (down) walking
 // 1 (down) idle
 // 2 (down) walking
-
 // 3 (left) walking
-
 // 6 (right) walking
-
 // 9 (up) walking
+
+[Serializable]
+public struct Page
+{
+    public Switch[] requiredSwitchList;
+    public Variable[] requiredVariableList;
+}
 
 public class Entity : MonoBehaviour
 {
+    public List<Page> pages;
     public Sprite[] spriteList;
     public float movementSpeed;
     public float animationFrameTime = 0.1f;
@@ -131,10 +136,10 @@ public class Variable
 }
 
 [Serializable]
-public class Switches : UnitySerializedDictionary<string, bool> { }
+public class Switches : UnitySerializedDictionary<string, Observable<bool>> { }
 
 [Serializable]
-public class Variables : UnitySerializedDictionary<string, int> { }
+public class Variables : UnitySerializedDictionary<string, Observable<int>> { }
 
 // This is required for Odin Inspector Plugin to serialize Dictionary
 public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver

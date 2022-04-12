@@ -479,14 +479,11 @@ MonoBehaviour:
   gameData:
     switches:
       keyData: []
-      valueData: 
+      valueData: []
     variables:
       keyData: []
-      valueData: 
+      valueData: []
     inventory: []
-  onGameDataChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &242303497
 Transform:
   m_ObjectHideFlags: 0
@@ -627,6 +624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a908fde32b459154a9176b4ceda38a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pages: []
   spriteList:
   - {fileID: 6234176133674011997, guid: ced9416025d79714885f78fdb2fd6acb, type: 3}
   - {fileID: -1790145400590651902, guid: ced9416025d79714885f78fdb2fd6acb, type: 3}
@@ -999,7 +997,7 @@ Transform:
   m_Children:
   - {fileID: 868660411}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -130.29}
 --- !u!1 &770384053
 GameObject:
@@ -1618,9 +1616,8 @@ Transform:
   - {fileID: 438304473}
   - {fileID: 963276607}
   - {fileID: 56756038}
-  - {fileID: 1398983802}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1350842602
 GameObject:
@@ -1662,7 +1659,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1398983802}
   m_Layer: 0
-  m_Name: Events
+  m_Name: '[EVENTS]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1676,12 +1673,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1398983801}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.5493548, y: -2.5374765, z: -64.02011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1762064343}
   - {fileID: 390634831}
-  m_Father: {fileID: 1284017112}
+  m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1408123169

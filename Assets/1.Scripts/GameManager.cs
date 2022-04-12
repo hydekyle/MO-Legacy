@@ -12,10 +12,7 @@ using Sirenix.OdinInspector;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    [OnValueChanged("OnGameDataChanged")]
     public GameData gameData;
-    [HideInInspector]
-    public UnityEvent onGameDataChanged;
 
     void Awake()
     {
@@ -41,7 +38,7 @@ public class GameManager : MonoBehaviour
     {
         try
         {
-            return gameData.switches[switchName];
+            return gameData.switches[switchName].Value;
         }
         catch
         {
@@ -53,7 +50,7 @@ public class GameManager : MonoBehaviour
     {
         try
         {
-            return gameData.variables[variableName];
+            return gameData.variables[variableName].Value;
         }
         catch
         {
@@ -63,19 +60,12 @@ public class GameManager : MonoBehaviour
 
     public void SetSwitch(string switchName, bool value)
     {
-        gameData.switches[switchName] = value;
-        OnGameDataChanged();
+        gameData.switches[switchName] = new Observable<bool>() { Value = value };
     }
 
     public void SetVariable(string variableName, int value)
     {
-        gameData.variables[variableName] = value;
-        OnGameDataChanged();
-    }
-
-    void OnGameDataChanged()
-    {
-        onGameDataChanged.Invoke();
+        gameData.variables[variableName] = new Observable<int>() { Value = value };
     }
 
     /// <summary>Saves GameManager Data in the user system</summary>
@@ -102,7 +92,6 @@ public class GameManager : MonoBehaviour
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(savePath, FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
-            OnGameDataChanged(); // Calling event manually since loading can't do it
         }
         else
         {
