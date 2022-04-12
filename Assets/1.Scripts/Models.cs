@@ -15,27 +15,21 @@ public enum FaceDirection { North, West, East, South }
 // 2 (down) walking
 
 // 3 (left) walking
-// 4 (left) idle
-// 5 (left) walking
 
 // 6 (right) walking
-// 7 (right) idle
-// 8 (right) walking
 
 // 9 (up) walking
-// 10 (up) idle
-// 11 (up) walking
 
 public class Entity : MonoBehaviour
 {
     public Sprite[] spriteList;
     public float movementSpeed;
-    public float animationSpeed = 0.1f;
+    public float animationFrameTime = 0.1f;
     [HideInInspector]
-    public Observable<FaceDirection> faceDirection;
+    public FaceDirection faceDirection;
     SpriteRenderer spriteRenderer;
     float _lastTimeAnimationChanged = -1;
-    List<int> stepAnimOrder = new List<int>() { 1, 2, 3, 2 };
+    List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
     int _indexStepAnim = 0;
 
     private void Awake()
@@ -43,16 +37,23 @@ public class Entity : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Move(Vector3 dir)
+    public void Move(Vector3 moveDirection)
     {
-        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(dir.x, dir.y, 0), Time.deltaTime * movementSpeed);
-        Animate(dir);
+        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
+        var _faceDirection = Helpers.GetFaceDirectionByDir(moveDirection);
+        faceDirection = _faceDirection;
+        AnimationWalk();
     }
 
     public async void StopMovement()
     {
-        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationSpeed < Time.time);
-        switch (faceDirection.Value)
+        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time);
+        LookAtDirection(faceDirection);
+    }
+
+    void LookAtDirection(FaceDirection fDir)
+    {
+        switch (fDir)
         {
             case FaceDirection.South:
                 spriteRenderer.sprite = spriteList[1];
@@ -66,30 +67,29 @@ public class Entity : MonoBehaviour
             case FaceDirection.North:
                 spriteRenderer.sprite = spriteList[10];
                 break;
-
         }
+        faceDirection = fDir;
     }
 
-    public void Animate(Vector3 dir)
+    public void AnimationWalk()
     {
-        var fDir = Helpers.GetFaceDirectionByDir(dir);
-        faceDirection.Value = fDir;
-        switch (fDir)
+        switch (faceDirection)
         {
             case FaceDirection.South:
-                spriteRenderer.sprite = spriteList[0 + stepAnimOrder[_indexStepAnim] - 1];
+                spriteRenderer.sprite = spriteList[0 + stepAnimOrder[_indexStepAnim]];
                 break;
             case FaceDirection.West:
-                spriteRenderer.sprite = spriteList[3 + stepAnimOrder[_indexStepAnim] - 1];
+                spriteRenderer.sprite = spriteList[3 + stepAnimOrder[_indexStepAnim]];
                 break;
             case FaceDirection.East:
-                spriteRenderer.sprite = spriteList[6 + stepAnimOrder[_indexStepAnim] - 1];
+                spriteRenderer.sprite = spriteList[6 + stepAnimOrder[_indexStepAnim]];
                 break;
             case FaceDirection.North:
-                spriteRenderer.sprite = spriteList[9 + stepAnimOrder[_indexStepAnim] - 1];
+                spriteRenderer.sprite = spriteList[9 + stepAnimOrder[_indexStepAnim]];
                 break;
         }
-        if (Time.time > _lastTimeAnimationChanged + animationSpeed)
+        // Animation Steps
+        if (Time.time > _lastTimeAnimationChanged + animationFrameTime)
         {
             _indexStepAnim = _indexStepAnim < stepAnimOrder.Count - 1 ? _indexStepAnim + 1 : 0;
             _lastTimeAnimationChanged = Time.time;
