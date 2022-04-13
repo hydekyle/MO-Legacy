@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class UsableItemZone : MonoBehaviour
+public class RPGUsableItemZone : MonoBehaviour
 {
     public string requiredItemName;
     public UnityEvent onUsed;

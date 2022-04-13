@@ -5,12 +5,12 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityObservables;
 
-public class Conditionality : MonoBehaviour
+public class RPGConditions : MonoBehaviour
 {
     public Switch[] requiredSwitchList;
     public Variable[] requiredVariableList;
 
-    void Awake()
+    void Start()
     {
         SubscribeToRequiredConditions();
         SetActiveIfAllConditionsOK();
@@ -33,7 +33,7 @@ public class Conditionality : MonoBehaviour
         {
             if (!GameManager.Instance.gameData.switches.ContainsKey(s.ID))
             {
-                GameManager.Instance.SetSwitch(s.ID, false);
+                GameManager.SetSwitch(s.ID, false);
             }
             GameManager.Instance.gameData.switches[s.ID].OnChanged += OnRequiredConditionValueChanged;
         }
@@ -41,7 +41,7 @@ public class Conditionality : MonoBehaviour
         {
             if (!GameManager.Instance.gameData.variables.ContainsKey(v.ID))
             {
-                GameManager.Instance.SetVariable(v.ID, 0);
+                GameManager.SetVariable(v.ID, 0);
             }
             GameManager.Instance.gameData.variables[v.ID].OnChanged += OnRequiredConditionValueChanged;
         }
@@ -63,12 +63,12 @@ public class Conditionality : MonoBehaviour
     {
         for (var x = 0; x < requiredSwitchList.Length; x++)
         {
-            var switchValue = GameManager.Instance.GetSwitch(requiredSwitchList[x].ID);
+            var switchValue = GameManager.GetSwitch(requiredSwitchList[x].ID);
             if (requiredSwitchList[x].value != switchValue) return false;
         }
         for (var x = 0; x < requiredVariableList.Length; x++)
         {
-            var variableValue = GameManager.Instance.GetVariable(requiredVariableList[x].ID);
+            var variableValue = GameManager.GetVariable(requiredVariableList[x].ID);
             if (requiredVariableList[x].value != variableValue) return false;
         }
         return true;

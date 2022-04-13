@@ -8,17 +8,22 @@ using System.Linq;
 using UnityObservables;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameData gameData;
+    [HideInInspector]
+    public Transform playerT;
 
     void Awake()
     {
         if (Instance) Destroy(this);
         Instance = this;
-        //DontDestroyOnLoad(this);
+        playerT = GameObject.Find("PLAYER").transform;
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
+        DontDestroyOnLoad(this);
     }
 
     void Update()
@@ -28,17 +33,22 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) SwitchTest();
     }
 
+    private void OnActiveSceneChanged(Scene arg0, Scene arg1)
+    {
+        playerT = GameObject.Find("Player").transform;
+    }
+
     void SwitchTest()
     {
         SetSwitch("test2", !GetSwitch("test2"));
     }
 
     #region GameData
-    public bool GetSwitch(string switchName)
+    public static bool GetSwitch(string switchName)
     {
         try
         {
-            return gameData.switches[switchName].Value;
+            return GameManager.Instance.gameData.switches[switchName].Value;
         }
         catch
         {
@@ -46,11 +56,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int GetVariable(string variableName)
+    public static int GetVariable(string variableName)
     {
         try
         {
-            return gameData.variables[variableName].Value;
+            return GameManager.Instance.gameData.variables[variableName].Value;
         }
         catch
         {
@@ -58,14 +68,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetSwitch(string switchName, bool value)
+    public static void SetSwitch(string switchName, bool value)
     {
-        gameData.switches[switchName] = new Observable<bool>() { Value = value };
+        if (GameManager.Instance.gameData.switches.ContainsKey(switchName))
+            GameManager.Instance.gameData.switches[switchName].Value = value;
+        else
+            GameManager.Instance.gameData.switches[switchName] = new Observable<bool>() { Value = value };
     }
 
-    public void SetVariable(string variableName, int value)
+    public static void SetVariable(string variableName, int value)
     {
-        gameData.variables[variableName] = new Observable<int>() { Value = value };
+        if (GameManager.Instance.gameData.variables.ContainsKey(variableName))
+            GameManager.Instance.gameData.variables[variableName].Value = value;
+        else
+            GameManager.Instance.gameData.variables[variableName] = new Observable<int>() { Value = value };
     }
 
     /// <summary>Saves GameManager Data in the user system</summary>
@@ -101,14 +117,31 @@ public class GameManager : MonoBehaviour
     #endregion
 
     /// <summary>This is for items like keys, it tries to find a trigger zone where a item is expected to be used</summary>
-    public void CastUsableItem(Item item)
+    public static void CastUsableItem(Vector2 castPoint, Item item)
     {
-        var player = GameObject.Find("Player"); //TODO: Avoid using Find
-        var playerPosition = player.transform.position;
-        var hit = Physics2D.CircleCast(playerPosition, 1f, Vector2.one, 1f, LayerMask.NameToLayer("Usable Item Zone"));
-        if (hit.transform.TryGetComponent<UsableItemZone>(out UsableItemZone usableItemZone))
+        var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.NameToLayer("Usable Item Zone"));
+        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
         {
             usableItemZone.UsedItem(item);
+        }
+    }
+
+    public static void CastUsableItem(Item item)
+    {
+        var playerPosition = GameManager.Instance.playerT.position;
+        var hit = Physics2D.CircleCast(playerPosition, 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
+        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
+        {
+            usableItemZone.UsedItem(item);
+        }
+    }
+
+    public static void CastInteraction(Vector2 castPoint)
+    {
+        var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.GetMask("Interactable"));
+        if (hit && hit.transform.TryGetComponent<RPGInteractable>(out RPGInteractable interactableZone))
+        {
+            interactableZone.onInteraction.Invoke();
         }
     }
 

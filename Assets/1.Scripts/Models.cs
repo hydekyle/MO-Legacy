@@ -6,7 +6,7 @@ using UnityObservables;
 using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
 
-public enum TriggerType { player, other }
+public enum TriggerType { player, other, any }
 
 public enum FaceDirection { North, West, East, South }
 
@@ -34,12 +34,15 @@ public class Entity : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    public void Interact()
+    {
+        GameManager.CastInteraction(transform.position);
+    }
+
     public void Move(Vector3 moveDirection)
     {
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
-        var _faceDirection = Helpers.GetFaceDirectionByDir(moveDirection);
-        faceDirection = _faceDirection;
-        AnimationWalk();
+        AnimationWalk(moveDirection);
     }
 
     public async void StopMovement()
@@ -68,7 +71,7 @@ public class Entity : MonoBehaviour
         faceDirection = fDir;
     }
 
-    public void AnimationWalk()
+    public void AnimationWalk(Vector3 moveDirection)
     {
         switch (faceDirection)
         {
@@ -90,6 +93,8 @@ public class Entity : MonoBehaviour
         {
             _indexStepAnim = _indexStepAnim < stepAnimOrder.Count - 1 ? _indexStepAnim + 1 : 0;
             _lastTimeAnimationChanged = Time.time;
+            var _faceDirection = Helpers.GetFaceDirectionByDir(moveDirection);
+            faceDirection = _faceDirection;
         }
     }
 }

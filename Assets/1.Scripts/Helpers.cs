@@ -21,7 +21,7 @@ public class Helpers
     {
         switch (item.name)
         {
-            case "Rusty Key": GameManager.Instance.CastUsableItem(item); break;
+            case "Rusty Key": GameManager.CastUsableItem(item); break;
             default: Debug.LogFormat("You used {0} but nothing happened...", item.name); break;
         }
     }

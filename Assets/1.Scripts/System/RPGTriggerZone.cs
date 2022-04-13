@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityObservables;
 
 [ExecuteAlways]
-public class TriggerZone : MonoBehaviour
+public class RPGTriggerZone : MonoBehaviour
 {
     public TriggerType triggerType;
     [ShowIf("triggerType", TriggerType.other)]
@@ -20,6 +20,7 @@ public class TriggerZone : MonoBehaviour
         {
             case TriggerType.player: PlayerEnter(col.gameObject); break;
             case TriggerType.other: OtherEnter(col.gameObject); break;
+            case TriggerType.any: AnyEnter(col.gameObject); break;
         }
     }
 
@@ -31,6 +32,11 @@ public class TriggerZone : MonoBehaviour
     void OtherEnter(GameObject other)
     {
         if (this.other == other) onEnter.Invoke();
+    }
+
+    void AnyEnter(GameObject other)
+    {
+        onEnter.Invoke();
     }
 
 }

@@ -8,4 +8,14 @@ public class FunctionsMap01 : MonoBehaviour
     {
         print("Hola soy un mensaje para el primer mapa de pruebas");
     }
+
+    public void _Palanca1On()
+    {
+        GameManager.SetSwitch("palanca1", true);
+    }
+
+    public void _Palanca1Off()
+    {
+        GameManager.SetSwitch("palanca1", false);
+    }
 }
