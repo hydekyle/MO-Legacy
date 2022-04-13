@@ -12,10 +12,12 @@ public class FunctionsMap01 : MonoBehaviour
     public void _Palanca1On()
     {
         GameManager.SetSwitch("palanca1", true);
+        GameManager.SetVariable("palanquita", GameManager.GetVariable("palanquita") + 1);
     }
 
     public void _Palanca1Off()
     {
         GameManager.SetSwitch("palanca1", false);
+        GameManager.SetVariable("palanquita", GameManager.GetVariable("palanquita") + 1);
     }
 }

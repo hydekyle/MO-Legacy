@@ -7,8 +7,8 @@ using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
 
 public enum TriggerType { player, other, any }
-
 public enum FaceDirection { North, West, East, South }
+public enum VariableConditionality { Equals, GreaterThan, LessThan }
 
 // 0 (down) walking
 // 1 (down) idle
@@ -99,7 +99,6 @@ public class Entity : MonoBehaviour
     }
 }
 
-
 [Serializable]
 public struct Item
 {
@@ -119,17 +118,18 @@ public struct GameData
 }
 
 [Serializable]
-public class Switch
+public class SwitchCondition
 {
     public string ID;
     public bool value;
 }
 
 [Serializable]
-public class Variable
+public class VariableCondition
 {
     public string ID;
     public int value;
+    public VariableConditionality conditionality;
 }
 
 [Serializable]

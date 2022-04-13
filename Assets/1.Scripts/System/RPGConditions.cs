@@ -7,8 +7,8 @@ using UnityObservables;
 
 public class RPGConditions : MonoBehaviour
 {
-    public Switch[] requiredSwitchList;
-    public Variable[] requiredVariableList;
+    public SwitchCondition[] requiredSwitchList;
+    public VariableCondition[] requiredVariableList;
 
     void Start()
     {
@@ -49,27 +49,33 @@ public class RPGConditions : MonoBehaviour
 
     void UnSubscribeToRequiredConditions()
     {
-        foreach (var s in requiredSwitchList)
+        foreach (var requiredSwitch in requiredSwitchList)
         {
-            GameManager.Instance.gameData.switches[s.ID].OnChanged -= OnRequiredConditionValueChanged;
+            GameManager.Instance.gameData.switches[requiredSwitch.ID].OnChanged -= OnRequiredConditionValueChanged;
         }
-        foreach (var v in requiredVariableList)
+        foreach (var requiredVariable in requiredVariableList)
         {
-            GameManager.Instance.gameData.variables[v.ID].OnChanged -= OnRequiredConditionValueChanged;
+            GameManager.Instance.gameData.variables[requiredVariable.ID].OnChanged -= OnRequiredConditionValueChanged;
         }
     }
 
     bool isAllConditionsOK()
     {
-        for (var x = 0; x < requiredSwitchList.Length; x++)
+        foreach (var requiredSwitch in requiredSwitchList)
         {
-            var switchValue = GameManager.GetSwitch(requiredSwitchList[x].ID);
-            if (requiredSwitchList[x].value != switchValue) return false;
+            var switchValue = GameManager.GetSwitch(requiredSwitch.ID);
+            if (requiredSwitch.value != switchValue) return false;
         }
-        for (var x = 0; x < requiredVariableList.Length; x++)
+        foreach (var requiredVariable in requiredVariableList)
         {
-            var variableValue = GameManager.GetVariable(requiredVariableList[x].ID);
-            if (requiredVariableList[x].value != variableValue) return false;
+            var variableValue = GameManager.GetVariable(requiredVariable.ID);
+            switch (requiredVariable.conditionality)
+            {
+                case VariableConditionality.Equals: if (requiredVariable.value == variableValue) return true; break;
+                case VariableConditionality.GreaterThan: if (requiredVariable.value < variableValue) return true; break;
+                case VariableConditionality.LessThan: if (requiredVariable.value > variableValue) return true; break;
+            }
+            return false;
         }
         return true;
     }
