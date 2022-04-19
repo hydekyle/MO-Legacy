@@ -48,7 +48,7 @@ public class Entity : MonoBehaviour
     public async void StopMovement()
     {
         await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time);
-        LookAtDirection(faceDirection);
+        try { LookAtDirection(faceDirection); } catch { }
     }
 
     void LookAtDirection(FaceDirection fDir)

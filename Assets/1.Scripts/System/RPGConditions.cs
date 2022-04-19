@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityObservables;
 
 public class RPGConditions : MonoBehaviour
 {
     public SwitchCondition[] requiredSwitchList;
     public VariableCondition[] requiredVariableList;
+    public AudioClip onEnabledAudio;
 
     void Start()
     {
@@ -16,15 +16,18 @@ public class RPGConditions : MonoBehaviour
         SetActiveIfAllConditionsOK();
     }
 
-    void SetActiveIfAllConditionsOK()
+    private void OnDestroy()
     {
-        gameObject.SetActive(isAllConditionsOK());
+        UnSubscribeToRequiredConditions();
     }
 
     // Called every time a required switch or variable changes the value
-    void OnRequiredConditionValueChanged()
+    void SetActiveIfAllConditionsOK()
     {
-        SetActiveIfAllConditionsOK();
+        var isAllOK = isAllConditionsOK();
+        if (isAllOK == gameObject.activeSelf) return;
+        if (onEnabledAudio && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnabledAudio, gameObject);
+        gameObject.SetActive(isAllOK);
     }
 
     void SubscribeToRequiredConditions()
@@ -35,7 +38,7 @@ public class RPGConditions : MonoBehaviour
             {
                 GameManager.SetSwitch(s.ID, false);
             }
-            GameManager.Instance.gameData.switches[s.ID].OnChanged += OnRequiredConditionValueChanged;
+            GameManager.Instance.gameData.switches[s.ID].OnChanged += SetActiveIfAllConditionsOK;
         }
         foreach (var v in requiredVariableList)
         {
@@ -43,7 +46,7 @@ public class RPGConditions : MonoBehaviour
             {
                 GameManager.SetVariable(v.ID, 0);
             }
-            GameManager.Instance.gameData.variables[v.ID].OnChanged += OnRequiredConditionValueChanged;
+            GameManager.Instance.gameData.variables[v.ID].OnChanged += SetActiveIfAllConditionsOK;
         }
     }
 
@@ -51,11 +54,11 @@ public class RPGConditions : MonoBehaviour
     {
         foreach (var requiredSwitch in requiredSwitchList)
         {
-            GameManager.Instance.gameData.switches[requiredSwitch.ID].OnChanged -= OnRequiredConditionValueChanged;
+            GameManager.Instance.gameData.switches[requiredSwitch.ID].OnChanged -= SetActiveIfAllConditionsOK;
         }
         foreach (var requiredVariable in requiredVariableList)
         {
-            GameManager.Instance.gameData.variables[requiredVariable.ID].OnChanged -= OnRequiredConditionValueChanged;
+            GameManager.Instance.gameData.variables[requiredVariable.ID].OnChanged -= SetActiveIfAllConditionsOK;
         }
     }
 

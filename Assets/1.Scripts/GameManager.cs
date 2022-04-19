@@ -9,6 +9,7 @@ using UnityObservables;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,11 +20,14 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance) Destroy(this);
-        Instance = this;
-        playerT = GameObject.Find("PLAYER").transform;
-        SceneManager.activeSceneChanged += OnActiveSceneChanged;
-        DontDestroyOnLoad(this);
+        if (Instance) Destroy(this.gameObject);
+        else
+        {
+            Instance = this;
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+            DontDestroyOnLoad(this);
+        }
+
     }
 
     void Update()
@@ -35,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     private void OnActiveSceneChanged(Scene arg0, Scene arg1)
     {
-        playerT = GameObject.Find("Player").transform;
+        playerT = GameObject.Find("PLAYER").transform;
     }
 
     void SwitchTest()
@@ -44,11 +48,11 @@ public class GameManager : MonoBehaviour
     }
 
     #region GameData
-    public static bool GetSwitch(string switchName)
+    public static bool GetSwitch(string switchID)
     {
         try
         {
-            return GameManager.Instance.gameData.switches[switchName].Value;
+            return GameManager.Instance.gameData.switches[switchID].Value;
         }
         catch
         {
@@ -56,11 +60,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static int GetVariable(string variableName)
+    public static int GetVariable(string variableID)
     {
         try
         {
-            return GameManager.Instance.gameData.variables[variableName].Value;
+            return GameManager.Instance.gameData.variables[variableID].Value;
         }
         catch
         {
@@ -138,10 +142,10 @@ public class GameManager : MonoBehaviour
 
     public static void CastInteraction(Vector2 castPoint)
     {
-        var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.GetMask("Interactable"));
+        var hit = Physics2D.CircleCast(castPoint, 0.2f, Vector2.one, 1f, LayerMask.GetMask("Interactable"));
         if (hit && hit.transform.TryGetComponent<RPGInteractable>(out RPGInteractable interactableZone))
         {
-            interactableZone.onInteraction.Invoke();
+            interactableZone.DoInteraction();
         }
     }
 

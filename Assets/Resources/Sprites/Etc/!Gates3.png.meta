@@ -29,6 +29,15 @@ TextureImporter:
   - first:
       213: 6881936112003597675
     second: '!Gates3_8'
+  - first:
+      213: -1144680947718420498
+    second: '!Gates3_9'
+  - first:
+      213: -6404229640438812819
+    second: '!Gates3_10'
+  - first:
+      213: 3945596800863207738
+    second: '!Gates3_11'
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -122,9 +131,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 287
+        y: 288
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,9 +152,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 150
-        y: 287
+        y: 288
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,9 +173,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 300
-        y: 287
+        y: 288
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -185,9 +194,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 190
+        y: 192
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,9 +215,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 150
-        y: 190
+        y: 192
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -227,9 +236,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 300
-        y: 190
+        y: 192
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -248,9 +257,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 93
+        y: 96
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -269,9 +278,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 150
-        y: 93
+        y: 96
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -290,9 +299,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 300
-        y: 93
+        y: 96
         width: 150
-        height: 97
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,6 +311,69 @@ TextureImporter:
       bones: []
       spriteID: b6548ea8e6c818f50800000000000000
       internalID: 6881936112003597675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '!Gates3_9'
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 150
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee7061a2eb64d10f0800000000000000
+      internalID: -1144680947718420498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '!Gates3_10'
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 150
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6fed95b21b9f17a0800000000000000
+      internalID: -6404229640438812819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '!Gates3_11'
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 150
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a318e5eb26391c630800000000000000
+      internalID: 3945596800863207738
       vertices: []
       indices: 
       edges: []
