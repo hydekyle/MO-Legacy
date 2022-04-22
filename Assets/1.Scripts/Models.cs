@@ -5,6 +5,7 @@ using System;
 using UnityObservables;
 using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
+using System.IO;
 
 public enum TriggerType { player, other, any }
 public enum FaceDirection { North, West, East, South }
@@ -118,7 +119,7 @@ public struct GameData
 }
 
 [Serializable]
-public class SwitchCondition
+public struct SwitchCondition
 {
     public string ID;
     public bool value;
@@ -128,15 +129,15 @@ public class SwitchCondition
 public class VariableCondition
 {
     public string ID;
-    public int value;
+    public float value;
     public VariableConditionality conditionality;
 }
 
 [Serializable]
-public class Switches : UnitySerializedDictionary<string, Observable<bool>> { }
+public class Switches : UnitySerializedDictionary<int, Observable<bool>> { }
 
 [Serializable]
-public class Variables : UnitySerializedDictionary<string, Observable<int>> { }
+public class Variables : UnitySerializedDictionary<int, Observable<float>> { }
 
 // This is required for Odin Inspector Plugin to serialize Dictionary
 public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
@@ -165,6 +166,49 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
         {
             this.keyData.Add(item.Key);
             this.valueData.Add(item.Value);
+        }
+    }
+}
+
+[Serializable]
+public class TableViewSwitch
+{
+    [TableColumnWidth(90)]
+    [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
+    public string switchID;
+    public bool value = true;
+
+    IEnumerable ReadSwitches()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+}
+
+[Serializable]
+public class TableViewVariable
+{
+    [TableColumnWidth(140)]
+    [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
+    public string variableID;
+    [ShowIf("variableID")]
+    public VariableConditionality condition;
+    [ShowIf("variableID")]
+    public float value;
+
+    IEnumerable ReadVariables()
+    {
+        var path = Application.dataPath + "/variables.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
         }
     }
 }

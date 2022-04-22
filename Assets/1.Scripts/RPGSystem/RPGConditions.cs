@@ -6,12 +6,22 @@ using UnityEngine;
 
 public class RPGConditions : MonoBehaviour
 {
-    public SwitchCondition[] requiredSwitchList;
-    public VariableCondition[] requiredVariableList;
-    public AudioClip onEnabledAudio;
+    [TableList]
+    [GUIColor(0.3f, 0.8f, 0.8f, 1f)]
+    public List<TableViewSwitch> switchTable = new List<TableViewSwitch>();
+    [Space]
+    [TableList]
+    [GUIColor(0.2f, 0.7f, 0.7f, 1f)]
+    public List<TableViewVariable> variableTable = new List<TableViewVariable>();
+    [Space(25)]
+    [Tooltip("Play a clip when all conditions are met")]
+    public AudioClip playSound;
+    List<SwitchCondition> requiredSwitchList = new List<SwitchCondition>();
+    List<VariableCondition> requiredVariableList = new List<VariableCondition>();
 
     void Start()
     {
+        LoadTableData();
         SubscribeToRequiredConditions();
         SetActiveIfAllConditionsOK();
     }
@@ -21,12 +31,32 @@ public class RPGConditions : MonoBehaviour
         UnSubscribeToRequiredConditions();
     }
 
+    void LoadTableData()
+    {
+        foreach (var tableItem in switchTable)
+        {
+            requiredSwitchList.Add(new SwitchCondition()
+            {
+                ID = tableItem.switchID,
+                value = tableItem.value
+            });
+        }
+        foreach (var tableItem in variableTable)
+        {
+            requiredVariableList.Add(new VariableCondition()
+            {
+                ID = tableItem.variableID,
+                value = tableItem.value
+            });
+        }
+    }
+
     // Called every time a required switch or variable changes the value
     void SetActiveIfAllConditionsOK()
     {
         var isAllOK = isAllConditionsOK();
         if (isAllOK == gameObject.activeSelf) return;
-        if (onEnabledAudio && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnabledAudio, gameObject);
+        if (playSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(playSound, gameObject);
         gameObject.SetActive(isAllOK);
     }
 
