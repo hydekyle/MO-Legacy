@@ -6,6 +6,7 @@ using UnityObservables;
 using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
 using System.IO;
+using UnityEditor;
 
 public enum TriggerType { player, other, any }
 public enum FaceDirection { North, West, East, South }
@@ -181,7 +182,7 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
 }
 
 [Serializable]
-public class ConditionTable
+public class ConditionTable : MonoBehaviour
 {
     [TableList]
     [GUIColor(0, 1f, 0)]
@@ -257,13 +258,94 @@ public class ConditionTable
     }
 }
 
+public class PopupEditableVariableName : EditorWindow
+{
+    string inputText = "";
+    string editingName = "";
+    int ID;
+    public static PopupEditableVariableName Instance;
+    bool isVariable;
+
+    public void EditSwitchNameByID(string switchID)
+    {
+        if (PopupEditableVariableName.Instance != null) return;
+        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
+        ID = int.Parse(switchID.Substring(0, 4));
+        editingName = switchID.Substring(4, switchID.Length - 4);
+        isVariable = false;
+        Instance = this;
+        ShowPopup();
+    }
+
+    public void EditVariableNameByID(string variableID)
+    {
+        if (PopupEditableVariableName.Instance != null) return;
+        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
+        ID = int.Parse(variableID.Substring(0, 4));
+        editingName = variableID.Substring(4, variableID.Length - 4);
+        isVariable = true;
+        Instance = this;
+        ShowPopup();
+    }
+
+    void OnGUI()
+    {
+        EditorGUILayout.LabelField("Renaming " + editingName, EditorStyles.wordWrappedLabel);
+        inputText = GUILayout.TextArea(inputText);
+        if (GUILayout.Button("SAVE"))
+        {
+            SaveNewSwitch(ID, inputText, isVariable);
+            if (Selection.activeGameObject.TryGetComponent<ConditionTable>(out var c)) c.Refresh();
+            Exit();
+        }
+        if (GUILayout.Button("CANCEL")) Exit();
+    }
+
+    void Exit()
+    {
+        Instance = null;
+        this.Close();
+    }
+
+    void SaveNewSwitch(int ID, string newName, bool isVariable)
+    {
+        var path = Application.dataPath;
+        path += isVariable ? "/variables.txt" : "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+        var textID = "";
+        if (ID < 10) textID = "00" + ID;
+        else if (ID < 100) textID = "0" + ID;
+        dataLines[ID] = textID + " " + newName;
+        File.WriteAllLines(path, dataLines);
+    }
+
+    IEnumerable<string> ReadSwitches()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+}
+
 [Serializable]
 public class TableViewSwitch
 {
-    [TableColumnWidth(90)]
+    [TableColumnWidth(120)]
     [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
     public string switchID;
+    [TableColumnWidth(120)]
     public bool value = true;
+    [TableColumnWidth(20)]
+    [Button("Rename")]
+    void Edit()
+    {
+        PopupEditableVariableName window = ScriptableObject.CreateInstance<PopupEditableVariableName>();
+        window.EditSwitchNameByID(switchID);
+    }
 
     IEnumerable<string> ReadSwitches()
     {
@@ -289,6 +371,13 @@ public class TableViewVariable
     public VariableConditionality condition;
     [ShowIf("variableID")]
     public float value;
+    [TableColumnWidth(20)]
+    [Button("Rename")]
+    void Edit()
+    {
+        PopupEditableVariableName window = ScriptableObject.CreateInstance<PopupEditableVariableName>();
+        window.EditVariableNameByID(variableID);
+    }
 
     IEnumerable ReadVariables()
     {

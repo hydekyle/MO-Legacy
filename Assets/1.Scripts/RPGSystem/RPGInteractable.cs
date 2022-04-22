@@ -5,9 +5,9 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RPGInteractable : MonoBehaviour
+public class RPGInteractable : ConditionTable
 {
-    public ConditionTable setOnInteraction;
+    [Space(25)]
     public UnityEvent onInteractionEvent;
     public AudioClip playSound;
     List<SwitchCondition> setSwitchList = new List<SwitchCondition>();
@@ -15,7 +15,7 @@ public class RPGInteractable : MonoBehaviour
 
     void OnValidate()
     {
-        setOnInteraction.Refresh();
+        Refresh();
     }
 
     void Awake()
@@ -25,7 +25,7 @@ public class RPGInteractable : MonoBehaviour
 
     void LoadTableData()
     {
-        foreach (var tableItem in setOnInteraction.switchTable)
+        foreach (var tableItem in switchTable)
         {
             setSwitchList.Add(new SwitchCondition()
             {
@@ -33,7 +33,7 @@ public class RPGInteractable : MonoBehaviour
                 value = tableItem.value
             });
         }
-        foreach (var tableItem in setOnInteraction.variableTable)
+        foreach (var tableItem in variableTable)
         {
             setVariableList.Add(new VariableCondition()
             {

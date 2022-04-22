@@ -621,14 +621,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cd5637dca4f934aa04392954921d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setOnInteraction:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 0
-    variableTable:
-    - variableID: 000 Palanca1 used times
-      condition: 1
-      value: 1
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 0
+  variableTable:
+  - variableID: 000 Palanca1 used times
+    condition: 1
+    value: 1
   onInteractionEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -645,11 +644,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 1
-    variableTable: []
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 1
+  variableTable: []
   playSound: {fileID: 0}
 --- !u!212 &218618218
 SpriteRenderer:
@@ -1111,11 +1109,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 1
-    variableTable: []
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 1
+  variableTable: []
   playSound: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
 --- !u!212 &509216030
 SpriteRenderer:
@@ -1298,9 +1295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable: []
-    variableTable: []
+  switchTable: []
+  variableTable: []
   playSound: {fileID: 0}
 --- !u!212 &617674495
 SpriteRenderer:
@@ -1695,9 +1691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable: []
-    variableTable: []
+  switchTable: []
+  variableTable: []
   playSound: {fileID: 0}
 --- !u!1 &837353800
 GameObject:
@@ -1937,17 +1932,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 0
-    variableTable:
-    - variableID: 000 Palanca1 used times
-      condition: 1
-      value: 3
-    - variableID: 000 Palanca1 used times
-      condition: 2
-      value: 100
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 0
+  variableTable:
+  - variableID: 000 Palanca1 used times
+    condition: 1
+    value: 3
+  - variableID: 000 Palanca1 used times
+    condition: 2
+    value: 100
   playSound: {fileID: 0}
 --- !u!212 &942627948
 SpriteRenderer:
@@ -2334,11 +2328,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 0
-    variableTable: []
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 0
+  variableTable: []
   playSound: {fileID: 0}
 --- !u!114 &992077239
 MonoBehaviour:
@@ -2352,14 +2345,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cd5637dca4f934aa04392954921d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setOnInteraction:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 1
-    variableTable:
-    - variableID: 000 Palanca1 used times
-      condition: 1
-      value: 1
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 1
+  variableTable:
+  - variableID: 000 Palanca1 used times
+    condition: 1
+    value: 1
   onInteractionEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -3276,11 +3268,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 0
-    variableTable: []
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 0
+  variableTable: []
   playSound: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
 --- !u!212 &1711008245
 SpriteRenderer:
@@ -3418,11 +3409,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditions:
-    switchTable:
-    - switchID: 000 Puerta1 OPEN
-      value: 1
-    variableTable: []
+  switchTable:
+  - switchID: 000 Puerta1 Open
+    value: 1
+  variableTable: []
   playSound: {fileID: 0}
 --- !u!114 &1762064345
 MonoBehaviour:

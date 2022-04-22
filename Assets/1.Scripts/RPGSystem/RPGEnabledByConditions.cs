@@ -3,19 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class RPGEnabledByConditions : MonoBehaviour
+public class RPGEnabledByConditions : ConditionTable
 {
-    public ConditionTable conditions;
     [Space(25)]
-    [Tooltip("Play a clip when all conditions are met")]
     public AudioClip playSound;
     List<SwitchCondition> requiredSwitchList = new List<SwitchCondition>();
     List<VariableCondition> requiredVariableList = new List<VariableCondition>();
 
     void OnValidate()
     {
-        conditions.Refresh();
+        Refresh();
     }
 
     void Start()
@@ -32,7 +31,7 @@ public class RPGEnabledByConditions : MonoBehaviour
 
     void LoadTableData()
     {
-        foreach (var tableItem in conditions.switchTable)
+        foreach (var tableItem in switchTable)
         {
             requiredSwitchList.Add(new SwitchCondition()
             {
@@ -40,7 +39,7 @@ public class RPGEnabledByConditions : MonoBehaviour
                 value = tableItem.value
             });
         }
-        foreach (var tableItem in conditions.variableTable)
+        foreach (var tableItem in variableTable)
         {
             requiredVariableList.Add(new VariableCondition()
             {
