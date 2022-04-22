@@ -1945,6 +1945,9 @@ MonoBehaviour:
     - variableID: 000 Palanca1 used times
       condition: 1
       value: 3
+    - variableID: 000 Palanca1 used times
+      condition: 2
+      value: 100
   playSound: {fileID: 0}
 --- !u!212 &942627948
 SpriteRenderer:

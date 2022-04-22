@@ -104,9 +104,9 @@ public class RPGEnabledByConditions : MonoBehaviour
             var variableValue = GameManager.GetVariable(requiredVariable.ID());
             switch (requiredVariable.conditionality)
             {
-                case VariableConditionality.Equals: if (requiredVariable.value == variableValue) return true; break;
-                case VariableConditionality.GreaterThan: if (requiredVariable.value < variableValue) return true; break;
-                case VariableConditionality.LessThan: if (requiredVariable.value > variableValue) return true; break;
+                case VariableConditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
+                case VariableConditionality.GreaterThan: if (requiredVariable.value < variableValue) continue; break;
+                case VariableConditionality.LessThan: if (requiredVariable.value > variableValue) continue; break;
             }
             return false;
         }

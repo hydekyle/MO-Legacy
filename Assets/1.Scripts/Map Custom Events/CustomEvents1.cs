@@ -21,7 +21,7 @@ public class CustomEvents1 : MonoBehaviour
 
     public void _Palanca1On()
     {
-        // GameManager.SetSwitch("palanca1", true);
-        // GameManager.SetVariable("palanquita", GameManager.GetVariable("palanquita") + 1);
+        GameManager.SetSwitch(0, true);
+        GameManager.AddToVariable(0, 100);
     }
 }
