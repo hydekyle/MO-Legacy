@@ -361,7 +361,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 37250464234765956, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 37250464234765956, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -402,6 +402,42 @@ PrefabInstance:
     - target: {fileID: 37250464234765956, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: mSwitches.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: mSwitches.Array.data[0]
+      value: Hola2
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: mSwitches.Array.data[1]
+      value: Cosas de la vida
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: mSwitches.Array.data[2]
+      value: Que viene el lobo
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: mSwitches.Array.data[0].ID
+      value: Cosas de la vida
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: mSwitches.Array.data[1].ID
+      value: Cosas de la vida
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: requiredSwitches.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: requiredSwitches.Array.data[0]
+      value: Hola2
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: requiredSwitches.Array.data[1]
+      value: Hola2
       objectReference: {fileID: 0}
     - target: {fileID: 37250464234765962, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
       propertyPath: m_Name
@@ -585,14 +621,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cd5637dca4f934aa04392954921d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playSound: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
-  setSwitchList:
-  - ID: palanca1
-    value: 0
-  setVariableList: []
+  setOnInteraction:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 0
+    variableTable:
+    - variableID: 000 Palanca1 used times
+      condition: 1
+      value: 1
   onInteractionEvent:
     m_PersistentCalls:
       m_Calls: []
+  playSound: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
 --- !u!114 &218618217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,11 +645,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: palanca1
-    value: 1
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 0}
+  conditions:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 1
+    variableTable: []
+  playSound: {fileID: 0}
 --- !u!212 &218618218
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -804,7 +845,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &287763534
 MonoBehaviour:
@@ -1070,11 +1111,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: palanca1
-    value: 1
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
+  conditions:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 1
+    variableTable: []
+  playSound: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
 --- !u!212 &509216030
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1256,12 +1298,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList: []
-  requiredVariableList:
-  - ID: palanquita
-    value: 3
-    conditionality: 1
-  onEnabledAudio: {fileID: 0}
+  conditions:
+    switchTable: []
+    variableTable: []
+  playSound: {fileID: 0}
 --- !u!212 &617674495
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1444,7 +1484,7 @@ Transform:
   m_Children:
   - {fileID: 868660411}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -130.29}
 --- !u!1 &663450297
 GameObject:
@@ -1655,11 +1695,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: test2
-    value: 1
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 0}
+  conditions:
+    switchTable: []
+    variableTable: []
+  playSound: {fileID: 0}
 --- !u!1 &837353800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,11 +1937,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: palanca1
-    value: 0
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 0}
+  conditions:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 0
+    variableTable:
+    - variableID: 000 Palanca1 used times
+      condition: 1
+      value: 3
+  playSound: {fileID: 0}
 --- !u!212 &942627948
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1961,13 +2004,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942627943}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.91, y: 0.77, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -8.459354, y: 3.3074765, z: 64.02011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 154199086}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 1398983802}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &959547083
 GameObject:
@@ -2142,7 +2185,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &982668594
 MonoBehaviour:
@@ -2288,11 +2331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: palanca1
-    value: 0
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 0}
+  conditions:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 0
+    variableTable: []
+  playSound: {fileID: 0}
 --- !u!114 &992077239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2305,14 +2349,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4cd5637dca4f934aa04392954921d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playSound: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
-  setSwitchList:
-  - ID: palanca1
-    value: 1
-  setVariableList: []
+  setOnInteraction:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 1
+    variableTable:
+    - variableID: 000 Palanca1 used times
+      condition: 1
+      value: 1
   onInteractionEvent:
     m_PersistentCalls:
       m_Calls: []
+  playSound: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
 --- !u!61 &992077240
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2563,7 +2611,7 @@ Transform:
   - {fileID: 56756038}
   - {fileID: 1357013984}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1350842602
 GameObject:
@@ -2662,8 +2710,9 @@ Transform:
   - {fileID: 617674492}
   - {fileID: 1432308421}
   - {fileID: 837035266}
+  - {fileID: 942627949}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1398983803
 MonoBehaviour:
@@ -3013,7 +3062,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2774416011268655940, guid: a68118515e44dc248b4ef6685184ac1d, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2774416011268655940, guid: a68118515e44dc248b4ef6685184ac1d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3192,7 +3241,7 @@ Transform:
   m_Children:
   - {fileID: 1226293704}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -54.879}
 --- !u!1 &1711008243
 GameObject:
@@ -3224,11 +3273,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: palanca1
-    value: 0
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
+  conditions:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 0
+    variableTable: []
+  playSound: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
 --- !u!212 &1711008245
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3365,11 +3415,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc10d0d0fb63b5418fe18607426a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredSwitchList:
-  - ID: palanca1
-    value: 1
-  requiredVariableList: []
-  onEnabledAudio: {fileID: 0}
+  conditions:
+    switchTable:
+    - switchID: 000 Puerta1 OPEN
+      value: 1
+    variableTable: []
+  playSound: {fileID: 0}
 --- !u!114 &1762064345
 MonoBehaviour:
   m_ObjectHideFlags: 0

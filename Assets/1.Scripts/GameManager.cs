@@ -33,17 +33,11 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F6)) SaveGameDataSlot(0);
         if (Input.GetKeyDown(KeyCode.F9)) LoadGameDataSlot(0);
-        if (Input.GetKeyDown(KeyCode.Space)) SwitchTest();
     }
 
     private void OnActiveSceneChanged(Scene arg0, Scene arg1)
     {
         playerT = GameObject.Find("PLAYER").transform;
-    }
-
-    void SwitchTest()
-    {
-        SetSwitch("test2", !GetSwitch("test2"));
     }
 
     /// <summary>This is for items like keys, it tries to find a trigger zone where a item is expected to be used</summary>
@@ -76,7 +70,7 @@ public class GameManager : MonoBehaviour
     }
 
     #region GameData
-    public static bool GetSwitch(string switchID)
+    public static bool GetSwitch(int switchID)
     {
         try
         {
@@ -88,7 +82,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static float GetVariable(string variableID)
+    public static float GetVariable(int variableID)
     {
         try
         {
@@ -100,20 +94,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void SetSwitch(string switchName, bool value)
+    public static void SetSwitch(int switchID, bool value)
     {
-        if (GameManager.Instance.gameData.switches.ContainsKey(switchName))
-            GameManager.Instance.gameData.switches[switchName].Value = value;
+        if (GameManager.Instance.gameData.switches.ContainsKey(switchID))
+            GameManager.Instance.gameData.switches[switchID].Value = value;
         else
-            GameManager.Instance.gameData.switches[switchName] = new Observable<bool>() { Value = value };
+            GameManager.Instance.gameData.switches[switchID] = new Observable<bool>() { Value = value };
     }
 
-    public static void SetVariable(string variableName, float value)
+    public static void SetVariable(int variableID, float value)
     {
-        if (GameManager.Instance.gameData.variables.ContainsKey(variableName))
-            GameManager.Instance.gameData.variables[variableName].Value = value;
+        if (GameManager.Instance.gameData.variables.ContainsKey(variableID))
+            GameManager.Instance.gameData.variables[variableID].Value = value;
         else
-            GameManager.Instance.gameData.variables[variableName] = new Observable<float>() { Value = value };
+            GameManager.Instance.gameData.variables[variableID] = new Observable<float>() { Value = value };
+    }
+
+    public static void AddToVariable(int variableID, float value)
+    {
+        if (GameManager.Instance.gameData.variables.ContainsKey(variableID))
+            GameManager.Instance.gameData.variables[variableID].Value += value;
+        else
+            GameManager.Instance.gameData.variables[variableID] = new Observable<float>() { Value = value };
     }
 
     /// <summary>Saves GameManager Data in the user system</summary>

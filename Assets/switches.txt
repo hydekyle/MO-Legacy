@@ -1,5 +1,5 @@
-000 Puerta1 open
-001 
+000 Puerta1 OPEN
+001 First Dialog
 002 
 003 
 004 

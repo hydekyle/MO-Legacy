@@ -119,18 +119,28 @@ public struct GameData
 }
 
 [Serializable]
-public struct SwitchCondition
+public class SwitchCondition
 {
-    public string ID;
+    public string name;
     public bool value;
+
+    public int ID()
+    {
+        return int.Parse(name.Substring(0, 4));
+    }
 }
 
 [Serializable]
 public class VariableCondition
 {
-    public string ID;
+    public string name;
     public float value;
     public VariableConditionality conditionality;
+
+    public int ID()
+    {
+        return int.Parse(name.Substring(0, 4));
+    }
 }
 
 [Serializable]
@@ -171,14 +181,60 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
 }
 
 [Serializable]
-public class TableViewSwitch
+public class ConditionTable
 {
-    [TableColumnWidth(90)]
-    [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
-    public string switchID;
-    public bool value = true;
+    [TableList]
+    [GUIColor(0, 1f, 0)]
+    public List<TableViewSwitch> switchTable = new List<TableViewSwitch>();
+    [Space]
+    [TableList]
+    [GUIColor(0, 0.85f, 0)]
+    public List<TableViewVariable> variableTable = new List<TableViewVariable>();
 
-    IEnumerable ReadSwitches()
+    /// <summary>Refresh variable names if they have changed in .txt</summary>
+    public void Refresh()
+    {
+        if (switchTable.Count > 0)
+        {
+            var switchLineList = new List<string>();
+            foreach (var line in ReadSwitches())
+            {
+                switchLineList.Add(line);
+            }
+            foreach (var sw in switchTable)
+            {
+                if (sw.switchID == null) return;
+                var ID = sw.switchID.Substring(0, 4);
+                var txtID = switchLineList[int.Parse(ID)];
+                if (txtID != sw.switchID)
+                {
+                    sw.switchID = txtID;
+                }
+            }
+        }
+
+        if (variableTable.Count > 0)
+        {
+            var variableLineList = new List<string>();
+            foreach (var line in ReadVariables())
+            {
+                variableLineList.Add(line);
+            }
+            foreach (var vr in variableTable)
+            {
+                if (vr.variableID == null) return;
+                var ID = vr.variableID.Substring(0, 4);
+                var txtID = variableLineList[int.Parse(ID)];
+                if (txtID != vr.variableID)
+                {
+                    vr.variableID = txtID;
+                }
+            }
+        }
+
+    }
+
+    IEnumerable<string> ReadSwitches()
     {
         var path = Application.dataPath + "/switches.txt";
         var dataLines = File.ReadAllLines(path);
@@ -188,6 +244,39 @@ public class TableViewSwitch
             yield return line;
         }
     }
+
+    IEnumerable<string> ReadVariables()
+    {
+        var path = Application.dataPath + "/variables.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+}
+
+[Serializable]
+public class TableViewSwitch
+{
+    [TableColumnWidth(90)]
+    [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
+    public string switchID;
+    public bool value = true;
+
+    IEnumerable<string> ReadSwitches()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+
+
 }
 
 [Serializable]
