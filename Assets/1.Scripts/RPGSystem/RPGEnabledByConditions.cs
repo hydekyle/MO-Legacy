@@ -5,22 +5,27 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RPGEnabledByConditions : ConditionTable
+public class RPGEnabledByConditions : MonoBehaviour
 {
+    public ConditionTable conditionTable;
+    [Tooltip("Añade una segunda tabla que funciona como OR")]
+    public bool enableTableOR;
+    [ShowIf("enableTableOR")]
+    public ConditionTable conditionTableOR;
     [Space(25)]
     public AudioClip playSound;
-    List<SwitchCondition> requiredSwitchList = new List<SwitchCondition>();
-    List<VariableCondition> requiredVariableList = new List<VariableCondition>();
+    // Cache subscribed ones to avoid multiples subscriptions
+    List<int> _subscribedSwitchID = new List<int>();
+    List<int> _subscribedVariableID = new List<int>();
 
     void OnValidate()
     {
-        Refresh();
+        conditionTable.Refresh();
     }
 
     void Start()
     {
-        LoadTableData();
-        SubscribeToRequiredConditions();
+        SubscribeToRequiredValueConditions();
         SetActiveIfAllConditionsOK();
     }
 
@@ -29,76 +34,67 @@ public class RPGEnabledByConditions : ConditionTable
         UnSubscribeToRequiredConditions();
     }
 
-    void LoadTableData()
-    {
-        foreach (var tableItem in switchTable)
-        {
-            requiredSwitchList.Add(new SwitchCondition()
-            {
-                name = tableItem.switchID,
-                value = tableItem.value
-            });
-        }
-        foreach (var tableItem in variableTable)
-        {
-            requiredVariableList.Add(new VariableCondition()
-            {
-                name = tableItem.variableID,
-                value = tableItem.value,
-                conditionality = tableItem.condition
-            });
-        }
-    }
-
     // Called every time a required switch or variable changes the value
     void SetActiveIfAllConditionsOK()
     {
-        var isAllOK = isAllConditionsOK();
+        var isAllOK = IsAllConditionsOK();
         if (isAllOK == gameObject.activeSelf) return;
         if (playSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(playSound, gameObject);
         gameObject.SetActive(isAllOK);
     }
 
-    void SubscribeToRequiredConditions()
+    void SubscribeToRequiredValueConditions()
     {
-        foreach (var s in requiredSwitchList)
+        SubscribeConditionTable(conditionTable);
+        if (enableTableOR) SubscribeConditionTable(conditionTableOR);
+    }
+
+    void SubscribeConditionTable(ConditionTable cTable)
+    {
+        foreach (var s in cTable.switchTable)
         {
-            if (!GameManager.Instance.gameData.switches.ContainsKey(s.ID()))
-            {
-                GameManager.SetSwitch(s.ID(), false);
-            }
-            GameManager.Instance.gameData.switches[s.ID()].OnChanged += SetActiveIfAllConditionsOK;
+            var ID = s.ID();
+            if (_subscribedSwitchID.Contains(ID)) continue; // Avoiding resubscription
+            GameManager.SubscribeToSwitchChangedEvent(ID, SetActiveIfAllConditionsOK);
+            _subscribedSwitchID.Add(ID);
         }
-        foreach (var v in requiredVariableList)
+        foreach (var v in cTable.variableTable)
         {
-            if (!GameManager.Instance.gameData.variables.ContainsKey(v.ID()))
-            {
-                GameManager.SetVariable(v.ID(), 0);
-            }
-            GameManager.Instance.gameData.variables[v.ID()].OnChanged += SetActiveIfAllConditionsOK;
+            var ID = v.ID();
+            if (_subscribedVariableID.Contains(ID)) continue;
+            GameManager.SubscribeToVariableChangedEvent(ID, SetActiveIfAllConditionsOK);
+            _subscribedVariableID.Add(ID);
         }
     }
 
     void UnSubscribeToRequiredConditions()
     {
-        foreach (var requiredSwitch in requiredSwitchList)
-        {
-            GameManager.Instance.gameData.switches[requiredSwitch.ID()].OnChanged -= SetActiveIfAllConditionsOK;
-        }
-        foreach (var requiredVariable in requiredVariableList)
-        {
-            GameManager.Instance.gameData.variables[requiredVariable.ID()].OnChanged -= SetActiveIfAllConditionsOK;
-        }
+        UnsubscribeConditionTable(conditionTable);
+        if (enableTableOR) UnsubscribeConditionTable(conditionTableOR);
     }
 
-    bool isAllConditionsOK()
+    void UnsubscribeConditionTable(ConditionTable cTable)
     {
-        foreach (var requiredSwitch in requiredSwitchList)
+        foreach (var id in _subscribedSwitchID) GameManager.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
+        foreach (var id in _subscribedVariableID) GameManager.UnsubscribeToVariableChangedEvent(id, SetActiveIfAllConditionsOK);
+        _subscribedSwitchID.Clear();
+        _subscribedVariableID.Clear();
+    }
+
+    bool IsAllConditionsOK()
+    {
+        if (enableTableOR) return IsTableConditionsOK(conditionTable) || IsTableConditionsOK(conditionTableOR);
+        else return IsTableConditionsOK(conditionTable);
+    }
+
+    bool IsTableConditionsOK(ConditionTable cTable)
+    {
+        foreach (var requiredSwitch in cTable.switchTable)
         {
             var switchValue = GameManager.GetSwitch(requiredSwitch.ID());
             if (requiredSwitch.value != switchValue) return false;
         }
-        foreach (var requiredVariable in requiredVariableList)
+        foreach (var requiredVariable in cTable.variableTable)
         {
             var variableValue = GameManager.GetVariable(requiredVariable.ID());
             switch (requiredVariable.conditionality)

@@ -5,43 +5,16 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RPGInteractable : ConditionTable
+public class RPGInteractable : MonoBehaviour
 {
+    public ConditionTable setOnInteraction;
     [Space(25)]
     public UnityEvent onInteractionEvent;
     public AudioClip playSound;
-    List<SwitchCondition> setSwitchList = new List<SwitchCondition>();
-    List<VariableCondition> setVariableList = new List<VariableCondition>();
 
     void OnValidate()
     {
-        Refresh();
-    }
-
-    void Awake()
-    {
-        LoadTableData();
-    }
-
-    void LoadTableData()
-    {
-        foreach (var tableItem in switchTable)
-        {
-            setSwitchList.Add(new SwitchCondition()
-            {
-                name = tableItem.switchID,
-                value = tableItem.value
-            });
-        }
-        foreach (var tableItem in variableTable)
-        {
-            setVariableList.Add(new VariableCondition()
-            {
-                name = tableItem.variableID,
-                value = tableItem.value,
-                conditionality = tableItem.condition
-            });
-        }
+        setOnInteraction.Refresh();
     }
 
     public void DoInteraction()
@@ -50,8 +23,8 @@ public class RPGInteractable : ConditionTable
         {
             AudioManager.PlaySoundFromGameobject(playSound, gameObject);
         }
-        foreach (var sw in setSwitchList) GameManager.SetSwitch(sw.ID(), sw.value);
-        foreach (var va in setVariableList)
+        foreach (var sw in setOnInteraction.switchTable) GameManager.SetSwitch(sw.ID(), sw.value);
+        foreach (var va in setOnInteraction.variableTable)
         {
             switch (va.conditionality)
             {

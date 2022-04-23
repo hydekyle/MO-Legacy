@@ -70,26 +70,50 @@ public class GameManager : MonoBehaviour
     }
 
     #region GameData
-    public static bool GetSwitch(int switchID)
+    public static bool GetSwitch(int ID)
     {
         try
         {
-            return GameManager.Instance.gameData.switches[switchID].Value;
+            return GameManager.Instance.gameData.switches[ID].Value;
         }
         catch
         {
+            GameManager.SetSwitch(ID, false);
             return false;
         }
     }
 
-    public static float GetVariable(int variableID)
+    public static void SubscribeToSwitchChangedEvent(int ID, Action action)
+    {
+        GameManager.GetSwitch(ID); // This ensure the switch exist before sub
+        GameManager.Instance.gameData.switches[ID].OnChanged += action;
+    }
+
+    public static void SubscribeToVariableChangedEvent(int ID, Action action)
+    {
+        GameManager.GetVariable(ID); // This ensure the switch exist before sub
+        GameManager.Instance.gameData.variables[ID].OnChanged += action;
+    }
+
+    public static void UnsubscribeToSwitchChangedEvent(int ID, Action action)
+    {
+        GameManager.Instance.gameData.switches[ID].OnChanged -= action;
+    }
+
+    public static void UnsubscribeToVariableChangedEvent(int ID, Action action)
+    {
+        GameManager.Instance.gameData.variables[ID].OnChanged -= action;
+    }
+
+    public static float GetVariable(int ID)
     {
         try
         {
-            return GameManager.Instance.gameData.variables[variableID].Value;
+            return GameManager.Instance.gameData.variables[ID].Value;
         }
         catch
         {
+            GameManager.SetVariable(ID, 0);
             return 0;
         }
     }

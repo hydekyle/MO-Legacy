@@ -182,7 +182,7 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
 }
 
 [Serializable]
-public class ConditionTable : MonoBehaviour
+public class ConditionTable
 {
     [TableList]
     [GUIColor(0, 1f, 0)]
@@ -347,6 +347,11 @@ public class TableViewSwitch
         window.EditSwitchNameByID(switchID);
     }
 
+    public int ID()
+    {
+        return int.Parse(switchID.Substring(0, 4));
+    }
+
     IEnumerable<string> ReadSwitches()
     {
         var path = Application.dataPath + "/switches.txt";
@@ -368,7 +373,7 @@ public class TableViewVariable
     [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
     public string variableID;
     [ShowIf("variableID")]
-    public VariableConditionality condition;
+    public VariableConditionality conditionality;
     [ShowIf("variableID")]
     public float value;
     [TableColumnWidth(20)]
@@ -377,6 +382,11 @@ public class TableViewVariable
     {
         PopupEditableVariableName window = ScriptableObject.CreateInstance<PopupEditableVariableName>();
         window.EditVariableNameByID(variableID);
+    }
+
+    public int ID()
+    {
+        return int.Parse(variableID.Substring(0, 4));
     }
 
     IEnumerable ReadVariables()
