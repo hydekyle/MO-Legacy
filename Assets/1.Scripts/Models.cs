@@ -258,79 +258,6 @@ public class ConditionTable
     }
 }
 
-public class PopupEditableVariableName : EditorWindow
-{
-    string inputText = "";
-    string editingName = "";
-    int ID;
-    public static PopupEditableVariableName Instance;
-    bool isVariable;
-
-    public void EditSwitchNameByID(string switchID)
-    {
-        if (PopupEditableVariableName.Instance != null) return;
-        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
-        ID = int.Parse(switchID.Substring(0, 4));
-        editingName = switchID.Substring(4, switchID.Length - 4);
-        isVariable = false;
-        Instance = this;
-        ShowPopup();
-    }
-
-    public void EditVariableNameByID(string variableID)
-    {
-        if (PopupEditableVariableName.Instance != null) return;
-        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
-        ID = int.Parse(variableID.Substring(0, 4));
-        editingName = variableID.Substring(4, variableID.Length - 4);
-        isVariable = true;
-        Instance = this;
-        ShowPopup();
-    }
-
-    void OnGUI()
-    {
-        EditorGUILayout.LabelField("Renaming " + editingName, EditorStyles.wordWrappedLabel);
-        inputText = GUILayout.TextArea(inputText);
-        if (GUILayout.Button("SAVE"))
-        {
-            SaveNewSwitch(ID, inputText, isVariable);
-            if (Selection.activeGameObject.TryGetComponent<ConditionTable>(out var c)) c.Refresh();
-            Exit();
-        }
-        if (GUILayout.Button("CANCEL")) Exit();
-    }
-
-    void Exit()
-    {
-        Instance = null;
-        this.Close();
-    }
-
-    void SaveNewSwitch(int ID, string newName, bool isVariable)
-    {
-        var path = Application.dataPath;
-        path += isVariable ? "/variables.txt" : "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-        var textID = "";
-        if (ID < 10) textID = "00" + ID;
-        else if (ID < 100) textID = "0" + ID;
-        dataLines[ID] = textID + " " + newName;
-        File.WriteAllLines(path, dataLines);
-    }
-
-    IEnumerable<string> ReadSwitches()
-    {
-        var path = Application.dataPath + "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
-        {
-            yield return line;
-        }
-    }
-}
-
 [Serializable]
 public class TableViewSwitch
 {
@@ -400,4 +327,93 @@ public class TableViewVariable
         }
     }
 }
+
+public class PopupEditableVariableName : EditorWindow
+{
+    string inputText = "";
+    string editingName = "";
+    int ID;
+    public static PopupEditableVariableName Instance;
+    bool isVariable;
+
+    public void EditSwitchNameByID(string switchID)
+    {
+        if (PopupEditableVariableName.Instance != null) return;
+        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
+        ID = int.Parse(switchID.Substring(0, 4));
+        inputText = editingName = switchID.Substring(4, switchID.Length - 4);
+        isVariable = false;
+        Instance = this;
+        ShowPopup();
+    }
+
+    public void EditVariableNameByID(string variableID)
+    {
+        if (PopupEditableVariableName.Instance != null) return;
+        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
+        ID = int.Parse(variableID.Substring(0, 4));
+        inputText = editingName = variableID.Substring(4, variableID.Length - 4);
+        isVariable = true;
+        Instance = this;
+        ShowPopup();
+    }
+
+    void OnGUI()
+    {
+        EditorGUILayout.LabelField(String.Format("Renaming '{0}'", editingName), EditorStyles.wordWrappedLabel);
+        inputText = GUILayout.TextField(inputText);
+
+        Event e = Event.current;
+        switch (e.type)
+        {
+            case EventType.KeyDown:
+                if (Event.current.keyCode == (KeyCode.Return)) Save(); break;
+        }
+
+        if (GUILayout.Button("SAVE")) Save();
+        if (GUILayout.Button("CANCEL")) Exit();
+    }
+
+    void Save()
+    {
+        SaveNewSwitch(ID, inputText, isVariable);
+        if (Selection.activeGameObject.TryGetComponent<RPGInteractable>(out var interactable)) interactable.setOnInteraction.Refresh();
+        if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c))
+        {
+            c.conditionTable.Refresh();
+            c.conditionTableOR.Refresh();
+        }
+        Exit();
+    }
+
+    void Exit()
+    {
+        Instance = null;
+        this.Close();
+    }
+
+    void SaveNewSwitch(int ID, string newName, bool isVariable)
+    {
+        var path = Application.dataPath;
+        path += isVariable ? "/variables.txt" : "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+        var textID = "";
+        if (ID < 10) textID = "00" + ID;
+        else if (ID < 100) textID = "0" + ID;
+        dataLines[ID] = textID + " " + newName;
+        File.WriteAllLines(path, dataLines);
+    }
+
+    IEnumerable<string> ReadSwitches()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+}
+
 

@@ -10,7 +10,7 @@ public class RPGInteractable : MonoBehaviour
     public ConditionTable setOnInteraction;
     [Space(25)]
     public UnityEvent onInteractionEvent;
-    public AudioClip playSound;
+    public AudioClip onInteractionSound;
 
     void OnValidate()
     {
@@ -19,9 +19,9 @@ public class RPGInteractable : MonoBehaviour
 
     public void DoInteraction()
     {
-        if (playSound != null)
+        if (onInteractionSound != null)
         {
-            AudioManager.PlaySoundFromGameobject(playSound, gameObject);
+            AudioManager.PlaySoundFromGameobject(onInteractionSound, gameObject);
         }
         foreach (var sw in setOnInteraction.switchTable) GameManager.SetSwitch(sw.ID(), sw.value);
         foreach (var va in setOnInteraction.variableTable)

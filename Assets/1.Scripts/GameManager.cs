@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
 
     public static void SubscribeToVariableChangedEvent(int ID, Action action)
     {
-        GameManager.GetVariable(ID); // This ensure the switch exist before sub
+        GameManager.GetVariable(ID);
         GameManager.Instance.gameData.variables[ID].OnChanged += action;
     }
 

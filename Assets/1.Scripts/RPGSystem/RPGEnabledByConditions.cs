@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class RPGEnabledByConditions : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class RPGEnabledByConditions : MonoBehaviour
     [ShowIf("enableTableOR")]
     public ConditionTable conditionTableOR;
     [Space(25)]
-    public AudioClip playSound;
+    [FormerlySerializedAs("playSound")]
+    public AudioClip onEnableSound;
     // Cache subscribed ones to avoid multiples subscriptions
     List<int> _subscribedSwitchID = new List<int>();
     List<int> _subscribedVariableID = new List<int>();
@@ -39,7 +41,7 @@ public class RPGEnabledByConditions : MonoBehaviour
     {
         var isAllOK = IsAllConditionsOK();
         if (isAllOK == gameObject.activeSelf) return;
-        if (playSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(playSound, gameObject);
+        if (onEnableSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnableSound, gameObject);
         gameObject.SetActive(isAllOK);
     }
 
