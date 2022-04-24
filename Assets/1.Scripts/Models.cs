@@ -267,12 +267,14 @@ public class TableViewSwitch
     [TableColumnWidth(120)]
     public bool value = true;
     [TableColumnWidth(20)]
+#if UNITY_EDITOR
+    Rect rect;
     [Button("Rename")]
     void Edit()
     {
-        PopupEditableVariableName window = ScriptableObject.CreateInstance<PopupEditableVariableName>();
-        window.EditSwitchNameByID(switchID);
+        PopupWindow.Show(rect, new PopupEditableVariableName(switchID, false));
     }
+#endif
 
     public int ID()
     {
@@ -304,12 +306,14 @@ public class TableViewVariable
     [ShowIf("variableID")]
     public float value;
     [TableColumnWidth(20)]
+#if UNITY_EDITOR
+    Rect rect;
     [Button("Rename")]
     void Edit()
     {
-        PopupEditableVariableName window = ScriptableObject.CreateInstance<PopupEditableVariableName>();
-        window.EditVariableNameByID(variableID);
+        PopupWindow.Show(rect, new PopupEditableVariableName(variableID, true));
     }
+#endif
 
     public int ID()
     {
@@ -328,7 +332,8 @@ public class TableViewVariable
     }
 }
 
-public class PopupEditableVariableName : EditorWindow
+#if UNITY_EDITOR
+public class PopupEditableVariableName : PopupWindowContent
 {
     string inputText = "";
     string editingName = "";
@@ -336,31 +341,22 @@ public class PopupEditableVariableName : EditorWindow
     public static PopupEditableVariableName Instance;
     bool isVariable;
 
-    public void EditSwitchNameByID(string switchID)
+    public PopupEditableVariableName(string varID, bool isVariable)
     {
-        if (PopupEditableVariableName.Instance != null) return;
-        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
-        ID = int.Parse(switchID.Substring(0, 4));
-        inputText = editingName = switchID.Substring(4, switchID.Length - 4);
-        isVariable = false;
-        Instance = this;
-        ShowPopup();
+        ID = int.Parse(varID.Substring(0, 4));
+        editingName = inputText = varID.Substring(4, varID.Length - 4); ;
+        this.isVariable = isVariable;
     }
 
-    public void EditVariableNameByID(string variableID)
+    public override Vector2 GetWindowSize()
     {
-        if (PopupEditableVariableName.Instance != null) return;
-        position = new Rect(Screen.width / 2, Screen.height / 2, 250, 150);
-        ID = int.Parse(variableID.Substring(0, 4));
-        inputText = editingName = variableID.Substring(4, variableID.Length - 4);
-        isVariable = true;
-        Instance = this;
-        ShowPopup();
+        return new Vector2(200, 80);
     }
 
-    void OnGUI()
+    public override void OnGUI(Rect rect)
     {
-        EditorGUILayout.LabelField(String.Format("Renaming '{0}'", editingName), EditorStyles.wordWrappedLabel);
+        var title = String.Format("Renaming '{0}'", editingName);
+        GUILayout.Label(title, EditorStyles.boldLabel);
         inputText = GUILayout.TextField(inputText);
 
         Event e = Event.current;
@@ -371,7 +367,6 @@ public class PopupEditableVariableName : EditorWindow
         }
 
         if (GUILayout.Button("SAVE")) Save();
-        if (GUILayout.Button("CANCEL")) Exit();
     }
 
     void Save()
@@ -383,13 +378,7 @@ public class PopupEditableVariableName : EditorWindow
             c.conditionTable.Refresh();
             c.conditionTableOR.Refresh();
         }
-        Exit();
-    }
-
-    void Exit()
-    {
-        Instance = null;
-        this.Close();
+        editorWindow.Close();
     }
 
     void SaveNewSwitch(int ID, string newName, bool isVariable)
@@ -414,6 +403,10 @@ public class PopupEditableVariableName : EditorWindow
             yield return line;
         }
     }
+
+    public override void OnOpen() { }
+
+    public override void OnClose() { }
 }
 
-
+#endif

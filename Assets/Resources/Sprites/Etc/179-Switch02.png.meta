@@ -24,6 +24,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -352,6 +353,19 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      179-Switch02_1: -1218756765276012660
+      179-Switch02_8: -8364978965352940289
+      179-Switch02_10: 42605515069761567
+      179-Switch02_5: -3627221672898047834
+      179-Switch02_11: -2660651317371638411
+      179-Switch02_0: 8750419504435711128
+      179-Switch02_12: 5153982408622150830
+      179-Switch02_6: 7811975620404619641
+      179-Switch02_2: 2866457543623403204
+      179-Switch02_4: 32249698311446469
+      179-Switch02_7: 2334946042876105606
+      179-Switch02_9: 3270324864427958336
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
