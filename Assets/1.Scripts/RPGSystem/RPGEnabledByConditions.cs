@@ -8,14 +8,14 @@ using UnityEngine.Serialization;
 
 public class RPGEnabledByConditions : MonoBehaviour
 {
-    public ConditionTable conditionTable;
+    public RPGConditionTable conditionTable;
     [Tooltip("Añade una segunda tabla que funciona como OR")]
     public bool enableTableOR;
     [ShowIf("enableTableOR")]
-    public ConditionTable conditionTableOR;
+    public RPGConditionTable conditionTableOR;
     [Space(25)]
-    [FormerlySerializedAs("playSound")]
-    public AudioClip onEnableSound;
+    [FormerlySerializedAs("onEnableSound")]
+    public AudioClip onEnabledSound;
     // Cache subscribed ones to avoid multiples subscriptions
     List<int> _subscribedSwitchID = new List<int>();
     List<int> _subscribedVariableID = new List<int>();
@@ -41,7 +41,7 @@ public class RPGEnabledByConditions : MonoBehaviour
     {
         var isAllOK = IsAllConditionsOK();
         if (isAllOK == gameObject.activeSelf) return;
-        if (onEnableSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnableSound, gameObject);
+        if (onEnabledSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnabledSound, gameObject);
         gameObject.SetActive(isAllOK);
     }
 
@@ -51,7 +51,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         if (enableTableOR) SubscribeConditionTable(conditionTableOR);
     }
 
-    void SubscribeConditionTable(ConditionTable cTable)
+    void SubscribeConditionTable(RPGConditionTable cTable)
     {
         foreach (var s in cTable.switchTable)
         {
@@ -75,7 +75,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         if (enableTableOR) UnsubscribeConditionTable(conditionTableOR);
     }
 
-    void UnsubscribeConditionTable(ConditionTable cTable)
+    void UnsubscribeConditionTable(RPGConditionTable cTable)
     {
         foreach (var id in _subscribedSwitchID) GameManager.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
         foreach (var id in _subscribedVariableID) GameManager.UnsubscribeToVariableChangedEvent(id, SetActiveIfAllConditionsOK);
@@ -89,7 +89,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         else return IsTableConditionsOK(conditionTable);
     }
 
-    bool IsTableConditionsOK(ConditionTable cTable)
+    bool IsTableConditionsOK(RPGConditionTable cTable)
     {
         foreach (var requiredSwitch in cTable.switchTable)
         {

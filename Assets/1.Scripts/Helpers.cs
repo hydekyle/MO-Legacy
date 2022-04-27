@@ -26,6 +26,21 @@ public class Helpers
         }
     }
 
+    public static void ResolveRPGActions(RPGAction[] actions)
+    {
+        for (var x = 0; x < actions.Length; x++)
+        {
+            var action = actions[x];
+            switch (action.actionType)
+            {
+                case RPGActionType.SetVariables: action.setVariableTable.Resolve(); break;
+                case RPGActionType.Talk: Debug.Log(action.talkMSG); break;
+                case RPGActionType.CallScript: action.callScript.Invoke(); break;
+                case RPGActionType.PlaySFX: AudioManager.PlaySound(action.playSFX); break;
+            }
+        }
+    }
+
     public static FaceDirection GetOppositeFaceDirection(FaceDirection faceDirection) => faceDirection switch
     {
         FaceDirection.South => FaceDirection.North,

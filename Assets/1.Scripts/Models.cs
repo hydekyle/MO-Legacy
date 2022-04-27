@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
 using System.IO;
 using UnityEditor;
+using UnityEngine.Events;
 
 public enum TriggerType { player, other, any }
 public enum FaceDirection { North, West, East, South }
@@ -114,8 +115,8 @@ public struct Item
 [Serializable]
 public struct GameData
 {
-    public Switches switches;
-    public Variables variables;
+    public RPGSwitches switches;
+    public RPGVariables variables;
     public List<Item> inventory;
 }
 
@@ -145,10 +146,10 @@ public class VariableCondition
 }
 
 [Serializable]
-public class Switches : UnitySerializedDictionary<int, Observable<bool>> { }
+public class RPGSwitches : UnitySerializedDictionary<int, Observable<bool>> { }
 
 [Serializable]
-public class Variables : UnitySerializedDictionary<int, Observable<float>> { }
+public class RPGVariables : UnitySerializedDictionary<int, Observable<float>> { }
 
 // This is required for Odin Inspector Plugin to serialize Dictionary
 public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
@@ -181,16 +182,50 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
     }
 }
 
+public enum RPGActionType { SetVariables, Talk, PlaySFX, CallScript }
+
 [Serializable]
-public class ConditionTable
+public struct RPGAction
+{
+    public RPGActionType actionType;
+    [ShowIf("actionType", RPGActionType.SetVariables)]
+    public RPGVariableTable setVariableTable;
+    [ShowIf("actionType", RPGActionType.Talk)]
+    public string talkMSG;
+    [ShowIf("actionType", RPGActionType.CallScript)]
+    public UnityEvent callScript;
+    [ShowIf("actionType", RPGActionType.PlaySFX)]
+    public AudioClip playSFX;
+}
+
+[Serializable]
+public class RPGVariableTable : RPGConditionTable
+{
+    public void Resolve()
+    {
+        foreach (var sw in switchTable) GameManager.SetSwitch(sw.ID(), sw.value);
+        foreach (var va in variableTable)
+        {
+            switch (va.conditionality)
+            {
+                case VariableConditionality.Equals: GameManager.SetVariable(va.ID(), va.value); break;
+                case VariableConditionality.GreaterThan: GameManager.AddToVariable(va.ID(), va.value); break;
+                case VariableConditionality.LessThan: GameManager.AddToVariable(va.ID(), -va.value); break;
+            }
+        }
+    }
+}
+
+[Serializable]
+public class RPGConditionTable
 {
     [TableList]
     [GUIColor(0, 1f, 0)]
-    public List<TableViewSwitch> switchTable = new List<TableViewSwitch>();
+    public List<UITableViewSwitch> switchTable = new List<UITableViewSwitch>();
     [Space]
     [TableList]
     [GUIColor(0, 0.85f, 0)]
-    public List<TableViewVariable> variableTable = new List<TableViewVariable>();
+    public List<UITableViewVariable> variableTable = new List<UITableViewVariable>();
 
     /// <summary>Refresh variable names if they have changed in .txt</summary>
     public void Refresh()
@@ -259,7 +294,7 @@ public class ConditionTable
 }
 
 [Serializable]
-public class TableViewSwitch
+public class UITableViewSwitch
 {
     [TableColumnWidth(120)]
     [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
@@ -272,7 +307,7 @@ public class TableViewSwitch
     [Button("Rename")]
     void Edit()
     {
-        PopupWindow.Show(rect, new PopupEditableVariableName(switchID, false));
+        PopupWindow.Show(rect, new UIPopupEditableVariableName(switchID, false));
     }
 #endif
 
@@ -296,7 +331,7 @@ public class TableViewSwitch
 }
 
 [Serializable]
-public class TableViewVariable
+public class UITableViewVariable
 {
     [TableColumnWidth(140)]
     [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
@@ -311,7 +346,7 @@ public class TableViewVariable
     [Button("Rename")]
     void Edit()
     {
-        PopupWindow.Show(rect, new PopupEditableVariableName(variableID, true));
+        PopupWindow.Show(rect, new UIPopupEditableVariableName(variableID, true));
     }
 #endif
 
@@ -333,15 +368,15 @@ public class TableViewVariable
 }
 
 #if UNITY_EDITOR
-public class PopupEditableVariableName : PopupWindowContent
+public class UIPopupEditableVariableName : PopupWindowContent
 {
     string inputText = "";
     string editingName = "";
     int ID;
-    public static PopupEditableVariableName Instance;
+    public static UIPopupEditableVariableName Instance;
     bool isVariable;
 
-    public PopupEditableVariableName(string varID, bool isVariable)
+    public UIPopupEditableVariableName(string varID, bool isVariable)
     {
         ID = int.Parse(varID.Substring(0, 4));
         editingName = inputText = varID.Substring(4, varID.Length - 4); ;
@@ -372,7 +407,7 @@ public class PopupEditableVariableName : PopupWindowContent
     void Save()
     {
         SaveNewSwitch(ID, inputText, isVariable);
-        if (Selection.activeGameObject.TryGetComponent<RPGInteractable>(out var interactable)) interactable.setOnInteraction.Refresh();
+        if (Selection.activeGameObject.TryGetComponent<RPGInteractable>(out var interactable)) foreach (var action in interactable.actions) action.setVariableTable.Refresh();
         if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c))
         {
             c.conditionTable.Refresh();
