@@ -8,17 +8,6 @@ using UnityEngine;
 
 public class Helpers
 {
-    public static int GetPlayerDeaths()
-    {
-        return PlayerPrefs.GetInt("DeathCounter");
-    }
-
-    public static void AddPlayerDeath()
-    {
-        var deaths = GetPlayerDeaths();
-        PlayerPrefs.SetInt("DeathCounter", ++deaths);
-    }
-
     public static async void ResolveActions(RPGAction[] actions)
     {
         for (var x = 0; x < actions.Length; x++)
@@ -35,11 +24,22 @@ public class Helpers
         }
     }
 
+    public static int GetPlayerDeaths()
+    {
+        return PlayerPrefs.GetInt("DeathCounter");
+    }
+
+    public static void AddPlayerDeath()
+    {
+        var deaths = GetPlayerDeaths();
+        PlayerPrefs.SetInt("DeathCounter", ++deaths);
+    }
+
     public static FaceDirection GetOppositeFaceDirection(FaceDirection faceDirection) => faceDirection switch
     {
         FaceDirection.South => FaceDirection.North,
-        FaceDirection.West => FaceDirection.West,
-        FaceDirection.East => FaceDirection.East,
+        FaceDirection.West => FaceDirection.East,
+        FaceDirection.East => FaceDirection.West,
         _ => FaceDirection.South
     };
 

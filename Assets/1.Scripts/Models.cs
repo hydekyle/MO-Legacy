@@ -12,15 +12,24 @@ using UnityEngine.Events;
 public enum TriggerType { player, other, any }
 public enum FaceDirection { North, West, East, South }
 public enum VariableConditionality { Equals, GreaterThan, LessThan }
-public enum RPGActionType { SetVariables, Talk, PlaySFX, WaitSeconds, CallScript }
 public enum RPGTriggerType { PlayerInteraction, PlayerTouch, Autorun }
+public enum RPGActionType { SetVariables, Talk, PlaySFX, WaitSeconds, CallScript }
 
-// 0 (down) walking
-// 1 (down) idle
-// 2 (down) walking
-// 3 (left) walking
-// 6 (right) walking
-// 9 (up) walking
+[Serializable]
+public struct RPGAction
+{
+    public RPGActionType actionType;
+    [ShowIf("actionType", RPGActionType.SetVariables)]
+    public RPGVariableTable setVariableTable;
+    [ShowIf("actionType", RPGActionType.Talk)]
+    public string talkMSG;
+    [ShowIf("actionType", RPGActionType.CallScript)]
+    public UnityEvent callScript;
+    [ShowIf("actionType", RPGActionType.PlaySFX)]
+    public AudioClip playSFX;
+    [ShowIf("actionType", RPGActionType.WaitSeconds)]
+    public float waitTime;
+}
 
 public class Entity : MonoBehaviour
 {
@@ -33,6 +42,12 @@ public class Entity : MonoBehaviour
     float _lastTimeAnimationChanged = -1;
     List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
     int _indexStepAnim = 0;
+    // 0 (down) walking
+    // 1 (down) idle
+    // 2 (down) walking
+    // 3 (left) walking
+    // 6 (right) walking
+    // 9 (up) walking
 
     private void Awake()
     {
@@ -225,22 +240,6 @@ public struct RPGPage
     public RPGTriggerType trigger;
     [Space(25)]
     public AudioClip playSFXOnEnabled;
-}
-
-[Serializable]
-public struct RPGAction
-{
-    public RPGActionType actionType;
-    [ShowIf("actionType", RPGActionType.SetVariables)]
-    public RPGVariableTable setVariableTable;
-    [ShowIf("actionType", RPGActionType.Talk)]
-    public string talkMSG;
-    [ShowIf("actionType", RPGActionType.CallScript)]
-    public UnityEvent callScript;
-    [ShowIf("actionType", RPGActionType.PlaySFX)]
-    public AudioClip playSFX;
-    [ShowIf("actionType", RPGActionType.WaitSeconds)]
-    public float waitTime;
 }
 
 [Serializable]
