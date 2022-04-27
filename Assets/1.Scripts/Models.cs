@@ -12,6 +12,8 @@ using UnityEngine.Events;
 public enum TriggerType { player, other, any }
 public enum FaceDirection { North, West, East, South }
 public enum VariableConditionality { Equals, GreaterThan, LessThan }
+public enum RPGActionType { SetVariables, Talk, PlaySFX, WaitSeconds, CallScript }
+public enum RPGTriggerType { PlayerInteraction, PlayerTouch, Autorun }
 
 // 0 (down) walking
 // 1 (down) idle
@@ -37,9 +39,37 @@ public class Entity : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Interact()
+    public void CastInteraction(Vector2 castPoint)
     {
-        GameManager.CastInteraction(transform.position);
+        var hits = Physics2D.CircleCastAll(castPoint, 0.2f, Vector2.one, 1f, LayerMask.GetMask("Default"));
+        foreach (var hit in hits)
+        {
+            if (hit && hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
+            {
+                if (interactedEvent.GetActivePage().trigger == RPGTriggerType.PlayerInteraction)
+                    Helpers.ResolveActions(interactedEvent.GetActivePage().actions);
+            }
+        }
+    }
+
+    /// <summary>This is for items like keys, it tries to find a trigger zone where a item is expected to be used</summary>
+    public void CastUsableItem(Vector2 castPoint, Item item)
+    {
+        var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.NameToLayer("Usable Item Zone"));
+        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
+        {
+            usableItemZone.UsedItem(item);
+        }
+    }
+
+    public void CastUsableItem(Item item)
+    {
+        var playerPosition = GameManager.Instance.playerT.position;
+        var hit = Physics2D.CircleCast(playerPosition, 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
+        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
+        {
+            usableItemZone.UsedItem(item);
+        }
     }
 
     public void Move(Vector3 moveDirection)
@@ -115,8 +145,8 @@ public struct Item
 [Serializable]
 public struct GameData
 {
-    public RPGSwitches switches;
-    public RPGVariables variables;
+    public SwitchDictionary switches;
+    public VariableDictionary variables;
     public List<Item> inventory;
 }
 
@@ -146,10 +176,10 @@ public class VariableCondition
 }
 
 [Serializable]
-public class RPGSwitches : UnitySerializedDictionary<int, Observable<bool>> { }
+public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
 
 [Serializable]
-public class RPGVariables : UnitySerializedDictionary<int, Observable<float>> { }
+public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
 
 // This is required for Odin Inspector Plugin to serialize Dictionary
 public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
@@ -182,7 +212,20 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
     }
 }
 
-public enum RPGActionType { SetVariables, Talk, PlaySFX, CallScript }
+[Serializable]
+public struct RPGPage
+{
+    [PreviewField(50, ObjectFieldAlignment.Center)]
+    public Sprite sprite;
+    [GUIColor(0, 1, 1)]
+    public RPGConditionTable conditions;
+    [GUIColor(1, 1, 0)]
+    public RPGAction[] actions;
+    [ShowIf("@this.actions.Length > 0")]
+    public RPGTriggerType trigger;
+    [Space(25)]
+    public AudioClip playSFXOnEnabled;
+}
 
 [Serializable]
 public struct RPGAction
@@ -196,6 +239,8 @@ public struct RPGAction
     public UnityEvent callScript;
     [ShowIf("actionType", RPGActionType.PlaySFX)]
     public AudioClip playSFX;
+    [ShowIf("actionType", RPGActionType.WaitSeconds)]
+    public float waitTime;
 }
 
 [Serializable]
@@ -220,11 +265,9 @@ public class RPGVariableTable : RPGConditionTable
 public class RPGConditionTable
 {
     [TableList]
-    [GUIColor(0, 1f, 0)]
     public List<UITableViewSwitch> switchTable = new List<UITableViewSwitch>();
     [Space]
     [TableList]
-    [GUIColor(0, 0.85f, 0)]
     public List<UITableViewVariable> variableTable = new List<UITableViewVariable>();
 
     /// <summary>Refresh variable names if they have changed in .txt</summary>
@@ -239,7 +282,7 @@ public class RPGConditionTable
             }
             foreach (var sw in switchTable)
             {
-                if (sw.switchID == null) return;
+                if (sw.switchID == null || sw.switchID == "") return;
                 var ID = sw.switchID.Substring(0, 4);
                 var txtID = switchLineList[int.Parse(ID)];
                 if (txtID != sw.switchID)
@@ -407,12 +450,13 @@ public class UIPopupEditableVariableName : PopupWindowContent
     void Save()
     {
         SaveNewSwitch(ID, inputText, isVariable);
-        if (Selection.activeGameObject.TryGetComponent<RPGInteractable>(out var interactable)) foreach (var action in interactable.actions) action.setVariableTable.Refresh();
-        if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c))
-        {
-            c.conditionTable.Refresh();
-            c.conditionTableOR.Refresh();
-        }
+        if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c)) c.conditionTable.Refresh();
+        if (Selection.activeGameObject.TryGetComponent<RPGEvent>(out var e))
+            foreach (var page in e.pages)
+            {
+                page.conditions.Refresh();
+                foreach (var action in page.actions) action.setVariableTable.Refresh();
+            }
         editorWindow.Close();
     }
 

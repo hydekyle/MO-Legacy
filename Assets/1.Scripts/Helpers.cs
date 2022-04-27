@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class Helpers
@@ -17,16 +19,7 @@ public class Helpers
         PlayerPrefs.SetInt("DeathCounter", ++deaths);
     }
 
-    public static void UseItem(Item item)
-    {
-        switch (item.name)
-        {
-            case "Rusty Key": GameManager.CastUsableItem(item); break;
-            default: Debug.LogFormat("You used {0} but nothing happened...", item.name); break;
-        }
-    }
-
-    public static void ResolveRPGActions(RPGAction[] actions)
+    public static async void ResolveActions(RPGAction[] actions)
     {
         for (var x = 0; x < actions.Length; x++)
         {
@@ -37,6 +30,7 @@ public class Helpers
                 case RPGActionType.Talk: Debug.Log(action.talkMSG); break;
                 case RPGActionType.CallScript: action.callScript.Invoke(); break;
                 case RPGActionType.PlaySFX: AudioManager.PlaySound(action.playSFX); break;
+                case RPGActionType.WaitSeconds: await UniTask.Delay(TimeSpan.FromSeconds(action.waitTime), ignoreTimeScale: false); ; break;
             }
         }
     }

@@ -8,11 +8,8 @@ using UnityEngine.Serialization;
 
 public class RPGEnabledByConditions : MonoBehaviour
 {
+    [GUIColor(0, 1, 1)]
     public RPGConditionTable conditionTable;
-    [Tooltip("Añade una segunda tabla que funciona como OR")]
-    public bool enableTableOR;
-    [ShowIf("enableTableOR")]
-    public RPGConditionTable conditionTableOR;
     [Space(25)]
     [FormerlySerializedAs("onEnableSound")]
     public AudioClip onEnabledSound;
@@ -48,7 +45,6 @@ public class RPGEnabledByConditions : MonoBehaviour
     void SubscribeToRequiredValueConditions()
     {
         SubscribeConditionTable(conditionTable);
-        if (enableTableOR) SubscribeConditionTable(conditionTableOR);
     }
 
     void SubscribeConditionTable(RPGConditionTable cTable)
@@ -72,7 +68,6 @@ public class RPGEnabledByConditions : MonoBehaviour
     void UnSubscribeToRequiredConditions()
     {
         UnsubscribeConditionTable(conditionTable);
-        if (enableTableOR) UnsubscribeConditionTable(conditionTableOR);
     }
 
     void UnsubscribeConditionTable(RPGConditionTable cTable)
@@ -85,8 +80,7 @@ public class RPGEnabledByConditions : MonoBehaviour
 
     bool IsAllConditionsOK()
     {
-        if (enableTableOR) return IsTableConditionsOK(conditionTable) || IsTableConditionsOK(conditionTableOR);
-        else return IsTableConditionsOK(conditionTable);
+        return IsTableConditionsOK(conditionTable);
     }
 
     bool IsTableConditionsOK(RPGConditionTable cTable)

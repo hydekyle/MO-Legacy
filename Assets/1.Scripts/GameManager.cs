@@ -40,35 +40,6 @@ public class GameManager : MonoBehaviour
         playerT = GameObject.Find("PLAYER").transform;
     }
 
-    /// <summary>This is for items like keys, it tries to find a trigger zone where a item is expected to be used</summary>
-    public static void CastUsableItem(Vector2 castPoint, Item item)
-    {
-        var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.NameToLayer("Usable Item Zone"));
-        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
-        {
-            usableItemZone.UsedItem(item);
-        }
-    }
-
-    public static void CastUsableItem(Item item)
-    {
-        var playerPosition = GameManager.Instance.playerT.position;
-        var hit = Physics2D.CircleCast(playerPosition, 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
-        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
-        {
-            usableItemZone.UsedItem(item);
-        }
-    }
-
-    public static void CastInteraction(Vector2 castPoint)
-    {
-        var hit = Physics2D.CircleCast(castPoint, 0.2f, Vector2.one, 1f, LayerMask.GetMask("Interactable"));
-        if (hit && hit.transform.TryGetComponent<RPGInteractable>(out RPGInteractable interactableZone))
-        {
-            interactableZone.DoInteraction();
-        }
-    }
-
     #region GameData
     public static bool GetSwitch(int ID)
     {
@@ -173,7 +144,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Switches Placeholder
+    // Switches .txt Placeholder 
     // [Button("save")]
     // void WriteTest()
     // {
