@@ -45,6 +45,26 @@ public class Helpers
             else return FaceDirection.East;
         }
     }
-
 }
+
+// Switches .txt Placeholder 
+// [Button("save")]
+// void WriteTest()
+// {
+//     var path = Application.dataPath + "/switches.txt";
+//     File.WriteAllLines(path, DameDatos());
+//     path = Application.dataPath + "/variables.txt";
+//     File.WriteAllLines(path, DameDatos());
+// }
+
+// IEnumerable<string> DameDatos()
+// {
+//     for (var x = 0; x < 200; x++)
+//     {
+//         var positionID = x.ToString();
+//         if (x < 10) positionID = "00" + positionID;
+//         else if (x < 100) positionID = "0" + positionID;
+//         yield return positionID + " ";
+//     }
+// }
 

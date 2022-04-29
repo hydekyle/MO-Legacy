@@ -8,6 +8,8 @@ using Cysharp.Threading.Tasks;
 using System.IO;
 using UnityEditor;
 using UnityEngine.Events;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.SceneManagement;
 
 public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
@@ -76,7 +78,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public void CastUsableItem(Vector2 castPoint, Item item)
+    public void CastUsableItem(Vector2 castPoint, ScriptableItem item)
     {
         var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.NameToLayer("Usable Item Zone"));
         if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
@@ -85,7 +87,7 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public void CastUsableItem(Item item)
+    public void CastUsableItem(ScriptableItem item)
     {
         var playerPosition = GameManager.Instance.playerT.position;
         var hit = Physics2D.CircleCast(playerPosition, 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
@@ -107,7 +109,7 @@ public class Entity : MonoBehaviour
         try { LookAtDirection(faceDirection); } catch { }
     }
 
-    void LookAtDirection(FaceDirection fDir)
+    public void LookAtDirection(FaceDirection fDir)
     {
         switch (fDir)
         {
@@ -156,21 +158,132 @@ public class Entity : MonoBehaviour
 }
 
 [Serializable]
-public struct Item
-{
-    [PreviewField(50, ObjectFieldAlignment.Right)]
-    public Sprite sprite;
-    public string name;
-    public string description;
-    public bool isUsable;
-}
-
-[Serializable]
-public struct GameData
+public class GameData
 {
     public SwitchDictionary switches;
     public VariableDictionary variables;
-    public List<Item> inventory;
+    public Inventory inventory = new Inventory();
+    [HideInInspector]
+    public Vector3 savedPosition;
+    [HideInInspector]
+    public FaceDirection savedFaceDir;
+
+    public static void AddItem(ScriptableItem item, int amount)
+    {
+        if (GameManager.Instance.gameData.inventory.ContainsKey(item))
+        {
+            if (item.isStackable) GameManager.Instance.gameData.inventory[item] += amount;
+            else GameManager.Instance.gameData.inventory[item] = amount;
+        }
+        else
+            GameManager.Instance.gameData.inventory.Add(item, amount);
+    }
+
+    public void SaveGameDataSlot(int slotIndex)
+    {
+        savedPosition = GameManager.Instance.playerT.position;
+        savedFaceDir = GameManager.Instance.playerT.GetComponent<Entity>().faceDirection;
+        var fileName = "/savegame" + slotIndex;
+        var savePath = string.Concat(Application.persistentDataPath, fileName);
+        string saveData = JsonUtility.ToJson(this, true);
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(savePath);
+        bf.Serialize(file, saveData);
+        file.Close();
+    }
+
+    public async void LoadGameDataSlot(int slotIndex)
+    {
+        var fileName = "/savegame" + slotIndex;
+        var savePath = string.Concat(Application.persistentDataPath, fileName);
+        if (File.Exists(savePath))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(savePath, FileMode.Open);
+            JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
+        }
+        else
+        {
+            Debug.Log("Starting New Game");
+        }
+        //TODO: Remove when Title Menu is completed
+        await SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        var playerT = GameManager.Instance.playerT;
+        playerT.position = savedPosition;
+        playerT.GetComponent<Entity>().LookAtDirection(savedFaceDir);
+    }
+
+    public static bool GetSwitch(int ID)
+    {
+        try
+        {
+            return GameManager.Instance.gameData.switches[ID].Value;
+        }
+        catch
+        {
+            GameData.SetSwitch(ID, false);
+            return false;
+        }
+    }
+
+    public static void SubscribeToSwitchChangedEvent(int ID, Action action)
+    {
+        GameData.GetSwitch(ID); // This ensure the switch exist before sub
+        GameManager.Instance.gameData.switches[ID].OnChanged += action;
+    }
+
+    public static void SubscribeToVariableChangedEvent(int ID, Action action)
+    {
+        GameData.GetVariable(ID);
+        GameManager.Instance.gameData.variables[ID].OnChanged += action;
+    }
+
+    public static void UnsubscribeToSwitchChangedEvent(int ID, Action action)
+    {
+        GameManager.Instance.gameData.switches[ID].OnChanged -= action;
+    }
+
+    public static void UnsubscribeToVariableChangedEvent(int ID, Action action)
+    {
+        GameManager.Instance.gameData.variables[ID].OnChanged -= action;
+    }
+
+    public static float GetVariable(int ID)
+    {
+        try
+        {
+            return GameManager.Instance.gameData.variables[ID].Value;
+        }
+        catch
+        {
+            GameData.SetVariable(ID, 0);
+            return 0;
+        }
+    }
+
+    public static void SetSwitch(int switchID, bool value)
+    {
+        if (GameManager.Instance.gameData.switches.ContainsKey(switchID))
+            GameManager.Instance.gameData.switches[switchID].Value = value;
+        else
+            GameManager.Instance.gameData.switches[switchID] = new Observable<bool>() { Value = value };
+    }
+
+    public static void SetVariable(int variableID, float value)
+    {
+        if (GameManager.Instance.gameData.variables.ContainsKey(variableID))
+            GameManager.Instance.gameData.variables[variableID].Value = value;
+        else
+            GameManager.Instance.gameData.variables[variableID] = new Observable<float>() { Value = value };
+    }
+
+    public static void AddToVariable(int variableID, float value)
+    {
+        if (GameManager.Instance.gameData.variables.ContainsKey(variableID))
+            GameManager.Instance.gameData.variables[variableID].Value += value;
+        else
+            GameManager.Instance.gameData.variables[variableID] = new Observable<float>() { Value = value };
+    }
 }
 
 [Serializable]
@@ -203,6 +316,9 @@ public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>>
 
 [Serializable]
 public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
+
+[Serializable]
+public class Inventory : UnitySerializedDictionary<ScriptableItem, int> { }
 
 // This is required for Odin Inspector Plugin to serialize Dictionary
 public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
@@ -288,14 +404,14 @@ public class RPGVariableTable
 
     public void Resolve()
     {
-        foreach (var sw in switchTable) GameManager.SetSwitch(sw.ID(), sw.value);
+        foreach (var sw in switchTable) GameData.SetSwitch(sw.ID(), sw.value);
         foreach (var va in variableTable)
         {
             switch (va.conditionality)
             {
-                case VariableConditionality.Equals: GameManager.SetVariable(va.ID(), va.value); break;
-                case VariableConditionality.GreaterThan: GameManager.AddToVariable(va.ID(), va.value); break;
-                case VariableConditionality.LessThan: GameManager.AddToVariable(va.ID(), -va.value); break;
+                case VariableConditionality.Equals: GameData.SetVariable(va.ID(), va.value); break;
+                case VariableConditionality.GreaterThan: GameData.AddToVariable(va.ID(), va.value); break;
+                case VariableConditionality.LessThan: GameData.AddToVariable(va.ID(), -va.value); break;
             }
         }
     }

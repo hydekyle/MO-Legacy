@@ -19,9 +19,4 @@ public class CustomEvents1 : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void _Palanca1On()
-    {
-        GameManager.SetSwitch(0, true);
-        GameManager.AddToVariable(0, 100);
-    }
 }

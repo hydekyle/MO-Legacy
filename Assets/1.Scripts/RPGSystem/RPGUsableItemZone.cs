@@ -11,7 +11,7 @@ public class RPGUsableItemZone : MonoBehaviour
     public UnityEvent onUsed;
     public List<RPGAction> actions;
 
-    public void UsedItem(Item ustedItem)
+    public void UsedItem(ScriptableItem ustedItem)
     {
         if (requiredItemName == ustedItem.name) onUsed.Invoke();
     }

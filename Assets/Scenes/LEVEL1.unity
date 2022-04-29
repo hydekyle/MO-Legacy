@@ -326,6 +326,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
+      propertyPath: gameData.inventory.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 37250464234765957, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
       propertyPath: requiredSwitches.Array.data[0]
       value: Hola2
       objectReference: {fileID: 0}
@@ -3150,13 +3154,14 @@ MonoBehaviour:
         switchTable: []
         variableTable: []
       talk:
-        text: 
+        text: Te sientes observado
       callScript:
         unityEvent:
           m_PersistentCalls:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3167,6 +3172,9 @@ MonoBehaviour:
         elasticity: 0
         vibrato: 0
         waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     trigger: 2
     run: 0
     playSFXOnEnabled: {fileID: 0}
@@ -3545,6 +3553,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3555,6 +3564,9 @@ MonoBehaviour:
         elasticity: 0
         vibrato: 0
         waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     - actionType: 4
       variableTable:
         switchTable: []
@@ -3567,6 +3579,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3577,6 +3590,9 @@ MonoBehaviour:
         elasticity: 0.1
         vibrato: 1
         waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     - actionType: 4
       variableTable:
         switchTable: []
@@ -3589,6 +3605,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3599,6 +3616,9 @@ MonoBehaviour:
         elasticity: 0.1
         vibrato: 1
         waitAnimEnd: 1
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     trigger: 0
     run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
@@ -3614,7 +3634,10 @@ MonoBehaviour:
         switchTable:
         - switchID: 000 Puerta Open
           value: 0
-        variableTable: []
+        variableTable:
+        - variableID: 000 Palanca Used Times
+          conditionality: 1
+          value: 1
       talk:
         text: 
       callScript:
@@ -3623,6 +3646,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3633,6 +3657,9 @@ MonoBehaviour:
         elasticity: 0
         vibrato: 0
         waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     - actionType: 4
       variableTable:
         switchTable: []
@@ -3645,6 +3672,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3655,6 +3683,9 @@ MonoBehaviour:
         elasticity: 0.1
         vibrato: 1
         waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     - actionType: 4
       variableTable:
         switchTable: []
@@ -3667,6 +3698,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 0}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -3677,6 +3709,9 @@ MonoBehaviour:
         elasticity: 0.1
         vibrato: 1
         waitAnimEnd: 1
+      addItem:
+        item: {fileID: 0}
+        amount: 0
     trigger: 0
     run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
@@ -5004,7 +5039,7 @@ MonoBehaviour:
         value: 1
       variableTable: []
     actions:
-    - actionType: 2
+    - actionType: 6
       variableTable:
         switchTable: []
         variableTable: []
@@ -5016,6 +5051,7 @@ MonoBehaviour:
             m_Calls: []
       playSFX:
         clip: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
+        waitEnd: 0
       waitSeconds:
         seconds: 0
       tweenParams:
@@ -5026,6 +5062,9 @@ MonoBehaviour:
         elasticity: 0
         vibrato: 0
         waitAnimEnd: 0
+      addItem:
+        item: {fileID: 11400000, guid: 36f6d2f669d1935408ffbecd5a306712, type: 2}
+        amount: 1
     trigger: 0
     run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}

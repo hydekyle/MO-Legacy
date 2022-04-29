@@ -15,7 +15,8 @@ public enum RPGActionType
     PlaySFX,
     WaitSeconds,
     DOTween,
-    CallScript
+    CallScript,
+    AddItem
 }
 
 [Serializable]
@@ -39,6 +40,9 @@ public class RPGAction
     [ShowIf("actionType", RPGActionType.DOTween)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionDOTween tweenParams;
+    [ShowIf("actionType", RPGActionType.AddItem)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionAddItem addItem;
 
     public async UniTask Resolve()
     {
@@ -47,9 +51,10 @@ public class RPGAction
             case RPGActionType.SetVariables: variableTable.Resolve(); break;
             case RPGActionType.Talk: talk.Resolve(); break;
             case RPGActionType.CallScript: callScript.Resolve(); break;
-            case RPGActionType.PlaySFX: playSFX.Resolve(); break;
+            case RPGActionType.PlaySFX: await playSFX.Resolve(); break;
             case RPGActionType.WaitSeconds: await waitSeconds.Resolve(); break;
             case RPGActionType.DOTween: await tweenParams.Resolve(); break;
+            case RPGActionType.AddItem: addItem.Resolve(); break;
         }
     }
 }
@@ -79,9 +84,11 @@ public class RPGActionCallScript
 public class RPGActionPlaySFX
 {
     public AudioClip clip;
-    public void Resolve()
+    public bool waitEnd;
+    public async UniTask Resolve()
     {
         AudioManager.PlaySound(clip);
+        await UniTask.Delay(TimeSpan.FromSeconds(waitEnd ? clip.length : 0));
     }
 }
 
@@ -95,6 +102,7 @@ public class RPGActionWaitTime
     }
 }
 
+public enum TweenType { PunchScale, PunchRotation }
 [Serializable]
 public class RPGActionDOTween
 {
@@ -120,6 +128,16 @@ public class RPGActionDOTween
     }
 }
 
-public enum TweenType { PunchScale, PunchRotation }
+[Serializable]
+public class RPGActionAddItem
+{
+    public ScriptableItem item;
+    [ShowIf("@item && item.isStackable")]
+    public int amount = 1;
+    public void Resolve()
+    {
+        GameData.AddItem(item, amount);
+    }
+}
 
 #endregion

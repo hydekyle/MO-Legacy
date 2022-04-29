@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 721a39e3c85708740a94374289bf83f1, type: 3}
-  m_Name: Sounds Table
+  m_Script: {fileID: 11500000, guid: 8ed05e5d8ba540742bb57c0f2d73ad63, type: 3}
+  m_Name: Oro
   m_EditorClassIdentifier: 
-  step_basic: {fileID: 8300000, guid: 85e9d4e344b12479289d938de38a6093, type: 3}
+  sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  title: Oro
+  description: Tus dineros
+  isUsable: 0
+  isStackable: 1

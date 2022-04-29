@@ -53,14 +53,14 @@ public class RPGEnabledByConditions : MonoBehaviour
         {
             var ID = s.ID();
             if (_subscribedSwitchID.Contains(ID)) continue; // Avoiding resubscription
-            GameManager.SubscribeToSwitchChangedEvent(ID, SetActiveIfAllConditionsOK);
+            GameData.SubscribeToSwitchChangedEvent(ID, SetActiveIfAllConditionsOK);
             _subscribedSwitchID.Add(ID);
         }
         foreach (var v in cTable.variableTable)
         {
             var ID = v.ID();
             if (_subscribedVariableID.Contains(ID)) continue;
-            GameManager.SubscribeToVariableChangedEvent(ID, SetActiveIfAllConditionsOK);
+            GameData.SubscribeToVariableChangedEvent(ID, SetActiveIfAllConditionsOK);
             _subscribedVariableID.Add(ID);
         }
     }
@@ -72,8 +72,8 @@ public class RPGEnabledByConditions : MonoBehaviour
 
     void UnsubscribeConditionTable(RPGVariableTable cTable)
     {
-        foreach (var id in _subscribedSwitchID) GameManager.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
-        foreach (var id in _subscribedVariableID) GameManager.UnsubscribeToVariableChangedEvent(id, SetActiveIfAllConditionsOK);
+        foreach (var id in _subscribedSwitchID) GameData.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
+        foreach (var id in _subscribedVariableID) GameData.UnsubscribeToVariableChangedEvent(id, SetActiveIfAllConditionsOK);
         _subscribedSwitchID.Clear();
         _subscribedVariableID.Clear();
     }
@@ -87,12 +87,12 @@ public class RPGEnabledByConditions : MonoBehaviour
     {
         foreach (var requiredSwitch in cTable.switchTable)
         {
-            var switchValue = GameManager.GetSwitch(requiredSwitch.ID());
+            var switchValue = GameData.GetSwitch(requiredSwitch.ID());
             if (requiredSwitch.value != switchValue) return false;
         }
         foreach (var requiredVariable in cTable.variableTable)
         {
-            var variableValue = GameManager.GetVariable(requiredVariable.ID());
+            var variableValue = GameData.GetVariable(requiredVariable.ID());
             switch (requiredVariable.conditionality)
             {
                 case VariableConditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
