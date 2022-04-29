@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public GameData gameData;
     [HideInInspector]
     public Transform playerT;
+    public static bool isMovementAvailable = true;
+    public static bool isInteractAvailable = true;
+    public static List<RPGPage> resolvingPageList = new List<RPGPage>();
 
     void Awake()
     {
@@ -38,6 +41,37 @@ public class GameManager : MonoBehaviour
     private void OnActiveSceneChanged(Scene arg0, Scene arg1)
     {
         playerT = GameObject.Find("PLAYER").transform;
+    }
+
+    public static void AddResolvingPage(RPGPage page)
+    {
+        resolvingPageList.Add(page);
+        OnResolvingPageListChanged();
+    }
+
+    public static void RemoveResolvingPage(RPGPage page)
+    {
+        resolvingPageList.Remove(page);
+        print(resolvingPageList.Count);
+        OnResolvingPageListChanged();
+    }
+
+    static void OnResolvingPageListChanged()
+    {
+        if (resolvingPageList.Count == 0)
+        {
+            isMovementAvailable = isInteractAvailable = true;
+            return;
+        }
+        var pageList = resolvingPageList;
+        if (pageList.Exists(item => item.run == RunType.FreezeAll)) isMovementAvailable = isInteractAvailable = false;
+        else
+        {
+            if (pageList.Exists(item => item.run == RunType.FreezeInteraction)) isInteractAvailable = false;
+            else isInteractAvailable = true;
+            if (pageList.Exists(item => item.run == RunType.FreezeMovement)) isMovementAvailable = false;
+            else isMovementAvailable = true;
+        }
     }
 
     #region GameData

@@ -8,20 +8,16 @@ using UnityEngine;
 
 public class Helpers
 {
-    public static async void ResolveActions(RPGAction[] actions)
+    public static async void ResolvePageActions(RPGPage page)
     {
-        for (var x = 0; x < actions.Length; x++)
+        if (GameManager.resolvingPageList.Contains(page)) return;
+        GameManager.AddResolvingPage(page);
+        for (var x = 0; x < page.actions.Length; x++)
         {
-            var action = actions[x];
-            switch (action.actionType)
-            {
-                case RPGActionType.SetVariables: action.setVariableTable.Resolve(); break;
-                case RPGActionType.Talk: Debug.Log(action.talkMSG); break;
-                case RPGActionType.CallScript: action.callScript.Invoke(); break;
-                case RPGActionType.PlaySFX: AudioManager.PlaySound(action.playSFX); break;
-                case RPGActionType.WaitSeconds: await UniTask.Delay(TimeSpan.FromSeconds(action.waitTime), ignoreTimeScale: false); ; break;
-            }
+            var action = page.actions[x];
+            await action.Resolve();
         }
+        GameManager.RemoveResolvingPage(page);
     }
 
     public static int GetPlayerDeaths()

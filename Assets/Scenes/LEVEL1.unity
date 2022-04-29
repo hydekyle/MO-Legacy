@@ -3135,6 +3135,7 @@ MonoBehaviour:
       variableTable: []
     actions: []
     trigger: 0
+    run: 0
     playSFXOnEnabled: {fileID: 0}
   - sprite: {fileID: 3020591298559086837, guid: ced9416025d79714885f78fdb2fd6acb, type: 3}
     conditions:
@@ -3145,16 +3146,29 @@ MonoBehaviour:
         value: 6
     actions:
     - actionType: 1
-      setVariableTable:
+      variableTable:
         switchTable: []
         variableTable: []
-      talkMSG: Alguien ha aparecido en el mapa
+      talk:
+        text: 
       callScript:
-        m_PersistentCalls:
-          m_Calls: []
-      playSFX: {fileID: 0}
-      waitTime: 0
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
     trigger: 2
+    run: 0
     playSFXOnEnabled: {fileID: 0}
 --- !u!1 &959547083
 GameObject:
@@ -3461,7 +3475,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 992077235}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.09, y: -0.99099994, z: 64.02011}
+  m_LocalPosition: {x: 7.61, y: -0.99099994, z: 64.02011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3515,7 +3529,7 @@ MonoBehaviour:
       variableTable: []
     actions:
     - actionType: 0
-      setVariableTable:
+      variableTable:
         switchTable:
         - switchID: 000 Puerta Open
           value: 1
@@ -3523,13 +3537,70 @@ MonoBehaviour:
         - variableID: 000 Palanca Used Times
           conditionality: 1
           value: 1
-      talkMSG: 
+      talk:
+        text: 
       callScript:
-        m_PersistentCalls:
-          m_Calls: []
-      playSFX: {fileID: 0}
-      waitTime: 0
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+    - actionType: 4
+      variableTable:
+        switchTable: []
+        variableTable: []
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 1711008246}
+        punch: {x: 0.1, y: 0.1, z: 0.1}
+        duration: 0.1
+        elasticity: 0.1
+        vibrato: 1
+        waitAnimEnd: 0
+    - actionType: 4
+      variableTable:
+        switchTable: []
+        variableTable: []
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 992077237}
+        punch: {x: 0.25, y: 0.25, z: 0.25}
+        duration: 4
+        elasticity: 0.1
+        vibrato: 1
+        waitAnimEnd: 1
     trigger: 0
+    run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
   - sprite: {fileID: -8364978965352940289, guid: 51451e2cfdf9aaf45854a368eb17f904, type: 3}
     conditions:
@@ -3539,21 +3610,75 @@ MonoBehaviour:
       variableTable: []
     actions:
     - actionType: 0
-      setVariableTable:
+      variableTable:
         switchTable:
         - switchID: 000 Puerta Open
           value: 0
-        variableTable:
-        - variableID: 000 Palanca Used Times
-          conditionality: 1
-          value: 1
-      talkMSG: 
+        variableTable: []
+      talk:
+        text: 
       callScript:
-        m_PersistentCalls:
-          m_Calls: []
-      playSFX: {fileID: 0}
-      waitTime: 0
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+    - actionType: 4
+      variableTable:
+        switchTable: []
+        variableTable: []
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 1711008246}
+        punch: {x: 0.1, y: 0.1, z: 0.1}
+        duration: 0.2
+        elasticity: 0.1
+        vibrato: 1
+        waitAnimEnd: 0
+    - actionType: 4
+      variableTable:
+        switchTable: []
+        variableTable: []
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 992077237}
+        punch: {x: 0.25, y: 0.25, z: 0.25}
+        duration: 2
+        elasticity: 0.1
+        vibrato: 1
+        waitAnimEnd: 1
     trigger: 0
+    run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
 --- !u!61 &992077242
 BoxCollider2D:
@@ -4147,7 +4272,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1284017112}
-  - component: {fileID: 1284017113}
   m_Layer: 0
   m_Name: '[MAP]'
   m_TagString: Untagged
@@ -4177,23 +4301,6 @@ Transform:
   m_Father: {fileID: 1359869444}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1284017113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1284017111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb6e91e56098cdf4bb053d10e706a8b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  requiredItemName: 
-  onUsed:
-    m_PersistentCalls:
-      m_Calls: []
-  actions: []
 --- !u!1 &1350842602
 GameObject:
   m_ObjectHideFlags: 0
@@ -4862,7 +4969,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711008243}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.1706448, y: 1.5374765, z: 64.02011}
+  m_LocalPosition: {x: 5.29, y: 1.5374765, z: 64.02011}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4888,6 +4995,7 @@ MonoBehaviour:
       variableTable: []
     actions: []
     trigger: 0
+    run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
   - sprite: {fileID: 7419906070637746193, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
     conditions:
@@ -4896,29 +5004,30 @@ MonoBehaviour:
         value: 1
       variableTable: []
     actions:
-    - actionType: 4
-      setVariableTable:
+    - actionType: 2
+      variableTable:
         switchTable: []
         variableTable: []
-      talkMSG: 
+      talk:
+        text: 
       callScript:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 1398983803}
-            m_TargetAssemblyTypeName: CustomEvents1, Assembly-CSharp
-            m_MethodName: _EnterDoor1
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-      playSFX: {fileID: 0}
-      waitTime: 0
-    trigger: 1
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+    trigger: 0
+    run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
 --- !u!61 &1711008248
 BoxCollider2D:

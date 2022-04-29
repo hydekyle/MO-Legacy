@@ -9,26 +9,30 @@ using System.IO;
 using UnityEditor;
 using UnityEngine.Events;
 
-public enum TriggerType { player, other, any }
+public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
 public enum VariableConditionality { Equals, GreaterThan, LessThan }
-public enum RPGTriggerType { PlayerInteraction, PlayerTouch, Autorun }
-public enum RPGActionType { SetVariables, Talk, PlaySFX, WaitSeconds, CallScript }
+public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
+public enum RunType { Parallel, FreezeMovement, FreezeInteraction, FreezeAll }
+
+[System.Serializable]
+public class ObsPage : Observable<List<RPGPage>> { }
 
 [Serializable]
-public struct RPGAction
+public struct RPGPage
 {
-    public RPGActionType actionType;
-    [ShowIf("actionType", RPGActionType.SetVariables)]
-    public RPGVariableTable setVariableTable;
-    [ShowIf("actionType", RPGActionType.Talk)]
-    public string talkMSG;
-    [ShowIf("actionType", RPGActionType.CallScript)]
-    public UnityEvent callScript;
-    [ShowIf("actionType", RPGActionType.PlaySFX)]
-    public AudioClip playSFX;
-    [ShowIf("actionType", RPGActionType.WaitSeconds)]
-    public float waitTime;
+    [PreviewField(50, ObjectFieldAlignment.Center)]
+    public Sprite sprite;
+    [GUIColor(0, 1, 1)]
+    public RPGVariableTable conditions;
+    [GUIColor(1, 1, 0)]
+    public RPGAction[] actions;
+    [ShowIf("@this.actions.Length > 0")]
+    public TriggerType trigger;
+    [ShowIf("@this.actions.Length > 0")]
+    public RunType run;
+    [Space(25)]
+    public AudioClip playSFXOnEnabled;
 }
 
 public class Entity : MonoBehaviour
@@ -57,17 +61,21 @@ public class Entity : MonoBehaviour
     public void CastInteraction(Vector2 castPoint)
     {
         var hits = Physics2D.CircleCastAll(castPoint, 0.2f, Vector2.one, 1f, LayerMask.GetMask("Default"));
+        var _resolvedHits = new List<int>(); // Avoid reinteract if multiple collider
         foreach (var hit in hits)
         {
+            var hitID = hit.transform.GetHashCode();
+            if (_resolvedHits.Contains(hitID)) return;
             if (hit && hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
             {
-                if (interactedEvent.GetActivePage().trigger == RPGTriggerType.PlayerInteraction)
-                    Helpers.ResolveActions(interactedEvent.GetActivePage().actions);
+                var page = interactedEvent.GetActivePage();
+                if (page.trigger == TriggerType.PlayerInteraction)
+                    Helpers.ResolvePageActions(page);
             }
+            _resolvedHits.Add(hitID);
         }
     }
 
-    /// <summary>This is for items like keys, it tries to find a trigger zone where a item is expected to be used</summary>
     public void CastUsableItem(Vector2 castPoint, Item item)
     {
         var hit = Physics2D.CircleCast(castPoint, 1f, Vector2.one, 1f, LayerMask.NameToLayer("Usable Item Zone"));
@@ -228,40 +236,7 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
 }
 
 [Serializable]
-public struct RPGPage
-{
-    [PreviewField(50, ObjectFieldAlignment.Center)]
-    public Sprite sprite;
-    [GUIColor(0, 1, 1)]
-    public RPGConditionTable conditions;
-    [GUIColor(1, 1, 0)]
-    public RPGAction[] actions;
-    [ShowIf("@this.actions.Length > 0")]
-    public RPGTriggerType trigger;
-    [Space(25)]
-    public AudioClip playSFXOnEnabled;
-}
-
-[Serializable]
-public class RPGVariableTable : RPGConditionTable
-{
-    public void Resolve()
-    {
-        foreach (var sw in switchTable) GameManager.SetSwitch(sw.ID(), sw.value);
-        foreach (var va in variableTable)
-        {
-            switch (va.conditionality)
-            {
-                case VariableConditionality.Equals: GameManager.SetVariable(va.ID(), va.value); break;
-                case VariableConditionality.GreaterThan: GameManager.AddToVariable(va.ID(), va.value); break;
-                case VariableConditionality.LessThan: GameManager.AddToVariable(va.ID(), -va.value); break;
-            }
-        }
-    }
-}
-
-[Serializable]
-public class RPGConditionTable
+public class RPGVariableTable
 {
     [TableList]
     public List<UITableViewSwitch> switchTable = new List<UITableViewSwitch>();
@@ -309,7 +284,20 @@ public class RPGConditionTable
                 }
             }
         }
+    }
 
+    public void Resolve()
+    {
+        foreach (var sw in switchTable) GameManager.SetSwitch(sw.ID(), sw.value);
+        foreach (var va in variableTable)
+        {
+            switch (va.conditionality)
+            {
+                case VariableConditionality.Equals: GameManager.SetVariable(va.ID(), va.value); break;
+                case VariableConditionality.GreaterThan: GameManager.AddToVariable(va.ID(), va.value); break;
+                case VariableConditionality.LessThan: GameManager.AddToVariable(va.ID(), -va.value); break;
+            }
+        }
     }
 
     IEnumerable<string> ReadSwitches()
@@ -454,7 +442,7 @@ public class UIPopupEditableVariableName : PopupWindowContent
             foreach (var page in e.pages)
             {
                 page.conditions.Refresh();
-                foreach (var action in page.actions) action.setVariableTable.Refresh();
+                foreach (var action in page.actions) action.variableTable.Refresh();
             }
         editorWindow.Close();
     }

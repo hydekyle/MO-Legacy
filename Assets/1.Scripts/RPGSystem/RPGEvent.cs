@@ -20,7 +20,7 @@ public class RPGEvent : MonoBehaviour
         {
             if (page.conditions != null) page.conditions.Refresh();
             if (page.actions != null)
-                foreach (var action in page.actions) action.setVariableTable.Refresh();
+                foreach (var action in page.actions) action.variableTable?.Refresh();
         }
     }
 
@@ -38,8 +38,8 @@ public class RPGEvent : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         var page = GetActivePage();
-        if (page.trigger == RPGTriggerType.PlayerTouch && other.CompareTag("Player"))
-            Helpers.ResolveActions(page.actions);
+        if (page.trigger == TriggerType.PlayerTouch && other.CompareTag("Player"))
+            Helpers.ResolvePageActions(page);
     }
 
     public RPGPage GetActivePage()
@@ -58,11 +58,12 @@ public class RPGEvent : MonoBehaviour
         {
             var newRenderer = gameObject.AddComponent<SpriteRenderer>();
             newRenderer.sprite = page.sprite;
+            newRenderer.sortingOrder = 3;
         }
 
         if (pageIndex != _activePageIndex && _activePageIndex != -1)
         {
-            if (page.trigger == RPGTriggerType.Autorun) Helpers.ResolveActions(page.actions);
+            if (page.trigger == TriggerType.Autorun) Helpers.ResolvePageActions(page);
             if (page.playSFXOnEnabled) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
         }
 
@@ -90,7 +91,7 @@ public class RPGEvent : MonoBehaviour
         foreach (var page in pages) SubscribeConditionTable(page.conditions);
     }
 
-    void SubscribeConditionTable(RPGConditionTable cTable)
+    void SubscribeConditionTable(RPGVariableTable cTable)
     {
         foreach (var s in cTable.switchTable)
         {
@@ -114,7 +115,7 @@ public class RPGEvent : MonoBehaviour
         foreach (var page in pages) UnsubscribeConditionTable(page.conditions);
     }
 
-    void UnsubscribeConditionTable(RPGConditionTable cTable)
+    void UnsubscribeConditionTable(RPGVariableTable cTable)
     {
         foreach (var id in _subscribedSwitchList) GameManager.UnsubscribeToSwitchChangedEvent(id, CheckAllPageCondition);
         foreach (var id in _subscribedVariableList) GameManager.UnsubscribeToVariableChangedEvent(id, CheckAllPageCondition);
@@ -127,7 +128,7 @@ public class RPGEvent : MonoBehaviour
         return IsTableConditionsOK(page.conditions);
     }
 
-    bool IsTableConditionsOK(RPGConditionTable cTable)
+    bool IsTableConditionsOK(RPGVariableTable cTable)
     {
         foreach (var requiredSwitch in cTable.switchTable)
         {

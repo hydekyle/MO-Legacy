@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 public class RPGEnabledByConditions : MonoBehaviour
 {
     [GUIColor(0, 1, 1)]
-    public RPGConditionTable conditionTable;
+    public RPGVariableTable conditionTable;
     [Space(25)]
     [FormerlySerializedAs("onEnableSound")]
     public AudioClip onEnabledSound;
@@ -47,7 +47,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         SubscribeConditionTable(conditionTable);
     }
 
-    void SubscribeConditionTable(RPGConditionTable cTable)
+    void SubscribeConditionTable(RPGVariableTable cTable)
     {
         foreach (var s in cTable.switchTable)
         {
@@ -70,7 +70,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         UnsubscribeConditionTable(conditionTable);
     }
 
-    void UnsubscribeConditionTable(RPGConditionTable cTable)
+    void UnsubscribeConditionTable(RPGVariableTable cTable)
     {
         foreach (var id in _subscribedSwitchID) GameManager.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
         foreach (var id in _subscribedVariableID) GameManager.UnsubscribeToVariableChangedEvent(id, SetActiveIfAllConditionsOK);
@@ -83,7 +83,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         return IsTableConditionsOK(conditionTable);
     }
 
-    bool IsTableConditionsOK(RPGConditionTable cTable)
+    bool IsTableConditionsOK(RPGVariableTable cTable)
     {
         foreach (var requiredSwitch in cTable.switchTable)
         {
