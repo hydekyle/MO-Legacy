@@ -70,7 +70,7 @@ public class Entity : MonoBehaviour
             {
                 var page = interactedEvent.GetActivePage();
                 if (page.trigger == TriggerType.PlayerInteraction)
-                    Helpers.ResolvePageActions(page);
+                    GameManager.ResolveEntityActions(page, transform.GetHashCode());
             }
             _resolvedHits.Add(hitID);
         }

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
     public static List<RPGPage> resolvingPageList = new List<RPGPage>();
+    public static List<int> resolvingEntityIDList = new List<int>();
 
     void Awake()
     {
@@ -43,16 +44,19 @@ public class GameManager : MonoBehaviour
         playerT = GameObject.Find("PLAYER").transform;
     }
 
-    public static void AddResolvingPage(RPGPage page)
+    public static async void ResolveEntityActions(RPGPage page, int entityID)
     {
+        if (GameManager.resolvingEntityIDList.Contains(entityID)) return;
         resolvingPageList.Add(page);
+        resolvingEntityIDList.Add(entityID);
         OnResolvingPageListChanged();
-    }
-
-    public static void RemoveResolvingPage(RPGPage page)
-    {
+        for (var x = 0; x < page.actions.Length; x++)
+        {
+            var action = page.actions[x];
+            await action.Resolve();
+        }
         resolvingPageList.Remove(page);
-        print(resolvingPageList.Count);
+        resolvingEntityIDList.Remove(entityID);
         OnResolvingPageListChanged();
     }
 

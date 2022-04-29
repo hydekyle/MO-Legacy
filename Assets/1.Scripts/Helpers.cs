@@ -8,18 +8,6 @@ using UnityEngine;
 
 public class Helpers
 {
-    public static async void ResolvePageActions(RPGPage page)
-    {
-        if (GameManager.resolvingPageList.Contains(page)) return;
-        GameManager.AddResolvingPage(page);
-        for (var x = 0; x < page.actions.Length; x++)
-        {
-            var action = page.actions[x];
-            await action.Resolve();
-        }
-        GameManager.RemoveResolvingPage(page);
-    }
-
     public static int GetPlayerDeaths()
     {
         return PlayerPrefs.GetInt("DeathCounter");

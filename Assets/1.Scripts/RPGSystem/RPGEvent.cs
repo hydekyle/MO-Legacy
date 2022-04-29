@@ -39,7 +39,7 @@ public class RPGEvent : MonoBehaviour
     {
         var page = GetActivePage();
         if (page.trigger == TriggerType.PlayerTouch && other.CompareTag("Player"))
-            Helpers.ResolvePageActions(page);
+            GameManager.ResolveEntityActions(page, transform.GetHashCode());
     }
 
     public RPGPage GetActivePage()
@@ -63,7 +63,7 @@ public class RPGEvent : MonoBehaviour
 
         if (pageIndex != _activePageIndex && _activePageIndex != -1)
         {
-            if (page.trigger == TriggerType.Autorun) Helpers.ResolvePageActions(page);
+            if (page.trigger == TriggerType.Autorun) GameManager.ResolveEntityActions(page, transform.GetHashCode());
             if (page.playSFXOnEnabled) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
         }
 
