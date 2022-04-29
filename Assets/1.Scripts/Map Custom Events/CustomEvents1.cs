@@ -10,7 +10,7 @@ public class CustomEvents1 : MonoBehaviour
     public AudioClip testSound;
     public Image red;
 
-    public async void _EnterDoor1()
+    public async UniTaskVoid _EnterDoor1()
     {
         AudioManager.PlaySound(testSound);
         red.gameObject.SetActive(true);

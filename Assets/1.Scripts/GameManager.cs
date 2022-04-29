@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         playerT = GameObject.Find("PLAYER").transform;
     }
 
-    public static async void ResolveEntityActions(RPGPage page, int entityID)
+    public static async UniTaskVoid ResolveEntityActions(RPGPage page, int entityID)
     {
         if (GameManager.resolvingEntityIDList.Contains(entityID)) return;
         resolvingPageList.Add(page);

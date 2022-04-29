@@ -103,7 +103,7 @@ public class Entity : MonoBehaviour
         AnimationWalk(moveDirection);
     }
 
-    public async void StopMovement()
+    public async UniTaskVoid StopMovement()
     {
         await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time);
         try { LookAtDirection(faceDirection); } catch { }
@@ -192,7 +192,7 @@ public class GameData
         file.Close();
     }
 
-    public async void LoadGameDataSlot(int slotIndex)
+    public async UniTaskVoid LoadGameDataSlot(int slotIndex)
     {
         var fileName = "/savegame" + slotIndex;
         var savePath = string.Concat(Application.persistentDataPath, fileName);

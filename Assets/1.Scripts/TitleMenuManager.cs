@@ -11,7 +11,7 @@ public class TitleMenuManager : MonoBehaviour
         WaitAndLoadMapTest();
     }
 
-    async void WaitAndLoadMapTest()
+    async UniTaskVoid WaitAndLoadMapTest()
     {
         await UniTask.Delay(1000);
         SceneManager.LoadScene(1);

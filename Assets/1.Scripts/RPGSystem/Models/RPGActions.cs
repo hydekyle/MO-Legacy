@@ -118,13 +118,13 @@ public class RPGActionDOTween
         switch (type)
         {
             case TweenType.PunchScale:
-                task = targetTransform.DOPunchScale(punch, duration, vibrato, elasticity).ToUniTask(); break;
+                task = targetTransform.DOPunchScale(punch, duration, vibrato, elasticity).AwaitForComplete(); break;
             case TweenType.PunchRotation:
-                task = targetTransform.DOPunchRotation(punch, duration, vibrato, elasticity).ToUniTask(); break;
+                task = targetTransform.DOPunchRotation(punch, duration, vibrato, elasticity).AwaitForComplete(); break;
             default:
-                task = new UniTask(); break;
+                return;
         }
-        if (waitAnimEnd) await task;
+        await task;
     }
 }
 
