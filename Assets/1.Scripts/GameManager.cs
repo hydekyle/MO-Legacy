@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     {
         playerT = GameObject.Find("PLAYER").transform;
         SpawnPlayer();
+        CameraController.SetPosition(playerT.position);
     }
 
     public void SpawnPlayer()

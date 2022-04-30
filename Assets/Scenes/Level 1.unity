@@ -5610,12 +5610,12 @@ MonoBehaviour:
         item: {fileID: 11400000, guid: 36f6d2f669d1935408ffbecd5a306712, type: 2}
         amount: 1
       teleportMap:
-        mapName: Level 1
+        mapName: Recuerdo Cloacas
         setCustomSpawnPoint: 0
         mapSpawnIndex: 0
         spawnPoint: {x: 7.25, y: -3.11, z: 0}
-        changeFaceDirection: 0
-        newFaceDirection: 3
+        changeFaceDirection: 1
+        newFaceDirection: 0
     trigger: 1
     run: 0
     playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
@@ -21355,7 +21355,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144335836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.01, y: 3.26, z: 0}
+  m_LocalPosition: {x: -0.25, y: 0.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

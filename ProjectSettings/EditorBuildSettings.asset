@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level 1.unity
     guid: 3a9663c36baaf214d94b713d1f0e7996
+  - enabled: 1
+    path: Assets/Scenes/Recuerdo Cloacas.unity
+    guid: b4326611c42415547a9f3a4b806bbd53
   m_configObjects: {}
