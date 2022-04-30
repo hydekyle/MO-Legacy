@@ -47,7 +47,7 @@ public class Entity : MonoBehaviour
     float _lastTimeAnimationChanged = -1;
     int _indexStepAnim = 0;
     List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
-    BoxCollider2D boxCollider2D;
+    public BoxCollider2D boxCollider2D;
     // 0 (down) walking
     // 1 (down) idle
     // 2 (down) walking
@@ -108,6 +108,7 @@ public class Entity : MonoBehaviour
     {
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
         AnimationWalk(moveDirection);
+        spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPosition(transform.position);
     }
 
     public void AnimationWalk(Vector3 moveDirection)
@@ -210,6 +211,7 @@ public class GameData
 
     public void SaveGameDataSlot(int slotIndex)
     {
+        savedMapSpawnIndex = -1;
         savedPosition = GameManager.Instance.playerT.position;
         savedFaceDir = GameManager.Instance.playerT.GetComponent<Entity>().faceDirection;
         var fileName = "/savegame" + slotIndex;
@@ -616,7 +618,7 @@ public class UITableViewLocalVariable
 
     public int ID()
     {
-        return target.name.GetHashCode();
+        return target.GetHashCode();
     }
 
 }

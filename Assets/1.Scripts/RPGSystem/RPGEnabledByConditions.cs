@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 public class RPGEnabledByConditions : MonoBehaviour
 {
     [GUIColor(0, 1, 1)]
-    public RPGVariableTable conditionTable;
+    public RPGVariableTable conditionTable = new RPGVariableTable();
     [Space(25)]
     [FormerlySerializedAs("onEnableSound")]
     public AudioClip onEnabledSound;

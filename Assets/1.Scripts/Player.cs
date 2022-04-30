@@ -6,6 +6,8 @@ public class Player : Entity
 {
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.LeftControl)) boxCollider2D.enabled = false;
+        if (Input.GetKeyUp(KeyCode.LeftControl)) boxCollider2D.enabled = true;
         if (GameManager.isMovementAvailable) MovementControl();
         if (Input.GetButtonDown("Interact") && GameManager.isInteractAvailable) CastInteraction();
     }

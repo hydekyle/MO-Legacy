@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 public class Helpers
@@ -26,6 +27,23 @@ public class Helpers
         FaceDirection.East => FaceDirection.West,
         _ => FaceDirection.South
     };
+
+    [MenuItem("RPG/Sprite Order Fix All")]
+    public static void SpriteOrderFixMapAll()
+    {
+        foreach (Transform t in GameObject.Find("[EVENTS]").transform)
+        {
+            if (t.TryGetComponent<SpriteRenderer>(out SpriteRenderer s))
+            {
+                s.sortingOrder = GetSpriteOrderByPosition(t.position);
+            }
+        }
+    }
+
+    public static int GetSpriteOrderByPosition(Vector3 position)
+    {
+        return (int)(-position.y * 10);
+    }
 }
 
 // Switches .txt Placeholder 

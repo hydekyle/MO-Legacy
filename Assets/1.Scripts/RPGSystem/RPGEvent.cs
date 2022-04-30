@@ -5,7 +5,7 @@ using UnityEngine;
 public class RPGEvent : MonoBehaviour
 {
     [OnValueChanged("OnValuePageChanged", true)]
-    public List<RPGPage> pages = new List<RPGPage>() { new RPGPage() };
+    public List<RPGPage> pages = new List<RPGPage>();
     int _activePageIndex = -1;
     // Caching to avoid resubs
     List<int> _subscribedLocalVariableList = new List<int>();
@@ -13,21 +13,27 @@ public class RPGEvent : MonoBehaviour
     List<int> _subscribedVariableList = new List<int>();
     SpriteRenderer spriteRenderer;
 
+    // Called when the component is added for first time
+    void Reset()
+    {
+        pages.Add(new RPGPage()
+        {
+            sprite = TryGetComponent<SpriteRenderer>(out SpriteRenderer s) ? s.sprite : null
+        });
+    }
+
+
     void OnValuePageChanged()
     {
         var page = pages[0];
-        if (page.sprite != null)
+        if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
         {
-            if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
-            {
-                spriteRenderer.sprite = page.sprite;
-            }
-            else
-            {
-                var newRenderer = gameObject.AddComponent<SpriteRenderer>();
-                newRenderer.sprite = page.sprite;
-                newRenderer.sortingOrder = 3;
-            }
+            spriteRenderer.sprite = page.sprite;
+        }
+        else
+        {
+            var newRenderer = gameObject.AddComponent<SpriteRenderer>();
+            newRenderer.sprite = page.sprite;
         }
     }
 
