@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,6 +41,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0);
     }
 
+    public static CancellationToken CancelOnDestroyToken()
+    {
+        return GameManager.Instance.GetCancellationTokenOnDestroy();
+    }
+
     private void OnActiveSceneChanged(Scene arg0, Scene arg1)
     {
         playerT = GameObject.Find("PLAYER").transform;
@@ -54,7 +60,7 @@ public class GameManager : MonoBehaviour
         for (var x = 0; x < page.actions.Length; x++)
         {
             var action = page.actions[x];
-            await action.Resolve();
+            await action.Resolve().AttachExternalCancellation(GameManager.CancelOnDestroyToken());
         }
         resolvingPageList.Remove(page);
         resolvingEntityIDList.Remove(entityID);
@@ -78,11 +84,5 @@ public class GameManager : MonoBehaviour
             else isMovementAvailable = true;
         }
     }
-
-    #region GameData
-
-
-    #endregion
-
 
 }
