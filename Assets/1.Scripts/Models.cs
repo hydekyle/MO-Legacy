@@ -7,7 +7,6 @@ using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
 using System.IO;
 using UnityEditor;
-using UnityEngine.Events;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 
@@ -89,7 +88,7 @@ public class Entity : MonoBehaviour
             {
                 var page = interactedEvent.GetActivePage();
                 if (page.trigger == TriggerType.PlayerInteraction)
-                    GameManager.ResolveEntityActions(page, gameObject.name);
+                    GameManager.ResolveEntityActions(page, gameObject);
             }
             _resolvedHits.Add(hitID);
         }

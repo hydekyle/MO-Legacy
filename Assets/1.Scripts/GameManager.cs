@@ -1,13 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Linq;
-using UnityObservables;
-using UnityEngine.Events;
-using Sirenix.OdinInspector;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using System.Threading;
@@ -51,8 +43,9 @@ public class GameManager : MonoBehaviour
         playerT = GameObject.Find("PLAYER").transform;
     }
 
-    public static async UniTaskVoid ResolveEntityActions(RPGPage page, string entityName)
+    public static async UniTaskVoid ResolveEntityActions(RPGPage page, GameObject entityGO)
     {
+        var entityName = entityGO.name;
         if (GameManager.resolvingEntityIDList.Contains(entityName)) return;
         resolvingPageList.Add(page);
         resolvingEntityIDList.Add(entityName);

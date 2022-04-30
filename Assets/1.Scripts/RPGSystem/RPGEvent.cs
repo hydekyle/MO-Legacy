@@ -1,19 +1,35 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 public class RPGEvent : MonoBehaviour
 {
+    [OnValueChanged("OnValuePageChanged", true)]
     public List<RPGPage> pages = new List<RPGPage>() { new RPGPage() };
     int _activePageIndex = -1;
     // Caching to avoid resubs
     List<int> _subscribedLocalVariableList = new List<int>();
     List<int> _subscribedSwitchList = new List<int>();
     List<int> _subscribedVariableList = new List<int>();
+    SpriteRenderer spriteRenderer;
+
+    void OnValuePageChanged()
+    {
+        var page = pages[0];
+        if (page.sprite != null)
+        {
+            if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+            {
+                spriteRenderer.sprite = page.sprite;
+            }
+            else
+            {
+                var newRenderer = gameObject.AddComponent<SpriteRenderer>();
+                newRenderer.sprite = page.sprite;
+                newRenderer.sortingOrder = 3;
+            }
+        }
+    }
 
     void OnValidate()
     {
@@ -23,6 +39,11 @@ public class RPGEvent : MonoBehaviour
             if (page.actions != null)
                 foreach (var action in page.actions) action.variableTable?.Refresh();
         }
+    }
+
+    void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
@@ -40,7 +61,7 @@ public class RPGEvent : MonoBehaviour
     {
         var page = GetActivePage();
         if (page.trigger == TriggerType.PlayerTouch && other.CompareTag("Player"))
-            GameManager.ResolveEntityActions(page, gameObject.name);
+            GameManager.ResolveEntityActions(page, gameObject);
     }
 
     public RPGPage GetActivePage()
@@ -51,20 +72,11 @@ public class RPGEvent : MonoBehaviour
     void ApplyPage(int pageIndex)
     {
         var page = pages[pageIndex];
-        if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
-        {
-            spriteRenderer.sprite = page.sprite;
-        }
-        else
-        {
-            var newRenderer = gameObject.AddComponent<SpriteRenderer>();
-            newRenderer.sprite = page.sprite;
-            newRenderer.sortingOrder = 3;
-        }
+        spriteRenderer.sprite = page.sprite;
 
         if (pageIndex != _activePageIndex && _activePageIndex != -1)
         {
-            if (page.trigger == TriggerType.Autorun) GameManager.ResolveEntityActions(page, gameObject.name);
+            if (page.trigger == TriggerType.Autorun) GameManager.ResolveEntityActions(page, gameObject);
             if (page.playSFXOnEnabled) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
         }
 
