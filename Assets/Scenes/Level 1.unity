@@ -3541,6 +3541,7 @@ GameObject:
   - component: {fileID: 982668591}
   - component: {fileID: 982668594}
   - component: {fileID: 982668595}
+  - component: {fileID: 982668596}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3583,7 +3584,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7.5416665
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3661,6 +3662,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 287763533}
   velocity: 0.12
+--- !u!114 &982668596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982668590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 1
+  m_AssetsPPU: 60
+  m_RefResolutionX: 800
+  m_RefResolutionY: 600
+  m_CropFrame: 0
+  m_GridSnapping: 2
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1 &992077235
 GameObject:
   m_ObjectHideFlags: 0
@@ -5632,7 +5656,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.1460824, y: -0.14302874}
+  m_Offset: {x: -0.1460824, y: -0.009462595}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5643,7 +5667,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.8241949, y: 2.2860575}
+  m_Size: {x: 0.8241949, y: 2.0189252}
   m_EdgeRadius: 0
 --- !u!1 &1771664880
 GameObject:

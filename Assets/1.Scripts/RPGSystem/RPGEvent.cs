@@ -95,7 +95,7 @@ public class RPGEvent : MonoBehaviour
         for (var x = pages.Count - 1; x >= 0; x--)
         {
             var page = pages[x];
-            var isAllOK = IsTableConditionsOK(page.conditions);
+            var isAllOK = page.conditions.IsAllConditionOK();
             if (isAllOK && _activePageIndex == x) return;
             else if (isAllOK)
             {
@@ -107,81 +107,11 @@ public class RPGEvent : MonoBehaviour
 
     void SubscribeToRequiredValueConditions()
     {
-        foreach (var page in pages) SubscribeConditionTable(page.conditions);
+        foreach (var page in pages) page.conditions.SubscribeToConditionTable(ref _subscribedSwitchList, ref _subscribedVariableList, ref _subscribedLocalVariableList, CheckAllPageCondition);
     }
 
-    void SubscribeConditionTable(RPGVariableTable cTable)
-    {
-        foreach (var s in cTable.switchTable)
-        {
-            var ID = s.ID();
-            if (_subscribedSwitchList.Contains(ID)) continue; // Avoiding resubscription
-            GameData.SubscribeToSwitchChangedEvent(ID, CheckAllPageCondition);
-            _subscribedSwitchList.Add(ID);
-        }
-        foreach (var v in cTable.variableTable)
-        {
-            var ID = v.ID();
-            if (_subscribedVariableList.Contains(ID)) continue;
-            GameData.SubscribeToVariableChangedEvent(ID, CheckAllPageCondition);
-            _subscribedVariableList.Add(ID);
-        }
-        foreach (var lv in cTable.localVariableTable)
-        {
-            var ID = lv.ID();
-            if (!_subscribedLocalVariableList.Contains(ID))
-            {
-                _subscribedLocalVariableList.Add(ID);
-                GameData.SubscribeToLocalVariableChangedEvent(ID, CheckAllPageCondition);
-            }
-        }
-    }
-
-    /// <summary>Called Only OnDestroy</summary>
     void UnSubscribeToRequiredConditions()
     {
-        foreach (var page in pages) UnsubscribeConditionTable(page.conditions);
-    }
-
-    void UnsubscribeConditionTable(RPGVariableTable cTable)
-    {
-        foreach (var id in _subscribedLocalVariableList) GameData.UnsubscribeToLocalVariableChangedEvent(id, CheckAllPageCondition);
-        foreach (var id in _subscribedSwitchList) GameData.UnsubscribeToSwitchChangedEvent(id, CheckAllPageCondition);
-        foreach (var id in _subscribedVariableList) GameData.UnsubscribeToVariableChangedEvent(id, CheckAllPageCondition);
-        _subscribedSwitchList.Clear();
-        _subscribedVariableList.Clear();
-        _subscribedLocalVariableList.Clear();
-    }
-
-    bool IsTableConditionsOK(RPGVariableTable cTable)
-    {
-        foreach (var requiredLocalVariable in cTable.localVariableTable)
-        {
-            var localVariableValue = GameData.GetLocalVariable(requiredLocalVariable.ID());
-            switch (requiredLocalVariable.conditionality)
-            {
-                case VariableConditionality.Equals: if (requiredLocalVariable.value == localVariableValue) continue; break;
-                case VariableConditionality.GreaterThan: if (requiredLocalVariable.value < localVariableValue) continue; break;
-                case VariableConditionality.LessThan: if (requiredLocalVariable.value > localVariableValue) continue; break;
-            }
-            return false;
-        }
-        foreach (var requiredSwitch in cTable.switchTable)
-        {
-            var switchValue = GameData.GetSwitch(requiredSwitch.ID());
-            if (requiredSwitch.value != switchValue) return false;
-        }
-        foreach (var requiredVariable in cTable.variableTable)
-        {
-            var variableValue = GameData.GetVariable(requiredVariable.ID());
-            switch (requiredVariable.conditionality)
-            {
-                case VariableConditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
-                case VariableConditionality.GreaterThan: if (requiredVariable.value < variableValue) continue; break;
-                case VariableConditionality.LessThan: if (requiredVariable.value > variableValue) continue; break;
-            }
-            return false;
-        }
-        return true;
+        foreach (var page in pages) page.conditions.UnsubscribeConditionTable(ref _subscribedSwitchList, ref _subscribedVariableList, ref _subscribedLocalVariableList, CheckAllPageCondition);
     }
 }

@@ -191,6 +191,9 @@ public class GameData
     public VariableDictionary variables;
     public LocalVariableDictionary localVariableDic;
     public Inventory inventory = new Inventory();
+
+    [HideInInspector]
+    public string savedMapName;
     [HideInInspector]
     public int savedMapSpawnIndex;
     [HideInInspector]
@@ -214,6 +217,7 @@ public class GameData
         savedMapSpawnIndex = -1;
         savedPosition = GameManager.Instance.playerT.position;
         savedFaceDir = GameManager.Instance.playerT.GetComponent<Entity>().faceDirection;
+        savedMapName = SceneManager.GetActiveScene().name;
         var fileName = "/savegame" + slotIndex;
         var savePath = string.Concat(Application.persistentDataPath, fileName);
         string saveData = JsonUtility.ToJson(this, true);
@@ -238,7 +242,7 @@ public class GameData
             Debug.Log("Starting New Game");
         }
         //TODO: Remove when Title Menu is completed
-        await SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        await SceneManager.LoadSceneAsync(savedMapName);
         var playerT = GameManager.Instance.playerT;
         playerT.position = savedPosition;
         playerT.GetComponent<Entity>().LookAtDirection(savedFaceDir);
@@ -426,6 +430,184 @@ public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey,
 }
 
 [Serializable]
+public class UITableViewSwitch
+{
+    [TableColumnWidth(120)]
+    [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
+    public string switchID;
+    [TableColumnWidth(120)]
+    public bool value = true;
+    [TableColumnWidth(20)]
+#if UNITY_EDITOR
+    [Button("Rename")]
+    void Edit()
+    {
+        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(switchID, false));
+    }
+#endif
+
+    public int ID()
+    {
+        return int.Parse(switchID.Substring(0, 4));
+    }
+
+    IEnumerable<string> ReadSwitches()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+
+
+}
+
+[Serializable]
+public class UITableViewVariable
+{
+    [TableColumnWidth(140)]
+    [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
+    public string variableID;
+    [ShowIf("variableID")]
+    public VariableConditionality conditionality;
+    [ShowIf("variableID")]
+    public float value;
+    [TableColumnWidth(20)]
+#if UNITY_EDITOR
+    [Button("Rename")]
+    void Edit()
+    {
+        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(variableID, true));
+    }
+#endif
+
+    public int ID()
+    {
+        return int.Parse(variableID.Substring(0, 4));
+    }
+
+    IEnumerable ReadVariables()
+    {
+        var path = Application.dataPath + "/variables.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+}
+
+[Serializable]
+public class UITableViewLocalVariable
+{
+    [HorizontalGroup("target")]
+    [TableColumnWidth(90)]
+    [HideLabel]
+    public GameObject target;
+    [TableColumnWidth(30)]
+    public float value;
+    [VerticalGroup("target/btn")]
+    [TableColumnWidth(90)]
+    [Button("Self")]
+    public void SaveID()
+    {
+        target = Selection.activeGameObject;
+    }
+    [HideLabel]
+    public VariableConditionality conditionality;
+
+    public int ID()
+    {
+        return String.Concat(target.name, SceneManager.GetActiveScene().name).GetHashCode();
+    }
+
+}
+
+#if UNITY_EDITOR
+public class UIPopupEditableVariableName : PopupWindowContent
+{
+    string inputText = "";
+    string editingName = "";
+    int ID;
+    public static UIPopupEditableVariableName Instance;
+    bool isVariable;
+
+    public UIPopupEditableVariableName(string varID, bool isVariable)
+    {
+        ID = int.Parse(varID.Substring(0, 4));
+        editingName = inputText = varID.Substring(4, varID.Length - 4); ;
+        this.isVariable = isVariable;
+    }
+
+    public override Vector2 GetWindowSize()
+    {
+        return new Vector2(200, 80);
+    }
+
+    public override void OnGUI(Rect rect)
+    {
+        var title = String.Format("Renaming '{0}'", editingName);
+        GUILayout.Label(title, EditorStyles.boldLabel);
+        inputText = GUILayout.TextField(inputText);
+
+        Event e = Event.current;
+        switch (e.type)
+        {
+            case EventType.KeyDown:
+                if (Event.current.keyCode == (KeyCode.Return)) Save(); break;
+        }
+
+        if (GUILayout.Button("SAVE")) Save();
+    }
+
+    void Save()
+    {
+        SaveNewSwitch(ID, inputText, isVariable);
+        if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c)) c.conditionTable.Refresh();
+        if (Selection.activeGameObject.TryGetComponent<RPGEvent>(out var e))
+            foreach (var page in e.pages)
+            {
+                page.conditions.Refresh();
+                foreach (var action in page.actions) action.variableTable.Refresh();
+            }
+        editorWindow.Close();
+    }
+
+    void SaveNewSwitch(int ID, string newName, bool isVariable)
+    {
+        var path = Application.dataPath;
+        path += isVariable ? "/variables.txt" : "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+        var textID = "";
+        if (ID < 10) textID = "00" + ID;
+        else if (ID < 100) textID = "0" + ID;
+        dataLines[ID] = textID + " " + newName;
+        File.WriteAllLines(path, dataLines);
+    }
+
+    IEnumerable<string> ReadSwitches()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+
+    public override void OnOpen() { }
+
+    public override void OnClose() { }
+}
+
+#endif
+
+[Serializable]
 public class RPGVariableTable
 {
     [TableList]
@@ -523,182 +705,72 @@ public class RPGVariableTable
             yield return line;
         }
     }
-}
 
-[Serializable]
-public class UITableViewSwitch
-{
-    [TableColumnWidth(120)]
-    [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
-    public string switchID;
-    [TableColumnWidth(120)]
-    public bool value = true;
-    [TableColumnWidth(20)]
-#if UNITY_EDITOR
-    [Button("Rename")]
-    void Edit()
+    public void SubscribeToConditionTable(ref List<int> _subscribedSwitchList, ref List<int> _subscribedVariableList, ref List<int> _subscribedLocalVariableList, Action action)
     {
-        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(switchID, false));
-    }
-#endif
-
-    public int ID()
-    {
-        return int.Parse(switchID.Substring(0, 4));
-    }
-
-    IEnumerable<string> ReadSwitches()
-    {
-        var path = Application.dataPath + "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
+        foreach (var s in switchTable)
         {
-            yield return line;
+            var ID = s.ID();
+            if (_subscribedSwitchList.Contains(ID)) continue; // Avoiding resubscription
+            GameData.SubscribeToSwitchChangedEvent(ID, action);
+            _subscribedSwitchList.Add(ID);
         }
-    }
-
-
-}
-
-[Serializable]
-public class UITableViewVariable
-{
-    [TableColumnWidth(140)]
-    [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
-    public string variableID;
-    [ShowIf("variableID")]
-    public VariableConditionality conditionality;
-    [ShowIf("variableID")]
-    public float value;
-    [TableColumnWidth(20)]
-#if UNITY_EDITOR
-    [Button("Rename")]
-    void Edit()
-    {
-        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(variableID, true));
-    }
-#endif
-
-    public int ID()
-    {
-        return int.Parse(variableID.Substring(0, 4));
-    }
-
-    IEnumerable ReadVariables()
-    {
-        var path = Application.dataPath + "/variables.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
+        foreach (var v in variableTable)
         {
-            yield return line;
+            var ID = v.ID();
+            if (_subscribedVariableList.Contains(ID)) continue;
+            GameData.SubscribeToVariableChangedEvent(ID, action);
+            _subscribedVariableList.Add(ID);
         }
-    }
-}
-
-[Serializable]
-public class UITableViewLocalVariable
-{
-    [HorizontalGroup("target")]
-    [TableColumnWidth(90)]
-    [HideLabel]
-    public GameObject target;
-    [TableColumnWidth(30)]
-    public float value;
-    [VerticalGroup("target/btn")]
-    [TableColumnWidth(90)]
-    [Button("Self")]
-    public void SaveID()
-    {
-        target = Selection.activeGameObject;
-    }
-    [HideLabel]
-    public VariableConditionality conditionality;
-
-    public int ID()
-    {
-        return target.GetHashCode();
-    }
-
-}
-
-#if UNITY_EDITOR
-public class UIPopupEditableVariableName : PopupWindowContent
-{
-    string inputText = "";
-    string editingName = "";
-    int ID;
-    public static UIPopupEditableVariableName Instance;
-    bool isVariable;
-
-    public UIPopupEditableVariableName(string varID, bool isVariable)
-    {
-        ID = int.Parse(varID.Substring(0, 4));
-        editingName = inputText = varID.Substring(4, varID.Length - 4); ;
-        this.isVariable = isVariable;
-    }
-
-    public override Vector2 GetWindowSize()
-    {
-        return new Vector2(200, 80);
-    }
-
-    public override void OnGUI(Rect rect)
-    {
-        var title = String.Format("Renaming '{0}'", editingName);
-        GUILayout.Label(title, EditorStyles.boldLabel);
-        inputText = GUILayout.TextField(inputText);
-
-        Event e = Event.current;
-        switch (e.type)
+        foreach (var lv in localVariableTable)
         {
-            case EventType.KeyDown:
-                if (Event.current.keyCode == (KeyCode.Return)) Save(); break;
-        }
-
-        if (GUILayout.Button("SAVE")) Save();
-    }
-
-    void Save()
-    {
-        SaveNewSwitch(ID, inputText, isVariable);
-        if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c)) c.conditionTable.Refresh();
-        if (Selection.activeGameObject.TryGetComponent<RPGEvent>(out var e))
-            foreach (var page in e.pages)
+            var ID = lv.ID();
+            if (!_subscribedLocalVariableList.Contains(ID))
             {
-                page.conditions.Refresh();
-                foreach (var action in page.actions) action.variableTable.Refresh();
+                _subscribedLocalVariableList.Add(ID);
+                GameData.SubscribeToLocalVariableChangedEvent(ID, action);
             }
-        editorWindow.Close();
-    }
-
-    void SaveNewSwitch(int ID, string newName, bool isVariable)
-    {
-        var path = Application.dataPath;
-        path += isVariable ? "/variables.txt" : "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-        var textID = "";
-        if (ID < 10) textID = "00" + ID;
-        else if (ID < 100) textID = "0" + ID;
-        dataLines[ID] = textID + " " + newName;
-        File.WriteAllLines(path, dataLines);
-    }
-
-    IEnumerable<string> ReadSwitches()
-    {
-        var path = Application.dataPath + "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
-        {
-            yield return line;
         }
     }
 
-    public override void OnOpen() { }
+    public void UnsubscribeConditionTable(ref List<int> _subscribedSwitchList, ref List<int> _subscribedVariableList, ref List<int> _subscribedLocalVariableList, Action action)
+    {
+        foreach (var id in _subscribedLocalVariableList) GameData.UnsubscribeToLocalVariableChangedEvent(id, action);
+        foreach (var id in _subscribedSwitchList) GameData.UnsubscribeToSwitchChangedEvent(id, action);
+        foreach (var id in _subscribedVariableList) GameData.UnsubscribeToVariableChangedEvent(id, action);
+        _subscribedSwitchList.Clear();
+        _subscribedVariableList.Clear();
+    }
 
-    public override void OnClose() { }
+    public bool IsAllConditionOK()
+    {
+        foreach (var requiredLocalVariable in localVariableTable)
+        {
+            var variableValue = GameData.GetLocalVariable(requiredLocalVariable.ID());
+            switch (requiredLocalVariable.conditionality)
+            {
+                case VariableConditionality.Equals: if (requiredLocalVariable.value == variableValue) continue; break;
+                case VariableConditionality.GreaterThan: if (requiredLocalVariable.value > variableValue) continue; break;
+                case VariableConditionality.LessThan: if (requiredLocalVariable.value < variableValue) continue; break;
+            }
+            return false;
+        }
+        foreach (var requiredSwitch in switchTable)
+        {
+            var switchValue = GameData.GetSwitch(requiredSwitch.ID());
+            if (requiredSwitch.value != switchValue) return false;
+        }
+        foreach (var requiredVariable in variableTable)
+        {
+            var variableValue = GameData.GetVariable(requiredVariable.ID());
+            switch (requiredVariable.conditionality)
+            {
+                case VariableConditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
+                case VariableConditionality.GreaterThan: if (requiredVariable.value < variableValue) continue; break;
+                case VariableConditionality.LessThan: if (requiredVariable.value > variableValue) continue; break;
+            }
+            return false;
+        }
+        return true;
+    }
 }
-
-#endif
