@@ -6,6 +6,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 // Don't reorder
 public enum RPGActionType
@@ -16,7 +17,8 @@ public enum RPGActionType
     WaitSeconds,
     DOTween,
     CallScript,
-    AddItem
+    AddItem,
+    TeleportMap
 }
 
 [Serializable]
@@ -43,6 +45,9 @@ public class RPGAction
     [ShowIf("actionType", RPGActionType.AddItem)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionAddItem addItem;
+    [ShowIf("actionType", RPGActionType.TeleportMap)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionTeleportMap teleportMap;
 
     public async UniTask Resolve()
     {
@@ -55,6 +60,7 @@ public class RPGAction
             case RPGActionType.WaitSeconds: await waitSeconds.Resolve(); break;
             case RPGActionType.DOTween: await tweenParams.Resolve(); break;
             case RPGActionType.AddItem: addItem.Resolve(); break;
+            case RPGActionType.TeleportMap: teleportMap.Resolve(); break;
         }
     }
 }
@@ -137,6 +143,33 @@ public class RPGActionAddItem
     public void Resolve()
     {
         GameData.AddItem(item, amount);
+    }
+}
+
+[Serializable]
+public class RPGActionTeleportMap
+{
+    public string mapName;
+    public bool setCustomSpawnPoint;
+    [HideIf("setCustomSpawnPoint")]
+    public int mapSpawnIndex;
+    [ShowIf("setCustomSpawnPoint")]
+    public Vector3 spawnPoint;
+    public bool changeFaceDirection;
+    [ShowIf("changeFaceDirection")]
+    public FaceDirection newFaceDirection;
+
+    public void Resolve()
+    {
+        var gameData = GameManager.Instance.gameData;
+        var playerEntity = GameManager.Instance.playerT.GetComponent<Entity>();
+        gameData.savedMapSpawnIndex = setCustomSpawnPoint ? -1 : mapSpawnIndex;
+        gameData.savedPosition = spawnPoint;
+        gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;
+        if (SceneManager.GetActiveScene().name == mapName)
+            GameManager.Instance.SpawnPlayer();
+        else
+            SceneManager.LoadScene(mapName);
     }
 }
 

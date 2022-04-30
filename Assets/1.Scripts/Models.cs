@@ -191,6 +191,8 @@ public class GameData
     public LocalVariableDictionary localVariableDic;
     public Inventory inventory = new Inventory();
     [HideInInspector]
+    public int savedMapSpawnIndex;
+    [HideInInspector]
     public Vector3 savedPosition;
     [HideInInspector]
     public FaceDirection savedFaceDir;

@@ -41,6 +41,18 @@ public class GameManager : MonoBehaviour
     private void OnActiveSceneChanged(Scene arg0, Scene arg1)
     {
         playerT = GameObject.Find("PLAYER").transform;
+        SpawnPlayer();
+    }
+
+    public void SpawnPlayer()
+    {
+        if (playerT)
+        {
+            playerT.GetComponent<Entity>().LookAtDirection(gameData.savedFaceDir);
+            playerT.position = gameData.savedMapSpawnIndex >= 0 ?
+                GameObject.Find("[SPAWN]").transform.GetChild(gameData.savedMapSpawnIndex).position
+                : gameData.savedPosition;
+        }
     }
 
     public static async UniTaskVoid ResolveEntityActions(RPGPage page, GameObject entityGO)
