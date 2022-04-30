@@ -1270,6 +1270,179 @@ Transform:
   m_Father: {fileID: 1284017112}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &544074506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 544074507}
+  - component: {fileID: 544074510}
+  - component: {fileID: 544074509}
+  - component: {fileID: 544074508}
+  m_Layer: 0
+  m_Name: '[Event]PUERTA (1)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &544074507
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544074506}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.02, y: 4.48, z: 64.02011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1398983802}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &544074508
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544074506}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.1460824, y: -0.14302874}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 3.125, y: 2}
+    newSize: {x: 1.5, y: 0.97}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.8241949, y: 2.2860575}
+  m_EdgeRadius: 0
+--- !u!114 &544074509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544074506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd500b0b5e01fb49a40965f9c418a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pages:
+  - sprite: {fileID: -1547648892272697065, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
+    conditions:
+      switchTable: []
+      variableTable: []
+      localVariableTable: []
+    actions: []
+    trigger: 0
+    run: 0
+    playSFXOnEnabled: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
+  - sprite: {fileID: 7419906070637746193, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
+    conditions:
+      switchTable: []
+      variableTable: []
+      localVariableTable:
+      - target: {fileID: 1492599335}
+        value: 1
+        conditionality: 0
+    actions:
+    - actionType: 6
+      variableTable:
+        switchTable: []
+        variableTable: []
+        localVariableTable: []
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
+        waitEnd: 0
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+      addItem:
+        item: {fileID: 11400000, guid: 36f6d2f669d1935408ffbecd5a306712, type: 2}
+        amount: 1
+    trigger: 0
+    run: 0
+    playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
+--- !u!212 &544074510
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544074506}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 3
+  m_Sprite: {fileID: -1547648892272697065, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.5, y: 0.97}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &574113735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3137,6 +3310,7 @@ MonoBehaviour:
     conditions:
       switchTable: []
       variableTable: []
+      localVariableTable: []
     actions: []
     trigger: 0
     run: 0
@@ -3148,11 +3322,13 @@ MonoBehaviour:
       - variableID: 000 Palanca Used Times
         conditionality: 1
         value: 6
+      localVariableTable: []
     actions:
     - actionType: 1
       variableTable:
         switchTable: []
         variableTable: []
+        localVariableTable: []
       talk:
         text: Te sientes observado
       callScript:
@@ -3413,7 +3589,6 @@ GameObject:
   m_Component:
   - component: {fileID: 992077237}
   - component: {fileID: 992077236}
-  - component: {fileID: 992077240}
   - component: {fileID: 992077241}
   - component: {fileID: 992077242}
   m_Layer: 0
@@ -3490,32 +3665,6 @@ Transform:
   m_Father: {fileID: 1398983802}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &992077240
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992077235}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.60862917, y: 0.4731678}
-    oldSize: {x: 0.71875, y: 0.59375}
-    newSize: {x: 0.23, y: 0.19}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.5, y: 1.5}
-  m_EdgeRadius: 0
 --- !u!114 &992077241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3535,6 +3684,7 @@ MonoBehaviour:
       - switchID: 000 Puerta Open
         value: 0
       variableTable: []
+      localVariableTable: []
     actions:
     - actionType: 0
       variableTable:
@@ -3545,6 +3695,7 @@ MonoBehaviour:
         - variableID: 000 Palanca Used Times
           conditionality: 1
           value: 1
+        localVariableTable: []
       talk:
         text: 
       callScript:
@@ -3571,6 +3722,7 @@ MonoBehaviour:
       variableTable:
         switchTable: []
         variableTable: []
+        localVariableTable: []
       talk:
         text: 
       callScript:
@@ -3597,6 +3749,7 @@ MonoBehaviour:
       variableTable:
         switchTable: []
         variableTable: []
+        localVariableTable: []
       talk:
         text: 
       callScript:
@@ -3628,6 +3781,7 @@ MonoBehaviour:
       - switchID: 000 Puerta Open
         value: 1
       variableTable: []
+      localVariableTable: []
     actions:
     - actionType: 0
       variableTable:
@@ -3638,6 +3792,7 @@ MonoBehaviour:
         - variableID: 000 Palanca Used Times
           conditionality: 1
           value: 1
+        localVariableTable: []
       talk:
         text: 
       callScript:
@@ -3664,6 +3819,7 @@ MonoBehaviour:
       variableTable:
         switchTable: []
         variableTable: []
+        localVariableTable: []
       talk:
         text: 
       callScript:
@@ -3690,6 +3846,7 @@ MonoBehaviour:
       variableTable:
         switchTable: []
         variableTable: []
+        localVariableTable: []
       talk:
         text: 
       callScript:
@@ -3728,7 +3885,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0554595, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.60862917, y: 0.4731678}
@@ -3739,7 +3896,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.71875, y: 0.59375}
+  m_Size: {x: 0.6481657, y: 0.59375}
   m_EdgeRadius: 0
 --- !u!1 &1075952811
 GameObject:
@@ -4467,6 +4624,8 @@ Transform:
   - {fileID: 1711008246}
   - {fileID: 942627949}
   - {fileID: 992077237}
+  - {fileID: 1492599336}
+  - {fileID: 544074507}
   m_Father: {fileID: 1359869444}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4716,6 +4875,212 @@ Transform:
   m_Father: {fileID: 1408123170}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -83.888}
+--- !u!1 &1492599335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1492599336}
+  - component: {fileID: 1492599339}
+  - component: {fileID: 1492599338}
+  - component: {fileID: 1492599337}
+  m_Layer: 0
+  m_Name: PALANCA (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1492599336
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492599335}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.84, y: -0.99099994, z: 64.02011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1398983802}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1492599337
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492599335}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0554595, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.60862917, y: 0.4731678}
+    oldSize: {x: 0.71875, y: 0.59375}
+    newSize: {x: 0.23, y: 0.19}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.6481657, y: 0.59375}
+  m_EdgeRadius: 0
+--- !u!114 &1492599338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492599335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd500b0b5e01fb49a40965f9c418a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pages:
+  - sprite: {fileID: -1218756765276012660, guid: 51451e2cfdf9aaf45854a368eb17f904, type: 3}
+    conditions:
+      switchTable: []
+      variableTable: []
+      localVariableTable: []
+    actions:
+    - actionType: 0
+      variableTable:
+        switchTable: []
+        variableTable: []
+        localVariableTable:
+        - target: {fileID: 1492599335}
+          value: 1
+          conditionality: 0
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+        waitEnd: 0
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
+    trigger: 0
+    run: 0
+    playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
+  - sprite: {fileID: -8364978965352940289, guid: 51451e2cfdf9aaf45854a368eb17f904, type: 3}
+    conditions:
+      switchTable: []
+      variableTable: []
+      localVariableTable:
+      - target: {fileID: 1492599335}
+        value: 1
+        conditionality: 0
+    actions:
+    - actionType: 0
+      variableTable:
+        switchTable: []
+        variableTable: []
+        localVariableTable:
+        - target: {fileID: 1492599335}
+          value: 0
+          conditionality: 0
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+        waitEnd: 0
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 0
+    trigger: 0
+    run: 0
+    playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
+--- !u!212 &1492599339
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492599335}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 2
+  m_Sprite: {fileID: -1218756765276012660, guid: 51451e2cfdf9aaf45854a368eb17f904, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.23, y: 0.19}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!4 &1497149018 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 37250464234765956, guid: 2c44596b743b74c48ac32b8ef3389e89, type: 3}
@@ -5028,6 +5393,7 @@ MonoBehaviour:
     conditions:
       switchTable: []
       variableTable: []
+      localVariableTable: []
     actions: []
     trigger: 0
     run: 0
@@ -5038,11 +5404,13 @@ MonoBehaviour:
       - switchID: 000 Puerta Open
         value: 1
       variableTable: []
+      localVariableTable: []
     actions:
     - actionType: 6
       variableTable:
         switchTable: []
         variableTable: []
+        localVariableTable: []
       talk:
         text: 
       callScript:

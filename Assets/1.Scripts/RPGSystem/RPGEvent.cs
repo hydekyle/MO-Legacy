@@ -11,6 +11,7 @@ public class RPGEvent : MonoBehaviour
     public List<RPGPage> pages = new List<RPGPage>() { new RPGPage() };
     int _activePageIndex = -1;
     // Caching to avoid resubs
+    List<int> _subscribedLocalVariableList = new List<int>();
     List<int> _subscribedSwitchList = new List<int>();
     List<int> _subscribedVariableList = new List<int>();
 
@@ -39,7 +40,7 @@ public class RPGEvent : MonoBehaviour
     {
         var page = GetActivePage();
         if (page.trigger == TriggerType.PlayerTouch && other.CompareTag("Player"))
-            GameManager.ResolveEntityActions(page, transform.GetHashCode());
+            GameManager.ResolveEntityActions(page, gameObject.name);
     }
 
     public RPGPage GetActivePage()
@@ -63,7 +64,7 @@ public class RPGEvent : MonoBehaviour
 
         if (pageIndex != _activePageIndex && _activePageIndex != -1)
         {
-            if (page.trigger == TriggerType.Autorun) GameManager.ResolveEntityActions(page, transform.GetHashCode());
+            if (page.trigger == TriggerType.Autorun) GameManager.ResolveEntityActions(page, gameObject.name);
             if (page.playSFXOnEnabled) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
         }
 
@@ -76,7 +77,7 @@ public class RPGEvent : MonoBehaviour
         for (var x = pages.Count - 1; x >= 0; x--)
         {
             var page = pages[x];
-            var isAllOK = IsAllPageConditionOK(page);
+            var isAllOK = IsTableConditionsOK(page.conditions);
             if (isAllOK && _activePageIndex == x) return;
             else if (isAllOK)
             {
@@ -107,6 +108,15 @@ public class RPGEvent : MonoBehaviour
             GameData.SubscribeToVariableChangedEvent(ID, CheckAllPageCondition);
             _subscribedVariableList.Add(ID);
         }
+        foreach (var lv in cTable.localVariableTable)
+        {
+            var ID = lv.ID();
+            if (!_subscribedLocalVariableList.Contains(ID))
+            {
+                _subscribedLocalVariableList.Add(ID);
+                GameData.SubscribeToLocalVariableChangedEvent(ID, CheckAllPageCondition);
+            }
+        }
     }
 
     /// <summary>Called Only OnDestroy</summary>
@@ -117,19 +127,27 @@ public class RPGEvent : MonoBehaviour
 
     void UnsubscribeConditionTable(RPGVariableTable cTable)
     {
+        foreach (var id in _subscribedLocalVariableList) GameData.UnsubscribeToLocalVariableChangedEvent(id, CheckAllPageCondition);
         foreach (var id in _subscribedSwitchList) GameData.UnsubscribeToSwitchChangedEvent(id, CheckAllPageCondition);
         foreach (var id in _subscribedVariableList) GameData.UnsubscribeToVariableChangedEvent(id, CheckAllPageCondition);
         _subscribedSwitchList.Clear();
         _subscribedVariableList.Clear();
-    }
-
-    bool IsAllPageConditionOK(RPGPage page)
-    {
-        return IsTableConditionsOK(page.conditions);
+        _subscribedLocalVariableList.Clear();
     }
 
     bool IsTableConditionsOK(RPGVariableTable cTable)
     {
+        foreach (var requiredLocalVariable in cTable.localVariableTable)
+        {
+            var localVariableValue = GameData.GetLocalVariable(requiredLocalVariable.ID());
+            switch (requiredLocalVariable.conditionality)
+            {
+                case VariableConditionality.Equals: if (requiredLocalVariable.value == localVariableValue) continue; break;
+                case VariableConditionality.GreaterThan: if (requiredLocalVariable.value < localVariableValue) continue; break;
+                case VariableConditionality.LessThan: if (requiredLocalVariable.value > localVariableValue) continue; break;
+            }
+            return false;
+        }
         foreach (var requiredSwitch in cTable.switchTable)
         {
             var switchValue = GameData.GetSwitch(requiredSwitch.ID());

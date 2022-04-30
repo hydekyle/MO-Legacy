@@ -16,6 +16,7 @@ public class RPGEnabledByConditions : MonoBehaviour
     // Cache subscribed ones to avoid multiples subscriptions
     List<int> _subscribedSwitchID = new List<int>();
     List<int> _subscribedVariableID = new List<int>();
+    List<int> _subscribedLocalVariableList = new List<int>();
 
     void OnValidate()
     {
@@ -36,7 +37,7 @@ public class RPGEnabledByConditions : MonoBehaviour
     // Called every time a required switch or variable changes the value
     void SetActiveIfAllConditionsOK()
     {
-        var isAllOK = IsAllConditionsOK();
+        var isAllOK = IsTableConditionsOK(conditionTable);
         if (isAllOK == gameObject.activeSelf) return;
         if (onEnabledSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnabledSound, gameObject);
         gameObject.SetActive(isAllOK);
@@ -63,6 +64,15 @@ public class RPGEnabledByConditions : MonoBehaviour
             GameData.SubscribeToVariableChangedEvent(ID, SetActiveIfAllConditionsOK);
             _subscribedVariableID.Add(ID);
         }
+        foreach (var lv in cTable.localVariableTable)
+        {
+            var ID = lv.ID();
+            if (!_subscribedLocalVariableList.Contains(ID))
+            {
+                _subscribedLocalVariableList.Add(ID);
+                GameData.SubscribeToLocalVariableChangedEvent(ID, SetActiveIfAllConditionsOK);
+            }
+        }
     }
 
     void UnSubscribeToRequiredConditions()
@@ -72,19 +82,26 @@ public class RPGEnabledByConditions : MonoBehaviour
 
     void UnsubscribeConditionTable(RPGVariableTable cTable)
     {
+        foreach (var id in _subscribedLocalVariableList) GameData.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
         foreach (var id in _subscribedSwitchID) GameData.UnsubscribeToSwitchChangedEvent(id, SetActiveIfAllConditionsOK);
         foreach (var id in _subscribedVariableID) GameData.UnsubscribeToVariableChangedEvent(id, SetActiveIfAllConditionsOK);
         _subscribedSwitchID.Clear();
         _subscribedVariableID.Clear();
     }
 
-    bool IsAllConditionsOK()
-    {
-        return IsTableConditionsOK(conditionTable);
-    }
-
     bool IsTableConditionsOK(RPGVariableTable cTable)
     {
+        foreach (var requiredLocalVariable in cTable.localVariableTable)
+        {
+            var variableValue = GameData.GetLocalVariable(requiredLocalVariable.ID());
+            switch (requiredLocalVariable.conditionality)
+            {
+                case VariableConditionality.Equals: if (requiredLocalVariable.value == variableValue) continue; break;
+                case VariableConditionality.GreaterThan: if (requiredLocalVariable.value > variableValue) continue; break;
+                case VariableConditionality.LessThan: if (requiredLocalVariable.value < variableValue) continue; break;
+            }
+            return false;
+        }
         foreach (var requiredSwitch in cTable.switchTable)
         {
             var switchValue = GameData.GetSwitch(requiredSwitch.ID());

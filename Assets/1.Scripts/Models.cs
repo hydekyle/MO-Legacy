@@ -89,7 +89,7 @@ public class Entity : MonoBehaviour
             {
                 var page = interactedEvent.GetActivePage();
                 if (page.trigger == TriggerType.PlayerInteraction)
-                    GameManager.ResolveEntityActions(page, transform.GetHashCode());
+                    GameManager.ResolveEntityActions(page, gameObject.name);
             }
             _resolvedHits.Add(hitID);
         }
@@ -140,7 +140,7 @@ public class Entity : MonoBehaviour
     public async UniTaskVoid StopMovement()
     {
         await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time, cancellationToken: GameManager.CancelOnDestroyToken());
-        LookAtDirection(faceDirection);
+        try { LookAtDirection(faceDirection); } catch { }
     }
 
     public void LookAtDirection(FaceDirection fDir)
@@ -189,6 +189,7 @@ public class GameData
 {
     public SwitchDictionary switches;
     public VariableDictionary variables;
+    public LocalVariableDictionary localVariableDic;
     public Inventory inventory = new Inventory();
     [HideInInspector]
     public Vector3 savedPosition;
@@ -265,6 +266,12 @@ public class GameData
         GameManager.Instance.gameData.variables[ID].OnChanged += action;
     }
 
+    public static void SubscribeToLocalVariableChangedEvent(int gameObjectID, Action action)
+    {
+        GameData.GetLocalVariable(gameObjectID);
+        GameManager.Instance.gameData.localVariableDic[gameObjectID].OnChanged += action;
+    }
+
     public static void UnsubscribeToSwitchChangedEvent(int ID, Action action)
     {
         GameManager.Instance.gameData.switches[ID].OnChanged -= action;
@@ -273,6 +280,11 @@ public class GameData
     public static void UnsubscribeToVariableChangedEvent(int ID, Action action)
     {
         GameManager.Instance.gameData.variables[ID].OnChanged -= action;
+    }
+
+    public static void UnsubscribeToLocalVariableChangedEvent(int gameObjectID, Action action)
+    {
+        GameManager.Instance.gameData.localVariableDic[gameObjectID].OnChanged -= action;
     }
 
     public static float GetVariable(int ID)
@@ -284,6 +296,19 @@ public class GameData
         catch
         {
             GameData.SetVariable(ID, 0);
+            return 0;
+        }
+    }
+
+    public static float GetLocalVariable(int gameObjectID)
+    {
+        try
+        {
+            return GameManager.Instance.gameData.localVariableDic[gameObjectID].Value;
+        }
+        catch
+        {
+            GameData.SetLocalVariable(gameObjectID, 0);
             return 0;
         }
     }
@@ -310,6 +335,22 @@ public class GameData
             GameManager.Instance.gameData.variables[variableID].Value += value;
         else
             GameManager.Instance.gameData.variables[variableID] = new Observable<float>() { Value = value };
+    }
+
+    public static void SetLocalVariable(int gameObjectID, float value)
+    {
+        if (GameManager.Instance.gameData.localVariableDic.ContainsKey(gameObjectID))
+            GameManager.Instance.gameData.localVariableDic[gameObjectID].Value = value;
+        else
+            GameManager.Instance.gameData.localVariableDic[gameObjectID] = new Observable<float>() { Value = value };
+    }
+
+    public static void AddToLocalVariable(int gameObjectID, float value)
+    {
+        if (GameManager.Instance.gameData.localVariableDic.ContainsKey(gameObjectID))
+            GameManager.Instance.gameData.localVariableDic[gameObjectID].Value += value;
+        else
+            GameManager.Instance.gameData.localVariableDic[gameObjectID] = new Observable<float>() { Value = value };
     }
 }
 
@@ -343,6 +384,9 @@ public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>>
 
 [Serializable]
 public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
+
+[Serializable]
+public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
 
 [Serializable]
 public class Inventory : UnitySerializedDictionary<ScriptableItem, int> { }
@@ -386,6 +430,9 @@ public class RPGVariableTable
     [Space]
     [TableList]
     public List<UITableViewVariable> variableTable = new List<UITableViewVariable>();
+    [Space]
+    [TableList]
+    public List<UITableViewLocalVariable> localVariableTable = new List<UITableViewLocalVariable>();
 
     /// <summary>Refresh variable names if they have changed in .txt</summary>
     public void Refresh()
@@ -431,6 +478,15 @@ public class RPGVariableTable
 
     public void Resolve()
     {
+        foreach (var lv in localVariableTable)
+        {
+            switch (lv.conditionality)
+            {
+                case VariableConditionality.Equals: GameData.SetLocalVariable(lv.ID(), lv.value); break;
+                case VariableConditionality.GreaterThan: GameData.AddToLocalVariable(lv.ID(), lv.value); break;
+                case VariableConditionality.LessThan: GameData.AddToLocalVariable(lv.ID(), -lv.value); break;
+            }
+        }
         foreach (var sw in switchTable) GameData.SetSwitch(sw.ID(), sw.value);
         foreach (var va in variableTable)
         {
@@ -476,11 +532,10 @@ public class UITableViewSwitch
     public bool value = true;
     [TableColumnWidth(20)]
 #if UNITY_EDITOR
-    Rect rect;
     [Button("Rename")]
     void Edit()
     {
-        PopupWindow.Show(rect, new UIPopupEditableVariableName(switchID, false));
+        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(switchID, false));
     }
 #endif
 
@@ -515,11 +570,10 @@ public class UITableViewVariable
     public float value;
     [TableColumnWidth(20)]
 #if UNITY_EDITOR
-    Rect rect;
     [Button("Rename")]
     void Edit()
     {
-        PopupWindow.Show(rect, new UIPopupEditableVariableName(variableID, true));
+        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(variableID, true));
     }
 #endif
 
@@ -538,6 +592,32 @@ public class UITableViewVariable
             yield return line;
         }
     }
+}
+
+[Serializable]
+public class UITableViewLocalVariable
+{
+    [HorizontalGroup("target")]
+    [TableColumnWidth(90)]
+    [HideLabel]
+    public GameObject target;
+    [TableColumnWidth(30)]
+    public float value;
+    [VerticalGroup("target/btn")]
+    [TableColumnWidth(90)]
+    [Button("Self")]
+    public void SaveID()
+    {
+        target = Selection.activeGameObject;
+    }
+    [HideLabel]
+    public VariableConditionality conditionality;
+
+    public int ID()
+    {
+        return target.name.GetHashCode();
+    }
+
 }
 
 #if UNITY_EDITOR
