@@ -26,25 +26,6 @@ public class Helpers
         FaceDirection.East => FaceDirection.West,
         _ => FaceDirection.South
     };
-
-    public static FaceDirection GetFaceDirectionByDir(Vector3 dir)
-    {
-        // Face priority by higher axis
-        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-        {
-            if (dir.x < 0) return FaceDirection.West;
-            else if (dir.x > 0) return FaceDirection.East;
-            else if (dir.y < 0) return FaceDirection.South;
-            else return FaceDirection.North;
-        }
-        else
-        {
-            if (dir.y < 0) return FaceDirection.South;
-            else if (dir.y > 0) return FaceDirection.North;
-            else if (dir.x < 0) return FaceDirection.West;
-            else return FaceDirection.East;
-        }
-    }
 }
 
 // Switches .txt Placeholder 

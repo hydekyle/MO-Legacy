@@ -7,7 +7,7 @@ public class Player : Entity
     void Update()
     {
         if (GameManager.isMovementAvailable) MovementControl();
-        if (Input.GetKeyDown(KeyCode.C) && GameManager.isInteractAvailable) CastInteraction(transform.position);
+        if (Input.GetButtonDown("Interact") && GameManager.isInteractAvailable) CastInteraction();
     }
 
     private void MovementControl()
