@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public Transform playerT;
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
-    public static List<RPGPage> resolvingPageList = new List<RPGPage>();
+    public static List<PageEvent> resolvingPageList = new List<PageEvent>();
     public static List<string> resolvingEntityIDList = new List<string>();
 
     void Awake()
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static async UniTaskVoid ResolveEntityActions(RPGPage page, GameObject entityGO)
+    public static async UniTaskVoid ResolveEntityActions(PageEvent page, GameObject entityGO)
     {
         var entityName = entityGO.name;
         if (GameManager.resolvingEntityIDList.Contains(entityName)) return;

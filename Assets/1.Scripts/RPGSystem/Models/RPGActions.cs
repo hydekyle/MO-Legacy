@@ -26,7 +26,7 @@ public class RPGAction
 {
     public RPGActionType actionType;
     [ShowIf("actionType", RPGActionType.SetVariables)]
-    public RPGVariableTable variableTable;
+    public VariableTable variableTable;
     [ShowIf("actionType", RPGActionType.Talk)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionTalk talk;

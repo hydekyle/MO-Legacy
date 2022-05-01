@@ -35,12 +35,12 @@ public class Helpers
         {
             if (t.TryGetComponent<SpriteRenderer>(out SpriteRenderer s))
             {
-                s.sortingOrder = GetSpriteOrderByPosition(t.position);
+                s.sortingOrder = GetSpriteOrderByPositionY(t.position);
             }
         }
     }
 
-    public static int GetSpriteOrderByPosition(Vector3 position)
+    public static int GetSpriteOrderByPositionY(Vector3 position)
     {
         return (int)(-position.y * 10);
     }

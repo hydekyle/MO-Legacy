@@ -16,16 +16,13 @@ public enum VariableConditionality { Equals, GreaterThan, LessThan }
 public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
 public enum RunType { Parallel, FreezeMovement, FreezeInteraction, FreezeAll }
 
-[System.Serializable]
-public class ObsPage : Observable<List<RPGPage>> { }
-
 [Serializable]
-public struct RPGPage
+public struct PageEvent
 {
     [PreviewField(50, ObjectFieldAlignment.Center)]
     public Sprite sprite;
     [GUIColor(0, 1, 1)]
-    public RPGVariableTable conditions;
+    public VariableTable conditions;
     [GUIColor(1, 1, 0)]
     public RPGAction[] actions;
     [ShowIf("@this.actions.Length > 0")]
@@ -34,154 +31,6 @@ public struct RPGPage
     public RunType run;
     [Space(25)]
     public AudioClip playSFXOnEnabled;
-}
-
-public class Entity : MonoBehaviour
-{
-    public Sprite[] spriteList;
-    public float movementSpeed;
-    public float animationFrameTime = 0.1f;
-    [HideInInspector]
-    public FaceDirection faceDirection;
-    SpriteRenderer spriteRenderer;
-    float _lastTimeAnimationChanged = -1;
-    int _indexStepAnim = 0;
-    List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
-    public BoxCollider2D boxCollider2D;
-    // 0 (down) walking
-    // 1 (down) idle
-    // 2 (down) walking
-    // 3 (left) walking
-    // 6 (right) walking
-    // 9 (up) walking
-
-    private void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
-    }
-
-    Vector3 GetCastPoint()
-    {
-        var castPoint = boxCollider2D.bounds.center;
-        var castDistance = 0.5f;
-        switch (faceDirection)
-        {
-            case FaceDirection.North: castPoint += Vector3.up * castDistance; break;
-            case FaceDirection.East: castPoint += Vector3.right * castDistance; break;
-            case FaceDirection.West: castPoint += Vector3.left * castDistance; break;
-            case FaceDirection.South: castPoint += Vector3.down * castDistance; break;
-        }
-        return castPoint;
-    }
-
-    public void CastInteraction()
-    {
-        var castPoint = GetCastPoint();
-        var hits = Physics2D.CircleCastAll(castPoint, 0.3f, Vector2.one, 1f, LayerMask.GetMask("Default"));
-        var _resolvedHits = new List<int>(); // Avoid reinteract when multiple collider
-        foreach (var hit in hits)
-        {
-            var hitID = hit.transform.GetHashCode();
-            if (_resolvedHits.Contains(hitID)) return;
-            if (hit && hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
-            {
-                var page = interactedEvent.GetActivePage();
-                if (page.trigger == TriggerType.PlayerInteraction)
-                    GameManager.ResolveEntityActions(page, gameObject);
-            }
-            _resolvedHits.Add(hitID);
-        }
-        //LookAtDirection(GetFaceDirectionByMoveDirection(castPoint - transform.position));
-    }
-
-    public void CastUsableItem(ScriptableItem item)
-    {
-        var hit = Physics2D.CircleCast(GetCastPoint(), 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
-        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
-        {
-            usableItemZone.UsedItem(item);
-        }
-    }
-
-    public void Move(Vector3 moveDirection)
-    {
-        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
-        AnimationWalk(moveDirection);
-        spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPosition(transform.position);
-    }
-
-    public void AnimationWalk(Vector3 moveDirection)
-    {
-        switch (faceDirection)
-        {
-            case FaceDirection.South:
-                spriteRenderer.sprite = spriteList[0 + stepAnimOrder[_indexStepAnim]];
-                break;
-            case FaceDirection.West:
-                spriteRenderer.sprite = spriteList[3 + stepAnimOrder[_indexStepAnim]];
-                break;
-            case FaceDirection.East:
-                spriteRenderer.sprite = spriteList[6 + stepAnimOrder[_indexStepAnim]];
-                break;
-            case FaceDirection.North:
-                spriteRenderer.sprite = spriteList[9 + stepAnimOrder[_indexStepAnim]];
-                break;
-        }
-        // Animation Steps
-        if (Time.time > _lastTimeAnimationChanged + animationFrameTime)
-        {
-            _indexStepAnim = _indexStepAnim < stepAnimOrder.Count - 1 ? _indexStepAnim + 1 : 0;
-            _lastTimeAnimationChanged = Time.time;
-            faceDirection = Entity.GetFaceDirectionByMoveDirection(moveDirection);
-        }
-    }
-
-    public async UniTaskVoid StopMovement()
-    {
-        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time, cancellationToken: GameManager.CancelOnDestroyToken());
-        try { LookAtDirection(faceDirection); } catch { }
-    }
-
-    public void LookAtDirection(FaceDirection fDir)
-    {
-        switch (fDir)
-        {
-            case FaceDirection.South:
-                spriteRenderer.sprite = spriteList[1];
-                break;
-            case FaceDirection.West:
-                spriteRenderer.sprite = spriteList[4];
-                break;
-            case FaceDirection.East:
-                spriteRenderer.sprite = spriteList[7];
-                break;
-            case FaceDirection.North:
-                spriteRenderer.sprite = spriteList[10];
-                break;
-        }
-        faceDirection = fDir;
-    }
-
-    public static FaceDirection GetFaceDirectionByMoveDirection(Vector3 dir)
-    {
-        // Face priority by higher axis
-        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-        {
-            if (dir.x < 0) return FaceDirection.West;
-            else if (dir.x > 0) return FaceDirection.East;
-            else if (dir.y < 0) return FaceDirection.South;
-            else return FaceDirection.North;
-        }
-        else
-        {
-            if (dir.y < 0) return FaceDirection.South;
-            else if (dir.y > 0) return FaceDirection.North;
-            else if (dir.x < 0) return FaceDirection.West;
-            else return FaceDirection.East;
-        }
-    }
-
 }
 
 [Serializable]
@@ -362,253 +211,7 @@ public class GameData
 }
 
 [Serializable]
-public class SwitchCondition
-{
-    public string name;
-    public bool value;
-
-    public int ID()
-    {
-        return int.Parse(name.Substring(0, 4));
-    }
-}
-
-[Serializable]
-public class VariableCondition
-{
-    public string name;
-    public float value;
-    public VariableConditionality conditionality;
-
-    public int ID()
-    {
-        return int.Parse(name.Substring(0, 4));
-    }
-}
-
-[Serializable]
-public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
-
-[Serializable]
-public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
-
-[Serializable]
-public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
-
-[Serializable]
-public class Inventory : UnitySerializedDictionary<ScriptableItem, int> { }
-
-// This is required for Odin Inspector Plugin to serialize Dictionary
-public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
-{
-    [SerializeField, HideInInspector]
-    private List<TKey> keyData = new List<TKey>();
-
-    [SerializeField, HideInInspector]
-    private List<TValue> valueData = new List<TValue>();
-
-    void ISerializationCallbackReceiver.OnAfterDeserialize()
-    {
-        this.Clear();
-        for (int i = 0; i < this.keyData.Count && i < this.valueData.Count; i++)
-        {
-            this[this.keyData[i]] = this.valueData[i];
-        }
-    }
-
-    void ISerializationCallbackReceiver.OnBeforeSerialize()
-    {
-        this.keyData.Clear();
-        this.valueData.Clear();
-
-        foreach (var item in this)
-        {
-            this.keyData.Add(item.Key);
-            this.valueData.Add(item.Value);
-        }
-    }
-}
-
-[Serializable]
-public class UITableViewSwitch
-{
-    [TableColumnWidth(120)]
-    [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
-    public string switchID;
-    [TableColumnWidth(120)]
-    public bool value = true;
-    [TableColumnWidth(20)]
-#if UNITY_EDITOR
-    [Button("Rename")]
-    void Edit()
-    {
-        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(switchID, false));
-    }
-#endif
-
-    public int ID()
-    {
-        return int.Parse(switchID.Substring(0, 4));
-    }
-
-    IEnumerable<string> ReadSwitches()
-    {
-        var path = Application.dataPath + "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
-        {
-            yield return line;
-        }
-    }
-
-
-}
-
-[Serializable]
-public class UITableViewVariable
-{
-    [TableColumnWidth(140)]
-    [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
-    public string variableID;
-    [ShowIf("variableID")]
-    public VariableConditionality conditionality;
-    [ShowIf("variableID")]
-    public float value;
-    [TableColumnWidth(20)]
-#if UNITY_EDITOR
-    [Button("Rename")]
-    void Edit()
-    {
-        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(variableID, true));
-    }
-#endif
-
-    public int ID()
-    {
-        return int.Parse(variableID.Substring(0, 4));
-    }
-
-    IEnumerable ReadVariables()
-    {
-        var path = Application.dataPath + "/variables.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
-        {
-            yield return line;
-        }
-    }
-}
-
-[Serializable]
-public class UITableViewLocalVariable
-{
-    [HorizontalGroup("target")]
-    [TableColumnWidth(90)]
-    [HideLabel]
-    public GameObject target;
-    [TableColumnWidth(30)]
-    public float value;
-    [VerticalGroup("target/btn")]
-    [TableColumnWidth(90)]
-    [Button("Self")]
-    public void SaveID()
-    {
-        target = Selection.activeGameObject;
-    }
-    [HideLabel]
-    public VariableConditionality conditionality;
-
-    public int ID()
-    {
-        return String.Concat(target.name, SceneManager.GetActiveScene().name).GetHashCode();
-    }
-
-}
-
-#if UNITY_EDITOR
-public class UIPopupEditableVariableName : PopupWindowContent
-{
-    string inputText = "";
-    string editingName = "";
-    int ID;
-    public static UIPopupEditableVariableName Instance;
-    bool isVariable;
-
-    public UIPopupEditableVariableName(string varID, bool isVariable)
-    {
-        ID = int.Parse(varID.Substring(0, 4));
-        editingName = inputText = varID.Substring(4, varID.Length - 4); ;
-        this.isVariable = isVariable;
-    }
-
-    public override Vector2 GetWindowSize()
-    {
-        return new Vector2(200, 80);
-    }
-
-    public override void OnGUI(Rect rect)
-    {
-        var title = String.Format("Renaming '{0}'", editingName);
-        GUILayout.Label(title, EditorStyles.boldLabel);
-        inputText = GUILayout.TextField(inputText);
-
-        Event e = Event.current;
-        switch (e.type)
-        {
-            case EventType.KeyDown:
-                if (Event.current.keyCode == (KeyCode.Return)) Save(); break;
-        }
-
-        if (GUILayout.Button("SAVE")) Save();
-    }
-
-    void Save()
-    {
-        SaveNewSwitch(ID, inputText, isVariable);
-        if (Selection.activeGameObject.TryGetComponent<RPGEnabledByConditions>(out var c)) c.conditionTable.Refresh();
-        if (Selection.activeGameObject.TryGetComponent<RPGEvent>(out var e))
-            foreach (var page in e.pages)
-            {
-                page.conditions.Refresh();
-                foreach (var action in page.actions) action.variableTable.Refresh();
-            }
-        editorWindow.Close();
-    }
-
-    void SaveNewSwitch(int ID, string newName, bool isVariable)
-    {
-        var path = Application.dataPath;
-        path += isVariable ? "/variables.txt" : "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-        var textID = "";
-        if (ID < 10) textID = "00" + ID;
-        else if (ID < 100) textID = "0" + ID;
-        dataLines[ID] = textID + " " + newName;
-        File.WriteAllLines(path, dataLines);
-    }
-
-    IEnumerable<string> ReadSwitches()
-    {
-        var path = Application.dataPath + "/switches.txt";
-        var dataLines = File.ReadAllLines(path);
-
-        foreach (var line in dataLines)
-        {
-            yield return line;
-        }
-    }
-
-    public override void OnOpen() { }
-
-    public override void OnClose() { }
-}
-
-#endif
-
-[Serializable]
-public class RPGVariableTable
+public class VariableTable
 {
     [TableList]
     public List<UITableViewSwitch> switchTable = new List<UITableViewSwitch>();
@@ -625,7 +228,7 @@ public class RPGVariableTable
         if (switchTable.Count > 0)
         {
             var switchLineList = new List<string>();
-            foreach (var line in ReadSwitches())
+            foreach (var line in UIReadSwitchesFromTXT())
             {
                 switchLineList.Add(line);
             }
@@ -644,7 +247,7 @@ public class RPGVariableTable
         if (variableTable.Count > 0)
         {
             var variableLineList = new List<string>();
-            foreach (var line in ReadVariables())
+            foreach (var line in UIReadVariablesFromTXT())
             {
                 variableLineList.Add(line);
             }
@@ -684,7 +287,7 @@ public class RPGVariableTable
         }
     }
 
-    IEnumerable<string> ReadSwitches()
+    IEnumerable<string> UIReadSwitchesFromTXT()
     {
         var path = Application.dataPath + "/switches.txt";
         var dataLines = File.ReadAllLines(path);
@@ -695,7 +298,7 @@ public class RPGVariableTable
         }
     }
 
-    IEnumerable<string> ReadVariables()
+    IEnumerable<string> UIReadVariablesFromTXT()
     {
         var path = Application.dataPath + "/variables.txt";
         var dataLines = File.ReadAllLines(path);
@@ -774,3 +377,65 @@ public class RPGVariableTable
         return true;
     }
 }
+
+[Serializable]
+public class SwitchCondition
+{
+    public string name;
+    public bool value;
+
+    public int ID()
+    {
+        return int.Parse(name.Substring(0, 4));
+    }
+}
+
+[Serializable]
+public class VariableCondition
+{
+    public string name;
+    public float value;
+    public VariableConditionality conditionality;
+
+    public int ID()
+    {
+        return int.Parse(name.Substring(0, 4));
+    }
+}
+
+#region Dictionaries
+[Serializable] public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
+[Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
+[Serializable] public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
+[Serializable] public class Inventory : UnitySerializedDictionary<ScriptableItem, int> { }
+public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+{
+    // This class is required for Odin to serialize dictionaries
+    [SerializeField, HideInInspector]
+    private List<TKey> keyData = new List<TKey>();
+
+    [SerializeField, HideInInspector]
+    private List<TValue> valueData = new List<TValue>();
+
+    void ISerializationCallbackReceiver.OnAfterDeserialize()
+    {
+        this.Clear();
+        for (int i = 0; i < this.keyData.Count && i < this.valueData.Count; i++)
+        {
+            this[this.keyData[i]] = this.valueData[i];
+        }
+    }
+
+    void ISerializationCallbackReceiver.OnBeforeSerialize()
+    {
+        this.keyData.Clear();
+        this.valueData.Clear();
+
+        foreach (var item in this)
+        {
+            this.keyData.Add(item.Key);
+            this.valueData.Add(item.Value);
+        }
+    }
+}
+#endregion
