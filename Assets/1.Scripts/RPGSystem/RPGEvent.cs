@@ -25,16 +25,24 @@ public class RPGEvent : MonoBehaviour
 
     void OnValuePageChanged()
     {
-        var page = pages[0];
-        if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+        for (var x = pages.Count - 1; x >= 0; x--)
         {
-            spriteRenderer.sprite = page.sprite;
+            if (pages[x].sprite != null)
+            {
+                if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+                {
+                    spriteRenderer.sprite = pages[x].sprite;
+                }
+                else
+                {
+                    var newRenderer = gameObject.AddComponent<SpriteRenderer>();
+                    newRenderer.sprite = pages[x].sprite;
+                }
+                return;
+            }
         }
-        else
-        {
-            var newRenderer = gameObject.AddComponent<SpriteRenderer>();
-            newRenderer.sprite = page.sprite;
-        }
+        // If pages has no sprite
+        DestroyImmediate(GetComponent(typeof(SpriteRenderer)));
     }
 
     void OnValidate()
@@ -78,7 +86,7 @@ public class RPGEvent : MonoBehaviour
     void ApplyPage(int pageIndex)
     {
         var page = pages[pageIndex];
-        spriteRenderer.sprite = page.sprite;
+        if (spriteRenderer) spriteRenderer.sprite = page.sprite;
 
         if (pageIndex != _activePageIndex && _activePageIndex != -1)
         {

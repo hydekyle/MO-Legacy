@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        transform.SetParent(null);
     }
 
     void Update()

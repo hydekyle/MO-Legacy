@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour
     public Transform playerT;
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
-    public static List<PageEvent> resolvingPageList = new List<PageEvent>();
-    public static List<string> resolvingEntityIDList = new List<string>();
+    public static List<PageEvent> resolvingPageList = new();
+    public static List<string> resolvingEntityIDList = new();
 
     void Awake()
     {
@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
             if (SceneManager.GetActiveScene().buildIndex != 0) playerT = GameObject.Find("PLAYER").transform;
+            transform.SetParent(null);
             DontDestroyOnLoad(this);
         }
     }

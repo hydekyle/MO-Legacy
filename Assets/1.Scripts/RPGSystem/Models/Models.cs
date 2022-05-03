@@ -39,7 +39,7 @@ public class GameData
     public SwitchDictionary switches;
     public VariableDictionary variables;
     public LocalVariableDictionary localVariableDic;
-    public Inventory inventory = new Inventory();
+    public Inventory inventory = new();
 
     [HideInInspector]
     public string savedMapName;
