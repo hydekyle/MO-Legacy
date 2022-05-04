@@ -3,17 +3,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public GameData gameData;
+    public static GameData gameData { get { return GameManager.Instance._gameData; } }
+    GameData _gameData = new();
     [HideInInspector]
     public Transform playerT;
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
-    public static List<PageEvent> resolvingPageList = new();
-    public static List<string> resolvingEntityIDList = new();
+    
 
     void Awake()
     {
@@ -30,8 +31,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
-        if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0);
+        if (Input.GetKeyDown(KeyCode.F6)) _gameData.SaveGameDataSlot(0);
+        if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0);
     }
 
     public static CancellationToken CancelOnDestroyToken()
@@ -50,46 +51,13 @@ public class GameManager : MonoBehaviour
     {
         if (playerT)
         {
-            playerT.GetComponent<Entity>().LookAtDirection(gameData.savedFaceDir);
-            playerT.position = gameData.savedMapSpawnIndex >= 0 ?
-                GameObject.Find("[SPAWN]").transform.GetChild(gameData.savedMapSpawnIndex).position
-                : gameData.savedPosition;
+            playerT.GetComponent<Entity>().LookAtDirection(_gameData.savedFaceDir);
+            playerT.position = _gameData.savedMapSpawnIndex >= 0 ?
+                GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
+                : _gameData.savedPosition;
         }
     }
 
-    public static async UniTaskVoid ResolveEntityActions(PageEvent page, GameObject entityGO)
-    {
-        var entityName = entityGO.name;
-        if (GameManager.resolvingEntityIDList.Contains(entityName)) return;
-        resolvingPageList.Add(page);
-        resolvingEntityIDList.Add(entityName);
-        OnResolvingPageListChanged();
-        for (var x = 0; x < page.actions.Length; x++)
-        {
-            var action = page.actions[x];
-            await action.Resolve().AttachExternalCancellation(GameManager.CancelOnDestroyToken());
-        }
-        resolvingPageList.Remove(page);
-        resolvingEntityIDList.Remove(entityName);
-        OnResolvingPageListChanged();
-    }
-
-    static void OnResolvingPageListChanged()
-    {
-        if (resolvingPageList.Count == 0)
-        {
-            isMovementAvailable = isInteractAvailable = true;
-            return;
-        }
-        var pageList = resolvingPageList;
-        if (pageList.Exists(item => item.run == RunType.FreezeAll)) isMovementAvailable = isInteractAvailable = false;
-        else
-        {
-            if (pageList.Exists(item => item.run == RunType.FreezeInteraction)) isInteractAvailable = false;
-            else isInteractAvailable = true;
-            if (pageList.Exists(item => item.run == RunType.FreezeMovement)) isMovementAvailable = false;
-            else isMovementAvailable = true;
-        }
-    }
+    
 
 }

@@ -22,8 +22,23 @@ public class RPGEvent : MonoBehaviour
         });
     }
 
-
     void OnValuePageChanged()
+    {
+        UIShowSprite();
+        UIShowBoxCollider();
+    }
+
+    void OnValidate()
+    {
+        foreach (var page in pages)
+        {
+            if (page.conditions != null) page.conditions.Refresh();
+            if (page.actions != null)
+                foreach (var action in page.actions) action.variableTable?.Refresh();
+        }
+    }
+
+    void UIShowSprite()
     {
         for (var x = pages.Count - 1; x >= 0; x--)
         {
@@ -32,6 +47,7 @@ public class RPGEvent : MonoBehaviour
                 if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
                 {
                     spriteRenderer.sprite = pages[x].sprite;
+                    spriteRenderer.sortingOrder = 3;
                 }
                 else
                 {
@@ -45,13 +61,20 @@ public class RPGEvent : MonoBehaviour
         DestroyImmediate(GetComponent(typeof(SpriteRenderer)));
     }
 
-    void OnValidate()
+    void UIShowBoxCollider()
     {
-        foreach (var page in pages)
+        if (pages.Exists(page => page.trigger == TriggerType.PlayerInteraction || page.trigger == TriggerType.PlayerTouch))
         {
-            if (page.conditions != null) page.conditions.Refresh();
-            if (page.actions != null)
-                foreach (var action in page.actions) action.variableTable?.Refresh();
+            if (!TryGetComponent<BoxCollider2D>(out BoxCollider2D boxCollider))
+            {
+                var newCollider = gameObject.AddComponent<BoxCollider2D>();
+                newCollider.isTrigger = true;
+            }
+        }
+        else
+        {
+            if (TryGetComponent<BoxCollider2D>(out BoxCollider2D boxCollider))
+                if (boxCollider.isTrigger) DestroyImmediate(boxCollider);
         }
     }
 
@@ -75,7 +98,7 @@ public class RPGEvent : MonoBehaviour
     {
         var page = GetActivePage();
         if (page.trigger == TriggerType.PlayerTouch && other.CompareTag("Player"))
-            GameManager.ResolveEntityActions(page, gameObject);
+            page.ResolveEntityActions(gameObject);
     }
 
     public PageEvent GetActivePage()
@@ -90,7 +113,7 @@ public class RPGEvent : MonoBehaviour
 
         if (pageIndex != _activePageIndex && _activePageIndex != -1)
         {
-            if (page.trigger == TriggerType.Autorun) GameManager.ResolveEntityActions(page, gameObject);
+            if (page.trigger == TriggerType.Autorun) page.ResolveEntityActions(gameObject);
             if (page.playSFXOnEnabled) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
         }
 

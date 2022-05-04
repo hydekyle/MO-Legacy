@@ -142,7 +142,7 @@ public class RPGActionAddItem
     public int amount = 1;
     public void Resolve()
     {
-        GameData.AddItem(item, amount);
+        GameManager.gameData.AddItem(item, amount);
     }
 }
 
@@ -161,7 +161,7 @@ public class RPGActionTeleportMap
 
     public void Resolve()
     {
-        var gameData = GameManager.Instance.gameData;
+        var gameData = GameManager.gameData;
         var playerEntity = GameManager.Instance.playerT.GetComponent<Entity>();
         gameData.savedMapSpawnIndex = setCustomSpawnPoint ? -1 : mapSpawnIndex;
         gameData.savedPosition = spawnPoint;

@@ -55,7 +55,7 @@ public class Entity : MonoBehaviour
             {
                 var page = interactedEvent.GetActivePage();
                 if (page.trigger == TriggerType.PlayerInteraction)
-                    GameManager.ResolveEntityActions(page, gameObject);
+                    page.ResolveEntityActions(gameObject);
             }
             _resolvedHits.Add(hitID);
         }
