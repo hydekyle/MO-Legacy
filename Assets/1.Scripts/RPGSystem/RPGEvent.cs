@@ -40,7 +40,7 @@ public class RPGEvent : MonoBehaviour
 
     void UIShowSprite()
     {
-        for (var x = pages.Count - 1; x >= 0; x--)
+        for (var x = 0; x < pages.Count; x++)
         {
             if (pages[x].sprite != null)
             {
@@ -110,11 +110,10 @@ public class RPGEvent : MonoBehaviour
     {
         var page = pages[pageIndex];
         if (spriteRenderer) spriteRenderer.sprite = page.sprite;
-
-        if (pageIndex != _activePageIndex && _activePageIndex != -1)
+        if (pageIndex != _activePageIndex)
         {
+            if (page.playSFXOnEnabled && _activePageIndex != -1) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
             if (page.trigger == TriggerType.Autorun) page.ResolveEntityActions(gameObject);
-            if (page.playSFXOnEnabled) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
         }
 
         _activePageIndex = pageIndex;

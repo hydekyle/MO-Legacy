@@ -18,12 +18,32 @@ public enum RPGActionType
     CallScript,
     AddItem,
     TeleportMap,
-    CheckConditions
+    CheckConditions,
+    SetCanvas
 }
 
 #region Action_Classes
 [Serializable]
-public class RPGCheckConditions
+public class RPGActionSetCanvas
+{
+    [ValueDropdown("GetCanvasList")]
+    public Transform canvasT;
+    public bool setStatus;
+
+    IEnumerable GetCanvasList()
+    {
+        foreach (Transform child in GameObject.Find("Canvas").transform)
+            yield return child;
+    }
+
+    public void Resolve()
+    {
+        canvasT.gameObject.SetActive(setStatus);
+    }
+}
+
+[Serializable]
+public class RPGActionCheckConditions
 {
     public VariableTable conditionList;
     public RPGAction[] onTrue, onFalse;
@@ -154,7 +174,7 @@ public class RPGAction
     [ShowIf("actionType", RPGActionType.CheckConditions)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGCheckConditions checkConditions;
+    public RPGActionCheckConditions checkConditions;
     [ShowIf("actionType", RPGActionType.SetVariables)]
     [GUIColor(0, 1, 1)]
     public VariableTable variableTable;
@@ -186,6 +206,10 @@ public class RPGAction
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionTeleportMap teleportMap;
+    [ShowIf("actionType", RPGActionType.SetCanvas)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionSetCanvas setCanvas;
     #endregion
 
     public async UniTask Resolve()
@@ -201,6 +225,7 @@ public class RPGAction
             case RPGActionType.AddItem: addItem.Resolve(); break;
             case RPGActionType.TeleportMap: teleportMap.Resolve(); break;
             case RPGActionType.CheckConditions: await checkConditions.Resolve(); break;
+            case RPGActionType.SetCanvas: setCanvas.Resolve(); break;
         }
     }
 }
