@@ -44,6 +44,29 @@ public class Helpers
     {
         return (int)(-position.y * 10);
     }
+
+    public static void SetVariables(VariableTable vTable)
+    {
+        foreach (var lv in vTable.localVariableTable)
+        {
+            switch (lv.conditionality)
+            {
+                case VariableConditionality.Equals: GameManager.gameData.SetLocalVariable(lv.ID(), lv.value); break;
+                case VariableConditionality.GreaterThan: GameManager.gameData.AddToLocalVariable(lv.ID(), lv.value); break;
+                case VariableConditionality.LessThan: GameManager.gameData.AddToLocalVariable(lv.ID(), -lv.value); break;
+            }
+        }
+        foreach (var sw in vTable.switchTable) GameManager.gameData.SetSwitch(sw.ID(), sw.value);
+        foreach (var va in vTable.variableTable)
+        {
+            switch (va.conditionality)
+            {
+                case VariableConditionality.Equals: GameManager.gameData.SetVariable(va.ID(), va.value); break;
+                case VariableConditionality.GreaterThan: GameManager.gameData.AddToVariable(va.ID(), va.value); break;
+                case VariableConditionality.LessThan: GameManager.gameData.AddToVariable(va.ID(), -va.value); break;
+            }
+        }
+    }
 }
 
 // Switches .txt Placeholder 

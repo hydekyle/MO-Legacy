@@ -216,7 +216,7 @@ public class RPGAction
     {
         switch (actionType)
         {
-            case RPGActionType.SetVariables: variableTable.Resolve(); break;
+            case RPGActionType.SetVariables: Helpers.SetVariables(variableTable); break;
             case RPGActionType.ShowText: talk.Resolve(); break;
             case RPGActionType.Script: callScript.Resolve(); break;
             case RPGActionType.PlaySE: await playSFX.Resolve(); break;

@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public Transform playerT;
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
-    
 
     void Awake()
     {
@@ -58,6 +57,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+
 
 }

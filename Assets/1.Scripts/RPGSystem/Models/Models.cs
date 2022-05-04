@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -6,7 +5,6 @@ using UnityObservables;
 using Sirenix.OdinInspector;
 using Cysharp.Threading.Tasks;
 using System.IO;
-using UnityEditor;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 
@@ -240,6 +238,7 @@ public class GameData
     }
 }
 
+#region Variables
 [Serializable]
 public class VariableTable
 {
@@ -290,29 +289,6 @@ public class VariableTable
                 {
                     vr.variableID = txtID;
                 }
-            }
-        }
-    }
-
-    public void Resolve()
-    {
-        foreach (var lv in localVariableTable)
-        {
-            switch (lv.conditionality)
-            {
-                case VariableConditionality.Equals: GameManager.gameData.SetLocalVariable(lv.ID(), lv.value); break;
-                case VariableConditionality.GreaterThan: GameManager.gameData.AddToLocalVariable(lv.ID(), lv.value); break;
-                case VariableConditionality.LessThan: GameManager.gameData.AddToLocalVariable(lv.ID(), -lv.value); break;
-            }
-        }
-        foreach (var sw in switchTable) GameManager.gameData.SetSwitch(sw.ID(), sw.value);
-        foreach (var va in variableTable)
-        {
-            switch (va.conditionality)
-            {
-                case VariableConditionality.Equals: GameManager.gameData.SetVariable(va.ID(), va.value); break;
-                case VariableConditionality.GreaterThan: GameManager.gameData.AddToVariable(va.ID(), va.value); break;
-                case VariableConditionality.LessThan: GameManager.gameData.AddToVariable(va.ID(), -va.value); break;
             }
         }
     }
@@ -433,6 +409,7 @@ public class VariableCondition
     }
 }
 
+#endregion
 #region Dictionaries
 [Serializable] public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
 [Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
