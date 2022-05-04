@@ -5,12 +5,12 @@ using UnityEngine;
 public class RPGEvent : MonoBehaviour
 {
     [OnValueChanged("OnValuePageChanged", true)]
-    public List<PageEvent> pages = new List<PageEvent>();
+    public List<PageEvent> pages = new();
     int _activePageIndex = -1;
     // Caching to avoid resubs
-    List<int> _subscribedLocalVariableList = new List<int>();
-    List<int> _subscribedSwitchList = new List<int>();
-    List<int> _subscribedVariableList = new List<int>();
+    List<int> _subscribedLocalVariableList = new();
+    List<int> _subscribedSwitchList = new();
+    List<int> _subscribedVariableList = new();
     SpriteRenderer spriteRenderer;
 
     // Called when the component is added for first time
@@ -33,8 +33,8 @@ public class RPGEvent : MonoBehaviour
         foreach (var page in pages)
         {
             if (page.conditions != null) page.conditions.Refresh();
-            if (page.actions != null)
-                foreach (var action in page.actions) action.variableTable?.Refresh();
+            if (page.actionList != null)
+                foreach (var action in page.actionList) action.variableTable?.Refresh();
         }
     }
 
@@ -94,11 +94,11 @@ public class RPGEvent : MonoBehaviour
         UnSubscribeToRequiredConditions();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void GetPlayerTouch()
     {
+        if (_activePageIndex == -1) return;
         var page = GetActivePage();
-        if (page.trigger == TriggerType.PlayerTouch && other.CompareTag("Player"))
-            page.ResolveEntityActions(gameObject);
+        if (page.conditions.IsAllConditionOK()) page.ResolveActionList();
     }
 
     public PageEvent GetActivePage()
@@ -113,9 +113,8 @@ public class RPGEvent : MonoBehaviour
         if (pageIndex != _activePageIndex)
         {
             if (page.playSFXOnEnabled && _activePageIndex != -1) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
-            if (page.trigger == TriggerType.Autorun) page.ResolveEntityActions(gameObject);
+            if (page.trigger == TriggerType.Autorun) page.ResolveActionList();
         }
-
         _activePageIndex = pageIndex;
     }
 

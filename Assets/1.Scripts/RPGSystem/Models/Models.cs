@@ -24,23 +24,27 @@ public class PageEvent
     [GUIColor(0, 1, 1)]
     public VariableTable conditions;
     [GUIColor(1, 1, 0)]
-    public RPGAction[] actions;
-    [ShowIf("@this.actions.Length > 0")]
+    public List<RPGAction> actionList = new();
+    [ShowIf("@this.actionList.Length > 0")]
     public TriggerType trigger = TriggerType.Autorun;
-    [ShowIf("@this.actions.Length > 0")]
+    [ShowIf("@this.actionList.Length > 0")]
     public FreezeType freezeWhile;
     [Space(25)]
     public AudioClip playSFXOnEnabled;
+    bool isResolvingActionList = false;
 
-    public async UniTaskVoid ResolveEntityActions(GameObject entityGO)
+    public async UniTaskVoid ResolveActionList()
     {
+        if (isResolvingActionList) return;
+        isResolvingActionList = true;
         DoFreezeWhile();
-        for (var x = 0; x < actions.Length; x++)
+        for (var x = 0; x < actionList.Count; x++)
         {
-            var action = actions[x];
+            var action = actionList[x];
             await action.Resolve().AttachExternalCancellation(GameManager.CancelOnDestroyToken());
         }
         UnfreezeWhile();
+        isResolvingActionList = false;
     }
 
     void DoFreezeWhile()

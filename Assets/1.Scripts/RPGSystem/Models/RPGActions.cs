@@ -11,24 +11,24 @@ using UnityEngine.SceneManagement;
 public enum RPGActionType
 {
     SetVariables,
-    Talk,
-    PlaySFX,
-    WaitSeconds,
+    ShowText,
+    PlaySE,
+    Wait,
     DOTween,
-    CallScript,
+    Script,
     AddItem,
-    TeleportMap,
-    CheckConditions,
-    SetCanvas
+    TeleportPlayer,
+    ConditionalBranch,
+    ShowCanvas
 }
 
 #region Action_Classes
 [Serializable]
-public class RPGActionSetCanvas
+public class RPGActionShowCanvas
 {
     [ValueDropdown("GetCanvasList")]
     public Transform canvasT;
-    public bool setStatus;
+    public bool isVisible;
 
     IEnumerable GetCanvasList()
     {
@@ -38,7 +38,7 @@ public class RPGActionSetCanvas
 
     public void Resolve()
     {
-        canvasT.gameObject.SetActive(setStatus);
+        canvasT.gameObject.SetActive(isVisible);
     }
 }
 
@@ -58,7 +58,7 @@ public class RPGActionCheckConditions
 }
 
 [Serializable]
-public class RPGActionTalk
+public class RPGActionShowText
 {
     public string text;
     public void Resolve()
@@ -68,7 +68,7 @@ public class RPGActionTalk
 }
 
 [Serializable]
-public class RPGActionCallScript
+public class RPGActionScript
 {
     public UnityEvent unityEvent;
     public void Resolve()
@@ -78,7 +78,7 @@ public class RPGActionCallScript
 }
 
 [Serializable]
-public class RPGActionPlaySFX
+public class RPGActionPlaySE
 {
     public AudioClip clip;
     public bool waitEnd;
@@ -90,7 +90,7 @@ public class RPGActionPlaySFX
 }
 
 [Serializable]
-public class RPGActionWaitTime
+public class RPGActionWait
 {
     public float seconds;
     public async UniTask Resolve()
@@ -138,7 +138,7 @@ public class RPGActionAddItem
 }
 
 [Serializable]
-public class RPGActionTeleportMap
+public class RPGActionTeleportPlayer
 {
     public string mapName;
     public bool setCustomSpawnPoint;
@@ -171,29 +171,29 @@ public class RPGAction
 {
     #region Action_Params
     public RPGActionType actionType;
-    [ShowIf("actionType", RPGActionType.CheckConditions)]
+    [ShowIf("actionType", RPGActionType.ConditionalBranch)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionCheckConditions checkConditions;
     [ShowIf("actionType", RPGActionType.SetVariables)]
     [GUIColor(0, 1, 1)]
     public VariableTable variableTable;
-    [ShowIf("actionType", RPGActionType.Talk)]
+    [ShowIf("actionType", RPGActionType.ShowText)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGActionTalk talk;
-    [ShowIf("actionType", RPGActionType.CallScript)]
+    public RPGActionShowText talk;
+    [ShowIf("actionType", RPGActionType.Script)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGActionCallScript callScript;
-    [ShowIf("actionType", RPGActionType.PlaySFX)]
+    public RPGActionScript callScript;
+    [ShowIf("actionType", RPGActionType.PlaySE)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGActionPlaySFX playSFX;
-    [ShowIf("actionType", RPGActionType.WaitSeconds)]
+    public RPGActionPlaySE playSFX;
+    [ShowIf("actionType", RPGActionType.Wait)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGActionWaitTime waitSeconds;
+    public RPGActionWait waitSeconds;
     [ShowIf("actionType", RPGActionType.DOTween)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
@@ -202,14 +202,14 @@ public class RPGAction
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionAddItem addItem;
-    [ShowIf("actionType", RPGActionType.TeleportMap)]
+    [ShowIf("actionType", RPGActionType.TeleportPlayer)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGActionTeleportMap teleportMap;
-    [ShowIf("actionType", RPGActionType.SetCanvas)]
+    public RPGActionTeleportPlayer teleportMap;
+    [ShowIf("actionType", RPGActionType.ShowCanvas)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
-    public RPGActionSetCanvas setCanvas;
+    public RPGActionShowCanvas setCanvas;
     #endregion
 
     public async UniTask Resolve()
@@ -217,15 +217,15 @@ public class RPGAction
         switch (actionType)
         {
             case RPGActionType.SetVariables: variableTable.Resolve(); break;
-            case RPGActionType.Talk: talk.Resolve(); break;
-            case RPGActionType.CallScript: callScript.Resolve(); break;
-            case RPGActionType.PlaySFX: await playSFX.Resolve(); break;
-            case RPGActionType.WaitSeconds: await waitSeconds.Resolve(); break;
+            case RPGActionType.ShowText: talk.Resolve(); break;
+            case RPGActionType.Script: callScript.Resolve(); break;
+            case RPGActionType.PlaySE: await playSFX.Resolve(); break;
+            case RPGActionType.Wait: await waitSeconds.Resolve(); break;
             case RPGActionType.DOTween: await tweenParams.Resolve(); break;
             case RPGActionType.AddItem: addItem.Resolve(); break;
-            case RPGActionType.TeleportMap: teleportMap.Resolve(); break;
-            case RPGActionType.CheckConditions: await checkConditions.Resolve(); break;
-            case RPGActionType.SetCanvas: setCanvas.Resolve(); break;
+            case RPGActionType.TeleportPlayer: teleportMap.Resolve(); break;
+            case RPGActionType.ConditionalBranch: await checkConditions.Resolve(); break;
+            case RPGActionType.ShowCanvas: setCanvas.Resolve(); break;
         }
     }
 }

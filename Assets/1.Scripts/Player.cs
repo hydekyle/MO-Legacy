@@ -12,7 +12,13 @@ public class Player : Entity
         if (Input.GetButtonDown("Interact") && GameManager.isInteractAvailable) CastInteraction();
     }
 
-    private void MovementControl()
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent<RPGEvent>(out RPGEvent _event))
+            _event.GetPlayerTouch();
+    }
+
+    void MovementControl()
     {
         var movDir = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
         if (movDir.x != 0.0f || movDir.y != 0.0f)

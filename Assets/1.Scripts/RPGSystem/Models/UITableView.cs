@@ -153,7 +153,7 @@ public class UIPopupEditableVariableName : PopupWindowContent
             foreach (var page in e.pages)
             {
                 page.conditions.Refresh();
-                foreach (var action in page.actions) 
+                foreach (var action in page.actionList)
                 {
                     action.variableTable.Refresh();
                     action.checkConditions.conditionList.Refresh();
