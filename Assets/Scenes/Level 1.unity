@@ -1158,7 +1158,7 @@ MonoBehaviour:
         conditionality: 0
     actions: []
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
   - sprite: {fileID: -1144680947718420498, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
     conditions:
@@ -1170,6 +1170,13 @@ MonoBehaviour:
         conditionality: 0
     actions:
     - actionType: 6
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -1204,7 +1211,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
 --- !u!212 &544074510
 SpriteRenderer:
@@ -3189,7 +3196,7 @@ MonoBehaviour:
       localVariableTable: []
     actions: []
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 0}
   - sprite: {fileID: 3020591298559086837, guid: ced9416025d79714885f78fdb2fd6acb, type: 3}
     conditions:
@@ -3201,6 +3208,13 @@ MonoBehaviour:
       localVariableTable: []
     actions:
     - actionType: 1
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -3235,7 +3249,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 2
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 0}
 --- !u!1 &959547083
 GameObject:
@@ -3435,6 +3449,13 @@ MonoBehaviour:
       localVariableTable: []
     actions:
     - actionType: 0
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable:
         - switchID: 000 Puerta Open
@@ -3474,6 +3495,13 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     - actionType: 4
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -3508,6 +3536,13 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     - actionType: 4
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -3542,7 +3577,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
   - sprite: {fileID: -8364978965352940289, guid: 51451e2cfdf9aaf45854a368eb17f904, type: 3}
     conditions:
@@ -3553,6 +3588,13 @@ MonoBehaviour:
       localVariableTable: []
     actions:
     - actionType: 0
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable:
         - switchID: 000 Puerta Open
@@ -3592,6 +3634,13 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     - actionType: 4
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -3626,6 +3675,13 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     - actionType: 4
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -3660,7 +3716,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
 --- !u!61 &992077242
 BoxCollider2D:
@@ -4748,6 +4804,13 @@ MonoBehaviour:
       localVariableTable: []
     actions:
     - actionType: 0
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -4785,7 +4848,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
   - sprite: {fileID: -8364978965352940289, guid: 51451e2cfdf9aaf45854a368eb17f904, type: 3}
     conditions:
@@ -4797,6 +4860,13 @@ MonoBehaviour:
         conditionality: 0
     actions:
     - actionType: 0
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -4834,7 +4904,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 60dcecc25324abc4c9924f5bee58cb5d, type: 3}
 --- !u!212 &1492599339
 SpriteRenderer:
@@ -5085,7 +5155,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: -1547648892272697065, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
+  m_Sprite: {fileID: 7419906070637746193, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5131,7 +5201,7 @@ MonoBehaviour:
       localVariableTable: []
     actions: []
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
   - sprite: {fileID: 7419906070637746193, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
     conditions:
@@ -5142,6 +5212,13 @@ MonoBehaviour:
       localVariableTable: []
     actions:
     - actionType: 0
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable:
@@ -5179,6 +5256,13 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     - actionType: 7
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -5213,7 +5297,7 @@ MonoBehaviour:
         changeFaceDirection: 1
         newFaceDirection: 0
     trigger: 1
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
 --- !u!61 &1711008248
 BoxCollider2D:
@@ -20705,7 +20789,7 @@ MonoBehaviour:
         conditionality: 0
     actions: []
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: 8e6b7f040cd418f43bd8942ac431e6e9, type: 3}
   - sprite: {fileID: -1144680947718420498, guid: d7124e3d62d676d4bb6016538f80fd83, type: 3}
     conditions:
@@ -20717,6 +20801,13 @@ MonoBehaviour:
         conditionality: 0
     actions:
     - actionType: 6
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
       variableTable:
         switchTable: []
         variableTable: []
@@ -20751,7 +20842,7 @@ MonoBehaviour:
         changeFaceDirection: 0
         newFaceDirection: 0
     trigger: 0
-    run: 0
+    freezeWhile: 0
     playSFXOnEnabled: {fileID: 8300000, guid: e02b862edbcd6384fb90148db0cafe85, type: 3}
 --- !u!212 &1982312471
 SpriteRenderer:
@@ -20805,6 +20896,101 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1995182864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1995182866}
+  - component: {fileID: 1995182865}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1995182865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995182864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd500b0b5e01fb49a40965f9c418a54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pages:
+  - sprite: {fileID: 0}
+    conditions:
+      switchTable: []
+      variableTable: []
+      localVariableTable: []
+    actions:
+    - actionType: 0
+      checkConditions:
+        conditionList:
+          switchTable: []
+          variableTable: []
+          localVariableTable: []
+        onTrue: []
+        onFalse: []
+      variableTable:
+        switchTable: []
+        variableTable: []
+        localVariableTable: []
+      talk:
+        text: 
+      callScript:
+        unityEvent:
+          m_PersistentCalls:
+            m_Calls: []
+      playSFX:
+        clip: {fileID: 0}
+        waitEnd: 0
+      waitSeconds:
+        seconds: 0
+      tweenParams:
+        type: 0
+        targetTransform: {fileID: 0}
+        punch: {x: 0, y: 0, z: 0}
+        duration: 0
+        elasticity: 0
+        vibrato: 0
+        waitAnimEnd: 0
+      addItem:
+        item: {fileID: 0}
+        amount: 1
+      teleportMap:
+        mapName: 
+        setCustomSpawnPoint: 0
+        mapSpawnIndex: 0
+        spawnPoint: {x: 0, y: 0, z: 0}
+        changeFaceDirection: 0
+        newFaceDirection: 0
+    trigger: 2
+    freezeWhile: 0
+    playSFXOnEnabled: {fileID: 0}
+--- !u!4 &1995182866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995182864}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0109406, y: -2.462391, z: -0.3864672}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2037630399
 GameObject:
   m_ObjectHideFlags: 0

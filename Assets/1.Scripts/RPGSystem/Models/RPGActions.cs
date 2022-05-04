@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-// Don't reorder
 public enum RPGActionType
 {
     SetVariables,
@@ -18,54 +17,26 @@ public enum RPGActionType
     DOTween,
     CallScript,
     AddItem,
-    TeleportMap
+    TeleportMap,
+    CheckConditions
 }
 
+#region Action_Classes
 [Serializable]
-public class RPGAction
+public class RPGCheckConditions
 {
-    public RPGActionType actionType;
-    [ShowIf("actionType", RPGActionType.SetVariables)]
-    public VariableTable variableTable;
-    [ShowIf("actionType", RPGActionType.Talk)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionTalk talk;
-    [ShowIf("actionType", RPGActionType.CallScript)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionCallScript callScript;
-    [ShowIf("actionType", RPGActionType.PlaySFX)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionPlaySFX playSFX;
-    [ShowIf("actionType", RPGActionType.WaitSeconds)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionWaitTime waitSeconds;
-    [ShowIf("actionType", RPGActionType.DOTween)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionDOTween tweenParams;
-    [ShowIf("actionType", RPGActionType.AddItem)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionAddItem addItem;
-    [ShowIf("actionType", RPGActionType.TeleportMap)]
-    [TableList(AlwaysExpanded = true)]
-    public RPGActionTeleportMap teleportMap;
+    public VariableTable conditionList;
+    public RPGAction[] onTrue, onFalse;
 
     public async UniTask Resolve()
     {
-        switch (actionType)
-        {
-            case RPGActionType.SetVariables: variableTable.Resolve(); break;
-            case RPGActionType.Talk: talk.Resolve(); break;
-            case RPGActionType.CallScript: callScript.Resolve(); break;
-            case RPGActionType.PlaySFX: await playSFX.Resolve(); break;
-            case RPGActionType.WaitSeconds: await waitSeconds.Resolve(); break;
-            case RPGActionType.DOTween: await tweenParams.Resolve(); break;
-            case RPGActionType.AddItem: addItem.Resolve(); break;
-            case RPGActionType.TeleportMap: teleportMap.Resolve(); break;
-        }
+        if (conditionList.IsAllConditionOK())
+            foreach (var action in onTrue) await action.Resolve();
+        else
+            foreach (var action in onFalse) await action.Resolve();
     }
 }
 
-#region Action_Params
 [Serializable]
 public class RPGActionTalk
 {
@@ -174,3 +145,63 @@ public class RPGActionTeleportMap
 }
 
 #endregion
+
+[Serializable]
+public class RPGAction
+{
+    #region Action_Params
+    public RPGActionType actionType;
+    [ShowIf("actionType", RPGActionType.CheckConditions)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGCheckConditions checkConditions;
+    [ShowIf("actionType", RPGActionType.SetVariables)]
+    [GUIColor(0, 1, 1)]
+    public VariableTable variableTable;
+    [ShowIf("actionType", RPGActionType.Talk)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionTalk talk;
+    [ShowIf("actionType", RPGActionType.CallScript)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionCallScript callScript;
+    [ShowIf("actionType", RPGActionType.PlaySFX)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionPlaySFX playSFX;
+    [ShowIf("actionType", RPGActionType.WaitSeconds)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionWaitTime waitSeconds;
+    [ShowIf("actionType", RPGActionType.DOTween)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionDOTween tweenParams;
+    [ShowIf("actionType", RPGActionType.AddItem)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionAddItem addItem;
+    [ShowIf("actionType", RPGActionType.TeleportMap)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionTeleportMap teleportMap;
+    #endregion
+
+    public async UniTask Resolve()
+    {
+        switch (actionType)
+        {
+            case RPGActionType.SetVariables: variableTable.Resolve(); break;
+            case RPGActionType.Talk: talk.Resolve(); break;
+            case RPGActionType.CallScript: callScript.Resolve(); break;
+            case RPGActionType.PlaySFX: await playSFX.Resolve(); break;
+            case RPGActionType.WaitSeconds: await waitSeconds.Resolve(); break;
+            case RPGActionType.DOTween: await tweenParams.Resolve(); break;
+            case RPGActionType.AddItem: addItem.Resolve(); break;
+            case RPGActionType.TeleportMap: teleportMap.Resolve(); break;
+            case RPGActionType.CheckConditions: await checkConditions.Resolve(); break;
+        }
+    }
+}
+

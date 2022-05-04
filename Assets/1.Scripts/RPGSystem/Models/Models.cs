@@ -62,9 +62,9 @@ public class PageEvent
 [Serializable]
 public class GameData
 {
-    public SwitchDictionary switches;
-    public VariableDictionary variables;
-    public LocalVariableDictionary localVariableDic;
+    public SwitchDictionary switches = new();
+    public VariableDictionary variables = new();
+    public LocalVariableDictionary localVariableDic = new();
     public Inventory inventory = new();
 
     [HideInInspector]
