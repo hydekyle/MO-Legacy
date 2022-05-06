@@ -29,7 +29,7 @@ public class Helpers
     };
 
     [MenuItem("RPG/Sprite Order Fix All")]
-    public static void SpriteOrderFixMapAll()
+    public static void UISpriteOrderFixMapAll()
     {
         foreach (Transform t in GameObject.Find("[EVENTS]").transform)
         {

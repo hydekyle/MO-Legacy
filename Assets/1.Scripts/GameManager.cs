@@ -4,14 +4,15 @@ using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static GameData gameData { get { return GameManager.Instance._gameData; } }
+    public static MapReferences refMap = new();
     GameData _gameData = new();
     [HideInInspector]
-    public Transform playerT;
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
 
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
-            if (SceneManager.GetActiveScene().buildIndex != 0) playerT = GameObject.Find("PLAYER").transform;
+            if (SceneManager.GetActiveScene().buildIndex != 0) LoadMapReferences();
             transform.SetParent(null);
             DontDestroyOnLoad(this);
         }
@@ -34,24 +35,30 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0);
     }
 
+    void LoadMapReferences()
+    {
+        refMap.player = GameObject.Find("PLAYER").GetComponent<Player>();
+        refMap.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
+    }
+
+    void OnActiveSceneChanged(Scene arg0, Scene arg1)
+    {
+        LoadMapReferences();
+        SpawnPlayer();
+        CameraController.SetPosition(refMap.player.transform.position);
+    }
+
     public static CancellationToken CancelOnDestroyToken()
     {
         return GameManager.Instance.GetCancellationTokenOnDestroy();
     }
 
-    private void OnActiveSceneChanged(Scene arg0, Scene arg1)
-    {
-        playerT = GameObject.Find("PLAYER").transform;
-        SpawnPlayer();
-        CameraController.SetPosition(playerT.position);
-    }
-
     public void SpawnPlayer()
     {
-        if (playerT)
+        if (refMap.player)
         {
-            playerT.GetComponent<Entity>().LookAtDirection(_gameData.savedFaceDir);
-            playerT.position = _gameData.savedMapSpawnIndex >= 0 ?
+            refMap.player.LookAtDirection(_gameData.savedFaceDir);
+            refMap.player.transform.position = _gameData.savedMapSpawnIndex >= 0 ?
                 GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
                 : _gameData.savedPosition;
         }

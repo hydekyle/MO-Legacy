@@ -19,26 +19,50 @@ public enum RPGActionType
     AddItem,
     TeleportPlayer,
     ConditionalBranch,
-    ShowCanvas
+    ShowCanvas,
+    FlashScreen
 }
 
 #region Action_Classes
 [Serializable]
+public class RPGActionFlashScreen
+{
+    public Color flashColor;
+    public float duration;
+    public bool waitToEnd;
+
+    public async UniTask Resolve()
+    {
+        var flashScreen = GameManager.refMap.flashScreen;
+        var initTime = Time.time;
+        flashScreen.color = flashColor;
+        do
+        {
+            var t = (Time.time - initTime) / duration;
+            flashScreen.color = new Color(flashColor.r, flashColor.g, flashColor.b, 1 - t);
+            await UniTask.Yield();
+        }
+        while (initTime + duration >= Time.time);
+        flashScreen.color = new Color(0, 0, 0, 0);
+    }
+}
+
+[Serializable]
 public class RPGActionShowCanvas
 {
-    [ValueDropdown("GetCanvasList")]
+    [ValueDropdown("UIGetCanvasList")]
     public Transform canvasT;
     public bool isVisible;
-
-    IEnumerable GetCanvasList()
-    {
-        foreach (Transform child in GameObject.Find("Canvas").transform)
-            yield return child;
-    }
 
     public void Resolve()
     {
         canvasT.gameObject.SetActive(isVisible);
+    }
+
+    IEnumerable UIGetCanvasList()
+    {
+        foreach (Transform child in GameObject.Find("Canvas").transform)
+            yield return child;
     }
 }
 
@@ -153,7 +177,7 @@ public class RPGActionTeleportPlayer
     public void Resolve()
     {
         var gameData = GameManager.gameData;
-        var playerEntity = GameManager.Instance.playerT.GetComponent<Entity>();
+        var playerEntity = GameManager.refMap.player;
         gameData.savedMapSpawnIndex = setCustomSpawnPoint ? -1 : mapSpawnIndex;
         gameData.savedPosition = spawnPoint;
         gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;
@@ -210,6 +234,10 @@ public class RPGAction
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
     public RPGActionShowCanvas setCanvas;
+    [ShowIf("actionType", RPGActionType.FlashScreen)]
+    [GUIColor(0, 1, 1)]
+    [TableList(AlwaysExpanded = true)]
+    public RPGActionFlashScreen flashScreen;
     #endregion
 
     public async UniTask Resolve()
@@ -226,6 +254,10 @@ public class RPGAction
             case RPGActionType.TeleportPlayer: teleportMap.Resolve(); break;
             case RPGActionType.ConditionalBranch: await checkConditions.Resolve(); break;
             case RPGActionType.ShowCanvas: setCanvas.Resolve(); break;
+            case RPGActionType.FlashScreen:
+                if (flashScreen.waitToEnd) await flashScreen.Resolve();
+                else flashScreen.Resolve();
+                break;
         }
     }
 }

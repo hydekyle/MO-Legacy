@@ -7,12 +7,19 @@ using Cysharp.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
 public enum VariableConditionality { Equals, GreaterThan, LessThan }
 public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
 public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
+
+public struct MapReferences
+{
+    public Player player;
+    public Image flashScreen;
+}
 
 [Serializable]
 public class PageEvent
@@ -23,9 +30,9 @@ public class PageEvent
     public VariableTable conditions;
     [GUIColor(1, 1, 0)]
     public List<RPGAction> actionList = new();
-    [ShowIf("@this.actionList.Length > 0")]
+    [ShowIf("@this.actionList.Count > 0")]
     public TriggerType trigger = TriggerType.Autorun;
-    [ShowIf("@this.actionList.Length > 0")]
+    [ShowIf("@this.actionList.Count > 0")]
     public FreezeType freezeWhile;
     [Space(25)]
     public AudioClip playSFXOnEnabled;
@@ -92,8 +99,8 @@ public class GameData
     public void SaveGameDataSlot(int slotIndex)
     {
         savedMapSpawnIndex = -1;
-        savedPosition = GameManager.Instance.playerT.position;
-        savedFaceDir = GameManager.Instance.playerT.GetComponent<Entity>().faceDirection;
+        savedPosition = GameManager.refMap.player.transform.position;
+        savedFaceDir = GameManager.refMap.player.faceDirection;
         savedMapName = SceneManager.GetActiveScene().name;
         var fileName = "/savegame" + slotIndex;
         var savePath = string.Concat(Application.persistentDataPath, fileName);
@@ -120,7 +127,7 @@ public class GameData
         }
         //TODO: Remove when Title Menu is completed
         await SceneManager.LoadSceneAsync(savedMapName);
-        var playerT = GameManager.Instance.playerT;
+        var playerT = GameManager.refMap.player.transform;
         playerT.position = savedPosition;
         playerT.GetComponent<Entity>().LookAtDirection(savedFaceDir);
     }
