@@ -15,7 +15,7 @@ public enum VariableConditionality { Equals, GreaterThan, LessThan }
 public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
 public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
 
-public struct MapReferences
+public struct GameReferences
 {
     public Player player;
     public Image flashScreen;

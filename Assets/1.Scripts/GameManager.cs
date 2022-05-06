@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static GameData gameData { get { return GameManager.Instance._gameData; } }
-    public static MapReferences refMap = new();
+    public static GameReferences refMap = new();
     GameData _gameData = new();
     [HideInInspector]
     public static bool isMovementAvailable = true;
@@ -22,11 +22,16 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
+            LoadGameReferences();
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
-            if (SceneManager.GetActiveScene().buildIndex != 0) LoadMapReferences();
             transform.SetParent(null);
             DontDestroyOnLoad(this);
         }
+    }
+
+    void OnActiveSceneChanged(Scene arg0, Scene arg1)
+    {
+        SpawnPlayer();
     }
 
     void Update()
@@ -35,17 +40,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0);
     }
 
-    void LoadMapReferences()
+    void LoadGameReferences()
     {
         refMap.player = GameObject.Find("PLAYER").GetComponent<Player>();
         refMap.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
-    }
-
-    void OnActiveSceneChanged(Scene arg0, Scene arg1)
-    {
-        LoadMapReferences();
-        SpawnPlayer();
-        CameraController.SetPosition(refMap.player.transform.position);
     }
 
     public static CancellationToken CancelOnDestroyToken()
@@ -55,13 +53,12 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPlayer()
     {
-        if (refMap.player)
-        {
-            refMap.player.LookAtDirection(_gameData.savedFaceDir);
-            refMap.player.transform.position = _gameData.savedMapSpawnIndex >= 0 ?
-                GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
-                : _gameData.savedPosition;
-        }
+        refMap.player.LookAtDirection(_gameData.savedFaceDir);
+        refMap.player.transform.position = _gameData.savedMapSpawnIndex >= 0 ?
+            GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
+            : _gameData.savedPosition;
+        CameraController.SetPosition(refMap.player.transform.position);
+        //Camera.main.transform.position = new Vector3(refMap.player.transform.position.x, refMap.player.transform.position.y, -10);
     }
 
 
