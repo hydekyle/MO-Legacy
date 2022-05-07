@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -94,13 +96,6 @@ public class RPGEvent : MonoBehaviour
         UnSubscribeToRequiredConditions();
     }
 
-    public void GetPlayerTouch()
-    {
-        if (_activePageIndex == -1) return;
-        var page = GetActivePage();
-        if (page.conditions.IsAllConditionOK()) page.ResolveActionList();
-    }
-
     public PageEvent GetActivePage()
     {
         return pages[_activePageIndex];
@@ -113,9 +108,16 @@ public class RPGEvent : MonoBehaviour
         if (pageIndex != _activePageIndex)
         {
             if (page.playSFXOnEnabled && _activePageIndex != -1) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
-            if (page.trigger == TriggerType.Autorun) page.ResolveActionList();
+            if (page.trigger == TriggerType.Autorun) page.ResolveActionList().AttachExternalCancellation(GameManager.Instance.cts.Token);
         }
         _activePageIndex = pageIndex;
+    }
+
+    public void GetPlayerTouch()
+    {
+        if (_activePageIndex == -1) return;
+        var page = GetActivePage();
+        if (page.conditions.IsAllConditionOK()) page.ResolveActionList();
     }
 
     // Called every time a required switch or variable changes the value

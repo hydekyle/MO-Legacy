@@ -15,6 +15,16 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
+    public CancellationTokenSource cts = new();
+
+    void OnGUI()
+    {
+        if (GUI.Button(new(0, 0, 100, 100), "Press me"))
+        {
+            cts.Cancel();
+            print("bro...");
+        }
+    }
 
     void Awake()
     {
@@ -31,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     void OnActiveSceneChanged(Scene arg0, Scene arg1)
     {
-        SpawnPlayer();
+        try { SpawnPlayer(); } catch { print("No se encontraron Player Spawn Points"); }
     }
 
     void Update()
@@ -44,11 +54,6 @@ public class GameManager : MonoBehaviour
     {
         refMap.player = GameObject.Find("PLAYER").GetComponent<Player>();
         refMap.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
-    }
-
-    public static CancellationToken CancelOnDestroyToken()
-    {
-        return GameManager.Instance.GetCancellationTokenOnDestroy();
     }
 
     public void SpawnPlayer()

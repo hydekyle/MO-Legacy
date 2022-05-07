@@ -106,7 +106,7 @@ public class Entity : MonoBehaviour
 
     public async UniTaskVoid StopMovement()
     {
-        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time, cancellationToken: GameManager.CancelOnDestroyToken());
+        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time);
         try { LookAtDirection(faceDirection); } catch { }
     }
 

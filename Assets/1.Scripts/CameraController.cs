@@ -27,8 +27,6 @@ public class CameraController : MonoBehaviour
     public static void SetPosition(Vector3 targetPos)
     {
         var camPos = new Vector3(targetPos.x, targetPos.y, -10);
-        print(Instance.transform.position);
         Instance.transform.position = camPos;
-        print(Instance.transform.position);
     }
 }

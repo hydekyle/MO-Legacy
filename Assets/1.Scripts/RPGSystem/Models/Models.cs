@@ -32,22 +32,28 @@ public class PageEvent
     public List<RPGAction> actionList = new();
     [ShowIf("@this.actionList.Count > 0")]
     public TriggerType trigger = TriggerType.Autorun;
+    [ShowIf("@this.actionList.Count > 0 && trigger == TriggerType.Autorun")]
+    public bool isLoop;
     [ShowIf("@this.actionList.Count > 0")]
     public FreezeType freezeWhile;
     [Space(25)]
     public AudioClip playSFXOnEnabled;
     bool isResolvingActionList = false;
 
-    public async UniTaskVoid ResolveActionList()
+    public async UniTask ResolveActionList()
     {
         if (isResolvingActionList) return;
         isResolvingActionList = true;
         DoFreezeWhile();
-        for (var x = 0; x < actionList.Count; x++)
+        do
         {
-            var action = actionList[x];
-            await action.Resolve().AttachExternalCancellation(GameManager.CancelOnDestroyToken());
-        }
+            for (var x = 0; x < actionList.Count; x++)
+            {
+                var action = actionList[x];
+                await action.Resolve();
+            }
+            await UniTask.Yield();
+        } while (isLoop);
         UnfreezeWhile();
         isResolvingActionList = false;
     }
