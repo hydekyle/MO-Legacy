@@ -55,7 +55,7 @@ public class Entity : MonoBehaviour
             {
                 var page = interactedEvent.GetActivePage();
                 if (page.trigger == TriggerType.PlayerInteraction)
-                    page.ResolveActionList(this.GetCancellationTokenOnDestroy());
+                    page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
             }
             _resolvedHits.Add(hitID);
         }

@@ -9,7 +9,6 @@ public class RPGEvent : MonoBehaviour
     [OnValueChanged("OnValuePageChanged", true)]
     public List<PageEvent> pages = new();
     int _activePageIndex = -1;
-    // Caching to avoid resubs
     List<int> _subscribedLocalVariableList = new();
     List<int> _subscribedSwitchList = new();
     List<int> _subscribedVariableList = new();
@@ -108,7 +107,7 @@ public class RPGEvent : MonoBehaviour
         if (pageIndex != _activePageIndex)
         {
             if (page.playSFXOnEnabled && _activePageIndex != -1) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
-            if (page.trigger == TriggerType.Autorun) page.ResolveActionList(this.GetCancellationTokenOnDestroy());
+            if (page.trigger == TriggerType.Autorun && page.actionList.Count > 0) page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
         }
         _activePageIndex = pageIndex;
     }
@@ -117,7 +116,7 @@ public class RPGEvent : MonoBehaviour
     {
         if (_activePageIndex == -1) return;
         var page = GetActivePage();
-        if (page.conditions.IsAllConditionOK()) page.ResolveActionList(this.GetCancellationTokenOnDestroy());
+        if (page.conditions.IsAllConditionOK()) page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
     // Called every time a required switch or variable changes the value

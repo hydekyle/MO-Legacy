@@ -256,7 +256,7 @@ public class RPGAction
             case RPGActionType.ShowCanvas: setCanvas.Resolve(); break;
             case RPGActionType.FlashScreen:
                 if (flashScreen.waitToEnd) await flashScreen.Resolve();
-                else flashScreen.Resolve();
+                else flashScreen.Resolve().Forget();
                 break;
         }
     }

@@ -53,6 +53,4 @@ public class RPGEnabledByConditions : MonoBehaviour
         conditionTable.UnsubscribeConditionTable(ref _subscribedSwitchID, ref _subscribedVariableID, ref _subscribedLocalVariableList, SetActiveIfAllConditionsOK);
     }
 
-
-
 }

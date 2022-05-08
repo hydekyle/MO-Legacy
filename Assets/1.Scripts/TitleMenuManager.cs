@@ -8,7 +8,7 @@ public class TitleMenuManager : MonoBehaviour
 {
     void Start()
     {
-        WaitAndLoadMapTest();
+        WaitAndLoadMapTest().Forget();
     }
 
     async UniTaskVoid WaitAndLoadMapTest()

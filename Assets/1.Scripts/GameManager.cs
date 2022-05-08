@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using System;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -15,28 +11,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
-    public CancellationTokenSource cts = new();
 
-    void OnGUI()
-    {
-        if (GUI.Button(new(0, 0, 100, 100), "Press me"))
-        {
-            cts.Cancel();
-        }
-    }
-
-    void Start()
-    {
-        Pinga();
-    }
-
-    async UniTaskVoid Pinga()
-    {
-        await UniTask.Delay(TimeSpan.FromSeconds(1), ignoreTimeScale: false);
-        print("ok");
-        await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: false, PlayerLoopTiming.Update, cts.Token);
-        print("ok2");
-    }
+    // void OnGUI()
+    // {
+    //     if (GUI.Button(new(0, 0, 100, 100), "Press me"))
+    //     {
+    //         cts.Cancel();
+    //     }
+    // }
 
     void Awake()
     {
@@ -44,7 +26,8 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            LoadGameReferences();
+            refMap.player = GameObject.Find("PLAYER").GetComponent<Player>();
+            refMap.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
             transform.SetParent(null);
             DontDestroyOnLoad(this);
@@ -59,13 +42,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F6)) _gameData.SaveGameDataSlot(0);
-        if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0);
-    }
-
-    void LoadGameReferences()
-    {
-        refMap.player = GameObject.Find("PLAYER").GetComponent<Player>();
-        refMap.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
+        if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0).Forget();
     }
 
     public void SpawnPlayer()
@@ -75,9 +52,6 @@ public class GameManager : MonoBehaviour
             GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
             : _gameData.savedPosition;
         CameraController.SetPosition(refMap.player.transform.position);
-        //Camera.main.transform.position = new Vector3(refMap.player.transform.position.x, refMap.player.transform.position.y, -10);
     }
-
-
 
 }

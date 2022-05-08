@@ -24,6 +24,6 @@ public class Player : Entity
         if (movDir.x != 0.0f || movDir.y != 0.0f)
             Move(movDir);
         else
-            StopMovement();
+            StopMovement().Forget();
     }
 }

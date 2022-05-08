@@ -36,12 +36,12 @@ public class PageEvent
     [ShowIf("@this.actionList.Count > 0 && trigger == TriggerType.Autorun")]
     public bool isLoop;
     [ShowIf("@this.actionList.Count > 0")]
-    public FreezeType freezeWhile;
+    public FreezeType freezePlayerAtRun;
     [Space(25)]
     public AudioClip playSFXOnEnabled;
     bool isResolvingActionList = false;
 
-    public async UniTask ResolveActionList(CancellationToken cts)
+    public async UniTaskVoid ResolveActionList(CancellationToken cts)
     {
         if (isResolvingActionList) return;
         isResolvingActionList = true;
@@ -61,7 +61,7 @@ public class PageEvent
 
     void DoFreezeWhile()
     {
-        switch (freezeWhile)
+        switch (freezePlayerAtRun)
         {
             case FreezeType.FreezeAll: GameManager.isInteractAvailable = GameManager.isMovementAvailable = false; break;
             case FreezeType.FreezeInteraction: GameManager.isInteractAvailable = false; break;
