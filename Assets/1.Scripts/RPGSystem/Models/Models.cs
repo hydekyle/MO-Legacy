@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Threading;
 
 public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
@@ -40,7 +41,7 @@ public class PageEvent
     public AudioClip playSFXOnEnabled;
     bool isResolvingActionList = false;
 
-    public async UniTask ResolveActionList()
+    public async UniTask ResolveActionList(CancellationToken cts)
     {
         if (isResolvingActionList) return;
         isResolvingActionList = true;
@@ -50,7 +51,7 @@ public class PageEvent
             for (var x = 0; x < actionList.Count; x++)
             {
                 var action = actionList[x];
-                await action.Resolve();
+                await action.Resolve().AttachExternalCancellation(cts);
             }
             await UniTask.Yield();
         } while (isLoop);

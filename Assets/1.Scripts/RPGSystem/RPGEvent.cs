@@ -108,7 +108,7 @@ public class RPGEvent : MonoBehaviour
         if (pageIndex != _activePageIndex)
         {
             if (page.playSFXOnEnabled && _activePageIndex != -1) AudioManager.PlaySoundFromGameobject(page.playSFXOnEnabled, gameObject);
-            if (page.trigger == TriggerType.Autorun) page.ResolveActionList().AttachExternalCancellation(GameManager.Instance.cts.Token);
+            if (page.trigger == TriggerType.Autorun) page.ResolveActionList(this.GetCancellationTokenOnDestroy());
         }
         _activePageIndex = pageIndex;
     }
@@ -117,7 +117,7 @@ public class RPGEvent : MonoBehaviour
     {
         if (_activePageIndex == -1) return;
         var page = GetActivePage();
-        if (page.conditions.IsAllConditionOK()) page.ResolveActionList();
+        if (page.conditions.IsAllConditionOK()) page.ResolveActionList(this.GetCancellationTokenOnDestroy());
     }
 
     // Called every time a required switch or variable changes the value

@@ -22,8 +22,20 @@ public class GameManager : MonoBehaviour
         if (GUI.Button(new(0, 0, 100, 100), "Press me"))
         {
             cts.Cancel();
-            print("bro...");
         }
+    }
+
+    void Start()
+    {
+        Pinga();
+    }
+
+    async UniTaskVoid Pinga()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(1), ignoreTimeScale: false);
+        print("ok");
+        await UniTask.Delay(TimeSpan.FromSeconds(3), ignoreTimeScale: false, PlayerLoopTiming.Update, cts.Token);
+        print("ok2");
     }
 
     void Awake()
