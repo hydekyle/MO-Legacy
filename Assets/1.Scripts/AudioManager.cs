@@ -30,6 +30,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>Creates a GameObject for each emmiter so sounds still playing even if the GameObject is disabled</summary>
+    //TODO: only use this function if the gameobject can be disabled while playing sound since it produce garbage (add bool in the sound action)
     public static void PlaySoundFromGameobject(AudioClip soundClip, GameObject emitter)
     {
         var emitterID = emitter.GetHashCode();

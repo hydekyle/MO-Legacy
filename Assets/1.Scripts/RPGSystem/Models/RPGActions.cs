@@ -109,7 +109,7 @@ public class RPGActionPlaySE
     public async UniTask Resolve()
     {
         AudioManager.PlaySound(clip);
-        await UniTask.Delay(TimeSpan.FromSeconds(waitEnd ? clip.length : 0));
+        await UniTask.Delay(TimeSpan.FromSeconds(waitEnd ? clip.length : 0), ignoreTimeScale: true);
     }
 }
 
@@ -132,7 +132,7 @@ public class RPGActionDOTween
     public Vector3 punch;
     public float duration, elasticity;
     public int vibrato;
-    public bool waitAnimEnd;
+    public bool waitToEnd;
     public async UniTask Resolve()
     {
         UniTask task;
@@ -193,8 +193,8 @@ public class RPGActionTeleportPlayer
 [Serializable]
 public class RPGAction
 {
-    #region Action_Params
     public RPGActionType actionType;
+    #region Action_Params
     [ShowIf("actionType", RPGActionType.ConditionalBranch)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]

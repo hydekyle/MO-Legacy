@@ -65,10 +65,7 @@ public class Entity : MonoBehaviour
     public void CastUsableItem(ScriptableItem item)
     {
         var hit = Physics2D.CircleCast(GetCastPoint(), 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
-        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone))
-        {
-            usableItemZone.UsedItem(item);
-        }
+        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone)) usableItemZone.UsedItem(item);
     }
 
     public void Move(Vector3 moveDirection)
