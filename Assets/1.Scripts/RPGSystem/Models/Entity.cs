@@ -22,7 +22,7 @@ public class Entity : MonoBehaviour
     // 6 (right) walking
     // 9 (up) walking
 
-    private void Awake()
+    void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
@@ -106,7 +106,7 @@ public class Entity : MonoBehaviour
 
     public async UniTaskVoid StopMovement()
     {
-        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time);
+        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time, PlayerLoopTiming.LastUpdate, this.GetCancellationTokenOnDestroy());
         try { LookAtDirection(faceDirection); } catch { }
     }
 
