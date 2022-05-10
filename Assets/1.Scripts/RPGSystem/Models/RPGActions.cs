@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Sirenix.OdinInspector;
@@ -164,12 +165,10 @@ public class RPGActionAddItem
 [Serializable]
 public class RPGActionTeleportPlayer
 {
+    [ValueDropdown("GetSceneNameList")]
     public string mapName;
-    public bool setCustomSpawnPoint;
-    [HideIf("setCustomSpawnPoint")]
+    [Range(0, 10)]
     public int mapSpawnIndex;
-    [ShowIf("setCustomSpawnPoint")]
-    public Vector3 spawnPoint;
     public bool changeFaceDirection;
     [ShowIf("changeFaceDirection")]
     public FaceDirection newFaceDirection;
@@ -178,13 +177,21 @@ public class RPGActionTeleportPlayer
     {
         var gameData = GameManager.gameData;
         var playerEntity = GameManager.refMap.player;
-        gameData.savedMapSpawnIndex = setCustomSpawnPoint ? -1 : mapSpawnIndex;
-        gameData.savedPosition = spawnPoint;
+        gameData.savedMapSpawnIndex = mapSpawnIndex;
         gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;
         if (SceneManager.GetActiveScene().name == mapName)
             GameManager.Instance.SpawnPlayer();
         else
             SceneManager.LoadScene(mapName);
+    }
+
+    public IEnumerable<string> GetSceneNameList()
+    {
+        var path = Application.dataPath + "/Scenes";
+        var directoryInfo = new DirectoryInfo(path);
+        var fileList = directoryInfo.GetFiles();
+        foreach (var file in fileList)
+            if (!file.Name.Contains(".meta")) yield return file.Name.Split(".unity")[0];
     }
 }
 
