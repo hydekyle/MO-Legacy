@@ -12,7 +12,8 @@ using System.Threading;
 
 public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
-public enum VariableConditionality { Equals, GreaterThan, LessThan }
+public enum Conditionality { Equals, GreaterThan, LessThan }
+public enum VariableSetType { Set, Add, Sub, Random }
 public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
 public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
 
@@ -28,7 +29,7 @@ public class PageEvent
     [PreviewField(50, ObjectFieldAlignment.Center)]
     public Sprite sprite;
     [GUIColor(0, 1, 1)]
-    public VariableTable conditions;
+    public VariableTableCondition conditions;
     [GUIColor(1, 1, 0)]
     public List<RPGAction> actionList = new();
     [ShowIf("@this.actionList.Count > 0")]
@@ -254,16 +255,16 @@ public class GameData
 
 #region Variables
 [Serializable]
-public class VariableTable
+public class VariableTableCondition
 {
     [TableList]
-    public List<UITableViewSwitch> switchTable = new List<UITableViewSwitch>();
+    public List<UISwitch> switchTable = new();
     [Space]
     [TableList]
-    public List<UITableViewVariable> variableTable = new List<UITableViewVariable>();
+    public List<UIVariableCondition> variableTable = new();
     [Space]
     [TableList]
-    public List<UITableViewLocalVariable> localVariableTable = new List<UITableViewLocalVariable>();
+    public List<UILocalVariableCondition> localVariableTable = new();
 
     /// <summary>Refresh variable names if they have changed in .txt</summary>
     public void Refresh()
@@ -278,7 +279,7 @@ public class VariableTable
             foreach (var sw in switchTable)
             {
                 if (sw.switchID == null || sw.switchID == "") return;
-                var ID = sw.switchID.Substring(0, 4);
+                var ID = sw.switchID[..4];
                 var txtID = switchLineList[int.Parse(ID)];
                 if (txtID != sw.switchID)
                 {
@@ -297,7 +298,7 @@ public class VariableTable
             foreach (var vr in variableTable)
             {
                 if (vr.variableID == null) return;
-                var ID = vr.variableID.Substring(0, 4);
+                var ID = vr.variableID[..4];
                 var txtID = variableLineList[int.Parse(ID)];
                 if (txtID != vr.variableID)
                 {
@@ -335,14 +336,14 @@ public class VariableTable
         {
             var ID = s.ID();
             if (_subscribedSwitchList.Contains(ID)) continue; // Avoiding resubscription
-            GameManager.gameData.SubscribeToSwitchChangedEvent(ID, action);
+            GameManager.GameData.SubscribeToSwitchChangedEvent(ID, action);
             _subscribedSwitchList.Add(ID);
         }
         foreach (var v in variableTable)
         {
             var ID = v.ID();
             if (_subscribedVariableList.Contains(ID)) continue;
-            GameManager.gameData.SubscribeToVariableChangedEvent(ID, action);
+            GameManager.GameData.SubscribeToVariableChangedEvent(ID, action);
             _subscribedVariableList.Add(ID);
         }
         foreach (var lv in localVariableTable)
@@ -351,16 +352,16 @@ public class VariableTable
             if (!_subscribedLocalVariableList.Contains(ID))
             {
                 _subscribedLocalVariableList.Add(ID);
-                GameManager.gameData.SubscribeToLocalVariableChangedEvent(ID, action);
+                GameManager.GameData.SubscribeToLocalVariableChangedEvent(ID, action);
             }
         }
     }
 
     public void UnsubscribeConditionTable(ref List<int> _subscribedSwitchList, ref List<int> _subscribedVariableList, ref List<int> _subscribedLocalVariableList, Action action)
     {
-        foreach (var id in _subscribedLocalVariableList) GameManager.gameData.UnsubscribeToLocalVariableChangedEvent(id, action);
-        foreach (var id in _subscribedSwitchList) GameManager.gameData.UnsubscribeToSwitchChangedEvent(id, action);
-        foreach (var id in _subscribedVariableList) GameManager.gameData.UnsubscribeToVariableChangedEvent(id, action);
+        foreach (var id in _subscribedLocalVariableList) GameManager.GameData.UnsubscribeToLocalVariableChangedEvent(id, action);
+        foreach (var id in _subscribedSwitchList) GameManager.GameData.UnsubscribeToSwitchChangedEvent(id, action);
+        foreach (var id in _subscribedVariableList) GameManager.GameData.UnsubscribeToVariableChangedEvent(id, action);
         _subscribedSwitchList.Clear();
         _subscribedVariableList.Clear();
     }
@@ -369,32 +370,109 @@ public class VariableTable
     {
         foreach (var requiredLocalVariable in localVariableTable)
         {
-            var variableValue = GameManager.gameData.GetLocalVariable(requiredLocalVariable.ID());
+            var variableValue = GameManager.GameData.GetLocalVariable(requiredLocalVariable.ID());
             switch (requiredLocalVariable.conditionality)
             {
-                case VariableConditionality.Equals: if (requiredLocalVariable.value == variableValue) continue; break;
-                case VariableConditionality.GreaterThan: if (requiredLocalVariable.value > variableValue) continue; break;
-                case VariableConditionality.LessThan: if (requiredLocalVariable.value < variableValue) continue; break;
+                case Conditionality.Equals: if (requiredLocalVariable.value == variableValue) continue; break;
+                case Conditionality.GreaterThan: if (requiredLocalVariable.value > variableValue) continue; break;
+                case Conditionality.LessThan: if (requiredLocalVariable.value < variableValue) continue; break;
             }
             return false;
         }
         foreach (var requiredSwitch in switchTable)
         {
-            var switchValue = GameManager.gameData.GetSwitch(requiredSwitch.ID());
+            var switchValue = GameManager.GameData.GetSwitch(requiredSwitch.ID());
             if (requiredSwitch.value != switchValue) return false;
         }
         foreach (var requiredVariable in variableTable)
         {
-            var variableValue = GameManager.gameData.GetVariable(requiredVariable.ID());
+            var variableValue = GameManager.GameData.GetVariable(requiredVariable.ID());
             switch (requiredVariable.conditionality)
             {
-                case VariableConditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
-                case VariableConditionality.GreaterThan: if (requiredVariable.value < variableValue) continue; break;
-                case VariableConditionality.LessThan: if (requiredVariable.value > variableValue) continue; break;
+                case Conditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
+                case Conditionality.GreaterThan: if (requiredVariable.value < variableValue) continue; break;
+                case Conditionality.LessThan: if (requiredVariable.value > variableValue) continue; break;
             }
             return false;
         }
         return true;
+    }
+}
+
+[Serializable]
+public class VariableTableSet
+{
+    [TableList]
+    public List<UISwitch> switchTable = new();
+    [Space]
+    [TableList]
+    public List<UIVariableSet> setVariableTable = new();
+    [Space]
+    [TableList]
+    public List<UILocalVariableSet> setLocalVariableTable = new();
+
+    /// <summary>Refresh variable names if they have changed in .txt</summary>
+    public void Refresh()
+    {
+        if (switchTable.Count > 0)
+        {
+            var switchLineList = new List<string>();
+            foreach (var line in UIReadSwitchesFromTXT())
+            {
+                switchLineList.Add(line);
+            }
+            foreach (var sw in switchTable)
+            {
+                if (sw.switchID == null || sw.switchID == "") return;
+                var ID = sw.switchID[..4];
+                var txtID = switchLineList[int.Parse(ID)];
+                if (txtID != sw.switchID)
+                {
+                    sw.switchID = txtID;
+                }
+            }
+        }
+
+        if (setVariableTable.Count > 0)
+        {
+            var variableLineList = new List<string>();
+            foreach (var line in UIReadVariablesFromTXT())
+            {
+                variableLineList.Add(line);
+            }
+            foreach (var vr in setVariableTable)
+            {
+                if (vr.variableID == null) return;
+                var ID = vr.variableID[..4];
+                var txtID = variableLineList[int.Parse(ID)];
+                if (txtID != vr.variableID)
+                {
+                    vr.variableID = txtID;
+                }
+            }
+        }
+    }
+
+    IEnumerable<string> UIReadSwitchesFromTXT()
+    {
+        var path = Application.dataPath + "/switches.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+
+    IEnumerable<string> UIReadVariablesFromTXT()
+    {
+        var path = Application.dataPath + "/variables.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
     }
 }
 
@@ -415,7 +493,7 @@ public class VariableCondition
 {
     public string name;
     public float value;
-    public VariableConditionality conditionality;
+    public Conditionality conditionality;
 
     public int ID()
     {

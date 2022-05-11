@@ -9,14 +9,14 @@ using UnityEngine.Serialization;
 public class RPGEnabledByConditions : MonoBehaviour
 {
     [GUIColor(0, 1, 1)]
-    public VariableTable conditionTable = new VariableTable();
+    public VariableTableCondition conditionTable = new();
     [Space(25)]
     [FormerlySerializedAs("onEnableSound")]
     public AudioClip onEnabledSound;
     // Cache subscribed ones to avoid multiples subscriptions
-    List<int> _subscribedSwitchID = new List<int>();
-    List<int> _subscribedVariableID = new List<int>();
-    List<int> _subscribedLocalVariableList = new List<int>();
+    List<int> _subscribedSwitchID = new();
+    List<int> _subscribedVariableID = new();
+    List<int> _subscribedLocalVariableList = new();
 
     void OnValidate()
     {
@@ -29,7 +29,7 @@ public class RPGEnabledByConditions : MonoBehaviour
         SetActiveIfAllConditionsOK();
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         UnSubscribeToRequiredConditions();
     }

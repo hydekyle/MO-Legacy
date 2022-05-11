@@ -70,7 +70,7 @@ public class RPGActionShowCanvas
 [Serializable]
 public class RPGActionCheckConditions
 {
-    public VariableTable conditionList;
+    public VariableTableCondition conditionList;
     public RPGAction[] onTrue, onFalse;
 
     public async UniTask Resolve()
@@ -158,7 +158,7 @@ public class RPGActionAddItem
     public int amount = 1;
     public void Resolve()
     {
-        GameManager.gameData.AddItem(item, amount);
+        GameManager.GameData.AddItem(item, amount);
     }
 }
 
@@ -175,7 +175,7 @@ public class RPGActionTeleportPlayer
 
     public void Resolve()
     {
-        var gameData = GameManager.gameData;
+        var gameData = GameManager.GameData;
         var playerEntity = GameManager.refMap.player;
         gameData.savedMapSpawnIndex = mapSpawnIndex;
         gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;
@@ -208,7 +208,7 @@ public class RPGAction
     public RPGActionCheckConditions checkConditions;
     [ShowIf("actionType", RPGActionType.SetVariables)]
     [GUIColor(0, 1, 1)]
-    public VariableTable variableTable;
+    public VariableTableSet setVariables;
     [ShowIf("actionType", RPGActionType.ShowText)]
     [GUIColor(0, 1, 1)]
     [TableList(AlwaysExpanded = true)]
@@ -251,7 +251,7 @@ public class RPGAction
     {
         switch (actionType)
         {
-            case RPGActionType.SetVariables: Helpers.SetVariables(variableTable); break;
+            case RPGActionType.SetVariables: Helpers.SetVariables(setVariables); break;
             case RPGActionType.ShowText: talk.Resolve(); break;
             case RPGActionType.Script: callScript.Resolve(); break;
             case RPGActionType.PlaySE: await playSFX.Resolve(); break;

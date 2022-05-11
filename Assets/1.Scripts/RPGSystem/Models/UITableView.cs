@@ -11,7 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 [Serializable]
-public class UITableViewSwitch
+public class UISwitch
 {
     [TableColumnWidth(120)]
     [ValueDropdown("ReadSwitches", IsUniqueList = true, DropdownTitle = "Select Switch", DropdownHeight = 400)]
@@ -47,13 +47,13 @@ public class UITableViewSwitch
 }
 
 [Serializable]
-public class UITableViewVariable
+public class UIVariableCondition
 {
     [TableColumnWidth(140)]
     [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
     public string variableID;
     [ShowIf("variableID")]
-    public VariableConditionality conditionality;
+    public Conditionality conditionality;
     [ShowIf("variableID")]
     public float value;
     [TableColumnWidth(20)]
@@ -83,7 +83,45 @@ public class UITableViewVariable
 }
 
 [Serializable]
-public class UITableViewLocalVariable
+public class UIVariableSet
+{
+    [TableColumnWidth(140)]
+    [ValueDropdown("ReadVariables", IsUniqueList = true, DropdownTitle = "Select Variable")]
+    public string variableID;
+    [ShowIf("variableID")]
+    public VariableSetType setType;
+    [ShowIf("variableID")]
+    public float value;
+    [ShowIf("@setType == VariableSetType.Random")]
+    public float max;
+    [TableColumnWidth(20)]
+#if UNITY_EDITOR
+    [Button("Rename")]
+    void Edit()
+    {
+        PopupWindow.Show(new Rect(), new UIPopupEditableVariableName(variableID, true));
+    }
+#endif
+
+    public int ID()
+    {
+        return int.Parse(variableID.Substring(0, 4));
+    }
+
+    IEnumerable ReadVariables()
+    {
+        var path = Application.dataPath + "/variables.txt";
+        var dataLines = File.ReadAllLines(path);
+
+        foreach (var line in dataLines)
+        {
+            yield return line;
+        }
+    }
+}
+
+[Serializable]
+public class UILocalVariableCondition
 {
     [HorizontalGroup("target")]
     [TableColumnWidth(90)]
@@ -99,7 +137,35 @@ public class UITableViewLocalVariable
         target = Selection.activeGameObject;
     }
     [HideLabel]
-    public VariableConditionality conditionality;
+    public Conditionality conditionality;
+
+    public int ID()
+    {
+        return String.Concat(target.name, SceneManager.GetActiveScene().name).GetHashCode();
+    }
+
+}
+
+[Serializable]
+public class UILocalVariableSet
+{
+    [HorizontalGroup("target")]
+    [TableColumnWidth(90)]
+    [HideLabel]
+    public GameObject target;
+    [HideLabel]
+    public VariableSetType setType;
+    [TableColumnWidth(30)]
+    public float value;
+    [ShowIf("@setType == VariableSetType.Random")]
+    public float max;
+    [VerticalGroup("target/btn")]
+    [TableColumnWidth(90)]
+    [Button("Self")]
+    public void SaveID()
+    {
+        target = Selection.activeGameObject;
+    }
 
     public int ID()
     {
@@ -155,7 +221,7 @@ public class UIPopupEditableVariableName : PopupWindowContent
                 page.conditions.Refresh();
                 foreach (var action in page.actionList)
                 {
-                    action.variableTable.Refresh();
+                    action.setVariables.Refresh();
                     action.checkConditions.conditionList.Refresh();
                 }
             }

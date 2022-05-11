@@ -35,7 +35,7 @@ public class RPGEvent : MonoBehaviour
         {
             if (page.conditions != null) page.conditions.Refresh();
             if (page.actionList != null)
-                foreach (var action in page.actionList) action.variableTable?.Refresh();
+                foreach (var action in page.actionList) action.setVariables?.Refresh();
         }
     }
 

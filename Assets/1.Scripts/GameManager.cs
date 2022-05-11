@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public static GameData gameData { get { return GameManager.Instance._gameData; } }
+    public static GameData GameData { get { return GameManager.Instance._gameData; } }
     public static GameReferences refMap = new();
-    GameData _gameData = new();
+    public GameData _gameData = new();
     [HideInInspector]
     public static bool isMovementAvailable = true;
     public static bool isInteractAvailable = true;
