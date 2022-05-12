@@ -13,7 +13,7 @@ using System.Threading;
 public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
 public enum Conditionality { Equals, GreaterThan, LessThan }
-public enum VariableSetType { Set, Add, Sub, Random }
+public enum VariableSetType { Set, Add, Sub, Multiply, Random }
 public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
 public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
 
@@ -186,7 +186,7 @@ public class GameData
         localVariableDic[gameObjectID].OnChanged -= action;
     }
 
-    public float GetVariable(int ID)
+    public int GetVariable(int ID)
     {
         try
         {
@@ -199,7 +199,7 @@ public class GameData
         }
     }
 
-    public float GetLocalVariable(int gameObjectID)
+    public int GetLocalVariable(int gameObjectID)
     {
         try
         {
@@ -220,36 +220,63 @@ public class GameData
             switches[switchID] = new Observable<bool>() { Value = value };
     }
 
-    public void SetVariable(int variableID, float value)
+    public void SetVariable(int variableID, int value)
     {
         if (variables.ContainsKey(variableID))
             variables[variableID].Value = value;
         else
-            variables[variableID] = new Observable<float>() { Value = value };
+            variables[variableID] = new Observable<int>() { Value = value };
     }
 
-    public void AddToVariable(int variableID, float value)
+    public void AddToVariable(int variableID, int value)
     {
         if (variables.ContainsKey(variableID))
             variables[variableID].Value += value;
         else
-            variables[variableID] = new Observable<float>() { Value = value };
+            variables[variableID] = new Observable<int>() { Value = value };
     }
 
-    public void SetLocalVariable(int gameObjectID, float value)
+    public void SetLocalVariable(int gameObjectID, int value)
     {
         if (localVariableDic.ContainsKey(gameObjectID))
             localVariableDic[gameObjectID].Value = value;
         else
-            localVariableDic[gameObjectID] = new Observable<float>() { Value = value };
+            localVariableDic[gameObjectID] = new Observable<int>() { Value = value };
     }
 
-    public void AddToLocalVariable(int gameObjectID, float value)
+    public void AddToLocalVariable(int gameObjectID, int value)
     {
         if (localVariableDic.ContainsKey(gameObjectID))
             localVariableDic[gameObjectID].Value += value;
         else
-            localVariableDic[gameObjectID] = new Observable<float>() { Value = value };
+            localVariableDic[gameObjectID] = new Observable<int>() { Value = value };
+    }
+
+    public void ResolveSetVariables(VariableTableSet vTable)
+    {
+        foreach (var sw in vTable.switchTable) SetSwitch(sw.ID(), sw.value);
+        foreach (var va in vTable.setVariableTable)
+        {
+            switch (va.setType)
+            {
+                case VariableSetType.Set: SetVariable(va.ID(), va.value); break;
+                case VariableSetType.Add: AddToVariable(va.ID(), va.value); break;
+                case VariableSetType.Sub: AddToVariable(va.ID(), -va.value); break;
+                case VariableSetType.Multiply: SetVariable(va.ID(), GetVariable(va.ID()) * va.value); break;
+                case VariableSetType.Random: SetVariable(va.ID(), UnityEngine.Random.Range(va.value, va.max)); break;
+            }
+        }
+        foreach (var lv in vTable.setLocalVariableTable)
+        {
+            switch (lv.setType)
+            {
+                case VariableSetType.Set: SetLocalVariable(lv.ID(), lv.value); break;
+                case VariableSetType.Add: AddToLocalVariable(lv.ID(), lv.value); break;
+                case VariableSetType.Sub: AddToLocalVariable(lv.ID(), -lv.value); break;
+                case VariableSetType.Multiply: SetVariable(lv.ID(), GetVariable(lv.ID()) * lv.value); break;
+                case VariableSetType.Random: SetVariable(lv.ID(), UnityEngine.Random.Range(lv.value, lv.max)); break;
+            }
+        }
     }
 }
 
@@ -492,7 +519,7 @@ public class SwitchCondition
 public class VariableCondition
 {
     public string name;
-    public float value;
+    public int value;
     public Conditionality conditionality;
 
     public int ID()
@@ -504,8 +531,8 @@ public class VariableCondition
 #endregion
 #region Dictionaries
 [Serializable] public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
-[Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
-[Serializable] public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<float>> { }
+[Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
+[Serializable] public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
 [Serializable] public class Inventory : UnitySerializedDictionary<ScriptableItem, int> { }
 public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
 {

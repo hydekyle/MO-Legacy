@@ -44,31 +44,6 @@ public class Helpers
     {
         return (int)(-position.y * 10);
     }
-
-    public static void SetVariables(VariableTableSet vTable)
-    {
-        foreach (var sw in vTable.switchTable) GameManager.GameData.SetSwitch(sw.ID(), sw.value);
-        foreach (var va in vTable.setVariableTable)
-        {
-            switch (va.setType)
-            {
-                case VariableSetType.Set: GameManager.GameData.SetVariable(va.ID(), va.value); break;
-                case VariableSetType.Add: GameManager.GameData.AddToVariable(va.ID(), va.value); break;
-                case VariableSetType.Sub: GameManager.GameData.AddToVariable(va.ID(), -va.value); break;
-                case VariableSetType.Random: GameManager.GameData.SetVariable(va.ID(), UnityEngine.Random.Range(va.value, va.max)); break;
-            }
-        }
-        foreach (var lv in vTable.setLocalVariableTable)
-        {
-            switch (lv.setType)
-            {
-                case VariableSetType.Set: GameManager.GameData.SetLocalVariable(lv.ID(), lv.value); break;
-                case VariableSetType.Add: GameManager.GameData.AddToLocalVariable(lv.ID(), lv.value); break;
-                case VariableSetType.Sub: GameManager.GameData.AddToLocalVariable(lv.ID(), -lv.value); break;
-                case VariableSetType.Random: GameManager.GameData.SetVariable(lv.ID(), UnityEngine.Random.Range(lv.value, lv.max)); break;
-            }
-        }
-    }
 }
 
 // Switches .txt Placeholder 

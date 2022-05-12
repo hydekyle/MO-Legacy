@@ -55,7 +55,7 @@ public class UIVariableCondition
     [ShowIf("variableID")]
     public Conditionality conditionality;
     [ShowIf("variableID")]
-    public float value;
+    public int value;
     [TableColumnWidth(20)]
 #if UNITY_EDITOR
     [Button("Rename")]
@@ -91,9 +91,9 @@ public class UIVariableSet
     [ShowIf("variableID")]
     public VariableSetType setType;
     [ShowIf("variableID")]
-    public float value;
+    public int value;
     [ShowIf("@setType == VariableSetType.Random")]
-    public float max;
+    public int max;
     [TableColumnWidth(20)]
 #if UNITY_EDITOR
     [Button("Rename")]
@@ -128,7 +128,7 @@ public class UILocalVariableCondition
     [HideLabel]
     public GameObject target;
     [TableColumnWidth(30)]
-    public float value;
+    public int value;
     [VerticalGroup("target/btn")]
     [TableColumnWidth(90)]
     [Button("Self")]
@@ -156,9 +156,9 @@ public class UILocalVariableSet
     [HideLabel]
     public VariableSetType setType;
     [TableColumnWidth(30)]
-    public float value;
+    public int value;
     [ShowIf("@setType == VariableSetType.Random")]
-    public float max;
+    public int max;
     [VerticalGroup("target/btn")]
     [TableColumnWidth(90)]
     [Button("Self")]
