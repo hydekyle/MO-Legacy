@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using RPGActions;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -35,7 +36,17 @@ public class RPGEvent : MonoBehaviour
         {
             if (page.conditions != null) page.conditions.Refresh();
             if (page.actionList != null)
-                foreach (var action in page.actionList) action.setVariables?.Refresh();
+                foreach (var action in page.actionList)
+                    if (action.GetType() == typeof(SetVariables))
+                    {
+                        SetVariables sv = (SetVariables)action;
+                        sv.setVariables?.Refresh();
+                    }
+                    else if (action.GetType() == typeof(CheckConditions))
+                    {
+                        CheckConditions sv = (CheckConditions)action;
+                        sv.conditionList?.Refresh();
+                    }
         }
     }
 

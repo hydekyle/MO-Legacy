@@ -143,6 +143,7 @@ MonoBehaviour:
   m_RefResolutionY: 600
   m_CropFrame: 0
   m_GridSnapping: 2
+  m_FilterMode: 0
   m_UpscaleRT: 0
   m_PixelSnapping: 0
   m_CropFrameX: 0
@@ -359,6 +360,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 99
   m_TargetDisplay: 0
@@ -846,6 +848,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9faf8fcb1943a4d9b25ac99b76b7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameData:
+    switches:
+      keyData: 
+      valueData: []
+    variables:
+      keyData: 
+      valueData: []
+    localVariableDic:
+      keyData: 
+      valueData: []
+    inventory:
+      keyData: []
+      valueData: 
+    savedMapName: 
+    savedMapSpawnIndex: 0
+    savedPosition: {x: 0, y: 0, z: 0}
+    savedFaceDir: 0
 --- !u!1 &7686847985906680875
 GameObject:
   m_ObjectHideFlags: 0

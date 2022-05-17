@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Threading;
+using RPGActions;
 
 public enum CollisionType { player, other, any }
 public enum FaceDirection { North, West, East, South }
@@ -31,6 +32,8 @@ public class PageEvent
     [GUIColor(0, 1, 1)]
     public VariableTableCondition conditions;
     [GUIColor(1, 1, 0)]
+    [ListDrawerSettings(Expanded = true)]
+    [SerializeReference]
     public List<RPGAction> actionList = new();
     [ShowIf("@this.actionList.Count > 0")]
     public TriggerType trigger = TriggerType.Autorun;

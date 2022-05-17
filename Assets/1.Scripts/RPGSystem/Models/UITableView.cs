@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using RPGActions;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -221,8 +222,16 @@ public class UIPopupEditableVariableName : PopupWindowContent
                 page.conditions.Refresh();
                 foreach (var action in page.actionList)
                 {
-                    action.setVariables.Refresh();
-                    action.checkConditions.conditionList.Refresh();
+                    if (action.GetType() == typeof(SetVariables))
+                    {
+                        SetVariables sv = (SetVariables)action;
+                        sv.setVariables?.Refresh();
+                    }
+                    else if (action.GetType() == typeof(CheckConditions))
+                    {
+                        CheckConditions sv = (CheckConditions)action;
+                        sv.conditionList?.Refresh();
+                    }
                 }
             }
         editorWindow.Close();
