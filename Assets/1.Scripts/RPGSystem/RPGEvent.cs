@@ -37,16 +37,19 @@ public class RPGEvent : MonoBehaviour
             if (page.conditions != null) page.conditions.Refresh();
             if (page.actionList != null)
                 foreach (var action in page.actionList)
-                    if (action.GetType() == typeof(SetVariables))
+                {
+                    var actionType = action.GetType();
+                    if (actionType == typeof(SetVariables))
                     {
                         SetVariables sv = (SetVariables)action;
                         sv.setVariables?.Refresh();
                     }
-                    else if (action.GetType() == typeof(CheckConditions))
+                    else if (actionType == typeof(CheckConditions))
                     {
                         CheckConditions sv = (CheckConditions)action;
                         sv.conditionList?.Refresh();
                     }
+                }
         }
     }
 
