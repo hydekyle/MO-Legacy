@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static GameData GameData { get { return GameManager.Instance._gameData; } }
     public static GameReferences refMap = new();
+    public TextManager textManager;
     public GameData _gameData = new();
     [HideInInspector]
     public static bool isMovementAvailable = true;
@@ -43,6 +45,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F6)) _gameData.SaveGameDataSlot(0);
         if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0).Forget();
+        if (Input.GetKeyDown(KeyCode.F1)) Test();
+    }
+
+    private void Test()
+    {
+        textManager.SelectLanguage(textManager.availableLanguages[0]);
+        print(textManager.ReadLine(1));
     }
 
     public void SpawnPlayer()
