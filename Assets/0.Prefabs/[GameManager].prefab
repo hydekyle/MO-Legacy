@@ -848,6 +848,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9faf8fcb1943a4d9b25ac99b76b7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textManager:
+    availableLanguages: []
   _gameData:
     switches:
       keyData: 

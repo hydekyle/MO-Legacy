@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Helpers
 {
@@ -31,11 +32,14 @@ public class Helpers
     [MenuItem("RPG/Sprite Order Fix All")]
     public static void UISpriteOrderFixMapAll()
     {
-        foreach (Transform t in GameObject.Find("[EVENTS]").transform)
+        foreach (Transform t in Selection.activeTransform)
         {
-            if (t.TryGetComponent<SpriteRenderer>(out SpriteRenderer s))
+            if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
             {
-                s.sortingOrder = GetSpriteOrderByPositionY(t.position);
+                var sortingOrder = GetSpriteOrderByPositionY(t.position);
+                if (t.TryGetComponent<SortingGroup>(out var sortingGroupComponent))
+                    sortingGroupComponent.sortingOrder = sortingOrder;
+                else spriteRendererComponent.sortingOrder = sortingOrder;
             }
         }
     }
