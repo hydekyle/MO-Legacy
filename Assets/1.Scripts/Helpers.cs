@@ -54,9 +54,9 @@ public class Helpers
 // [Button("save")]
 // void WriteTest()
 // {
-//     var path = Application.dataPath + "/switches.txt";
+//     var path = Application.dataPath + "/Editor/switches.txt";
 //     File.WriteAllLines(path, DameDatos());
-//     path = Application.dataPath + "/variables.txt";
+//     path = Application.dataPath + "/Editor/variables.txt";;
 //     File.WriteAllLines(path, DameDatos());
 // }
 

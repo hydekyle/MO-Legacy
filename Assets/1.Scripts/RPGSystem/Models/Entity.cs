@@ -15,6 +15,7 @@ public class Entity : MonoBehaviour
     int _indexStepAnim = 0;
     List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
     public BoxCollider2D boxCollider2D;
+    Rigidbody2D rb;
     // 0 (down) walking
     // 1 (down) idle
     // 2 (down) walking
@@ -26,6 +27,7 @@ public class Entity : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     Vector3 GetCastPoint()
@@ -70,7 +72,7 @@ public class Entity : MonoBehaviour
 
     public void Move(Vector3 moveDirection)
     {
-        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
+        rb.position = Vector2.Lerp(rb.position, rb.position + new Vector2(moveDirection.x, moveDirection.y), Time.deltaTime * movementSpeed);
         AnimationWalk(moveDirection);
         spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
     }

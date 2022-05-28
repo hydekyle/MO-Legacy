@@ -35,7 +35,7 @@ public class UISwitch
 
     IEnumerable<string> ReadSwitches()
     {
-        var path = Application.dataPath + "/switches.txt";
+        var path = Application.dataPath + "/Editor/switches.txt";
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
@@ -73,7 +73,7 @@ public class UIVariableCondition
 
     IEnumerable ReadVariables()
     {
-        var path = Application.dataPath + "/variables.txt";
+        var path = Application.dataPath + "/Editor/variables.txt"; ;
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
@@ -111,7 +111,7 @@ public class UIVariableSet
 
     IEnumerable ReadVariables()
     {
-        var path = Application.dataPath + "/variables.txt";
+        var path = Application.dataPath + "/Editor/variables.txt"; ;
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
@@ -241,7 +241,7 @@ public class UIPopupEditableVariableName : PopupWindowContent
     void SaveNewSwitch(int ID, string newName, bool isVariable)
     {
         var path = Application.dataPath;
-        path += isVariable ? "/variables.txt" : "/switches.txt";
+        path += isVariable ? "/Editor/variables.txt" : "/Editor/switches.txt";
         var dataLines = File.ReadAllLines(path);
         var textID = "";
         if (ID < 10) textID = "00" + ID;
@@ -252,7 +252,7 @@ public class UIPopupEditableVariableName : PopupWindowContent
 
     IEnumerable<string> ReadSwitches()
     {
-        var path = Application.dataPath + "/switches.txt";
+        var path = Application.dataPath + "/Editor/switches.txt";
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)

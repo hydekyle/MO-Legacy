@@ -416,9 +416,9 @@ GameObject:
   - component: {fileID: 7649782458787357339}
   - component: {fileID: 7649782458787357337}
   - component: {fileID: 7649782458787357319}
-  - component: {fileID: 7649782458787357336}
   - component: {fileID: 1747476988957585548}
   - component: {fileID: 1747476988957585542}
+  - component: {fileID: 8858845622088666835}
   m_Layer: 0
   m_Name: PLAYER
   m_TagString: Player
@@ -543,32 +543,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &7649782458787357336
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7649782458787357340}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.021243095, y: -0.5417027}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.6, y: 1.6}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.6865406, y: 0.5165945}
-  m_EdgeRadius: 0
 --- !u!81 &1747476988957585548
 AudioListener:
   m_ObjectHideFlags: 0
@@ -603,7 +577,23 @@ MonoBehaviour:
   - {x: 0.8000002, y: -0.79999995, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -133646
+  m_InstanceId: 78682
+--- !u!58 &8858845622088666835
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7649782458787357340}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: fb156649d04e93d46971ae643227162c, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.01, y: -0.65}
+  serializedVersion: 2
+  m_Radius: 0.21
 --- !u!1 &7649782460043637299
 GameObject:
   m_ObjectHideFlags: 0

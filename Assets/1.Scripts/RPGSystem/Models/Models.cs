@@ -340,7 +340,7 @@ public class VariableTableCondition
 
     IEnumerable<string> UIReadSwitchesFromTXT()
     {
-        var path = Application.dataPath + "/switches.txt";
+        var path = Application.dataPath + "/Editor/switches.txt";
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
@@ -351,7 +351,7 @@ public class VariableTableCondition
 
     IEnumerable<string> UIReadVariablesFromTXT()
     {
-        var path = Application.dataPath + "/variables.txt";
+        var path = Application.dataPath + "/Editor/variables.txt"; ;
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
@@ -485,7 +485,7 @@ public class VariableTableSet
 
     IEnumerable<string> UIReadSwitchesFromTXT()
     {
-        var path = Application.dataPath + "/switches.txt";
+        var path = Application.dataPath + "/Editor/switches.txt";
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
@@ -496,7 +496,7 @@ public class VariableTableSet
 
     IEnumerable<string> UIReadVariablesFromTXT()
     {
-        var path = Application.dataPath + "/variables.txt";
+        var path = Application.dataPath + "/Editor/variables.txt"; ;
         var dataLines = File.ReadAllLines(path);
 
         foreach (var line in dataLines)
