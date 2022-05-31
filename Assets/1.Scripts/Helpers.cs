@@ -32,7 +32,7 @@ public class Helpers
     [MenuItem("RPG/Sprite Order Fix All")]
     public static void UISpriteOrderFixMapAll()
     {
-        foreach (Transform t in Selection.activeTransform)
+        foreach (Transform t in GameObject.Find("Decoration").transform)
         {
             if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
             {
