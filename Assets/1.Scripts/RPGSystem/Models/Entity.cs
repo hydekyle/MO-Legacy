@@ -30,6 +30,11 @@ public class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    public void SetSortingLayer(string layerName)
+    {
+        spriteRenderer.sortingLayerName = layerName;
+    }
+
     Vector3 GetCastPoint()
     {
         var castPoint = boxCollider2D.bounds.center;
@@ -72,7 +77,8 @@ public class Entity : MonoBehaviour
 
     public void Move(Vector3 moveDirection)
     {
-        rb.position = Vector2.Lerp(rb.position, rb.position + new Vector2(moveDirection.x, moveDirection.y), Time.deltaTime * movementSpeed);
+        //rb.position = Vector2.Lerp(rb.position, rb.position + new Vector2(moveDirection.x, moveDirection.y), Time.deltaTime * movementSpeed);
+        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
         AnimationWalk(moveDirection);
         spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
     }

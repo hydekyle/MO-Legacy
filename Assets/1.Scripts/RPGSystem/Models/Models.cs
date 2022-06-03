@@ -110,8 +110,8 @@ public class GameData
     public void SaveGameDataSlot(int slotIndex)
     {
         savedMapSpawnIndex = -1;
-        savedPosition = GameManager.refMap.player.transform.position;
-        savedFaceDir = GameManager.refMap.player.faceDirection;
+        savedPosition = GameManager.refs.player.transform.position;
+        savedFaceDir = GameManager.refs.player.faceDirection;
         savedMapName = SceneManager.GetActiveScene().name;
         var fileName = "/savegame" + slotIndex;
         var savePath = string.Concat(Application.persistentDataPath, fileName);
@@ -138,7 +138,7 @@ public class GameData
         }
         //TODO: Remove when Title Menu is completed
         await SceneManager.LoadSceneAsync(savedMapName);
-        var playerT = GameManager.refMap.player.transform;
+        var playerT = GameManager.refs.player.transform;
         playerT.position = savedPosition;
         playerT.GetComponent<Entity>().LookAtDirection(savedFaceDir);
     }

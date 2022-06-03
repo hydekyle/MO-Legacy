@@ -37,7 +37,7 @@ namespace RPGActions
 
         public override async UniTask Resolve()
         {
-            var flashScreen = GameManager.refMap.flashScreen;
+            var flashScreen = GameManager.refs.flashScreen;
             var initTime = Time.time;
             flashScreen.color = flashColor;
             do
@@ -180,7 +180,7 @@ namespace RPGActions
         public override async UniTask Resolve()
         {
             var gameData = GameManager.GameData;
-            var playerEntity = GameManager.refMap.player;
+            var playerEntity = GameManager.refs.player;
             gameData.savedMapSpawnIndex = mapSpawnIndex;
             gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;
             if (SceneManager.GetActiveScene().name == mapName)

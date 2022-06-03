@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static GameData GameData { get { return GameManager.Instance._gameData; } }
-    public static GameReferences refMap = new();
+    public static GameReferences refs = new();
     public TextManager textManager;
     public GameData _gameData = new();
     [HideInInspector]
@@ -28,8 +28,8 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            refMap.player = GameObject.Find("PLAYER").GetComponent<Player>();
-            refMap.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
+            refs.player = GameObject.Find("PLAYER").GetComponent<Player>();
+            refs.flashScreen = GameObject.Find("RPGFlashScreen").GetComponent<Image>();
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
             transform.SetParent(null);
             DontDestroyOnLoad(this);
@@ -56,11 +56,11 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPlayer()
     {
-        refMap.player.LookAtDirection(_gameData.savedFaceDir);
-        refMap.player.transform.position = _gameData.savedMapSpawnIndex >= 0 ?
+        refs.player.LookAtDirection(_gameData.savedFaceDir);
+        refs.player.transform.position = _gameData.savedMapSpawnIndex >= 0 ?
             GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
             : _gameData.savedPosition;
-        CameraController.SetPosition(refMap.player.transform.position);
+        CameraController.SetPosition(refs.player.transform.position);
     }
 
 }

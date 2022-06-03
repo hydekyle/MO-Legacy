@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Tilemaps;
 
 public class Helpers
 {
@@ -32,15 +33,18 @@ public class Helpers
     [MenuItem("RPG/Sprite Order Fix All")]
     public static void UISpriteOrderFixMapAll()
     {
-        foreach (Transform t in GameObject.Find("Decoration").transform)
+        var target = Selection.activeTransform ? Selection.activeTransform : GameObject.Find("Decoration").transform;
+        foreach (Transform t in target)
         {
+            var sortingOrder = GetSpriteOrderByPositionY(t.position);
             if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
             {
-                var sortingOrder = GetSpriteOrderByPositionY(t.position);
                 if (t.TryGetComponent<SortingGroup>(out var sortingGroupComponent))
                     sortingGroupComponent.sortingOrder = sortingOrder;
                 else spriteRendererComponent.sortingOrder = sortingOrder;
             }
+            else if (t.TryGetComponent<TilemapRenderer>(out var tilemapRenderer))
+                tilemapRenderer.sortingOrder = sortingOrder;
         }
     }
 
