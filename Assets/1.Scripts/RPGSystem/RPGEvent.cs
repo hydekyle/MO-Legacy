@@ -68,6 +68,7 @@ public class RPGEvent : MonoBehaviour
                 {
                     var newRenderer = gameObject.AddComponent<SpriteRenderer>();
                     newRenderer.sprite = pages[x].sprite;
+                    newRenderer.sortingLayerName = "Outside";
                 }
                 return;
             }
