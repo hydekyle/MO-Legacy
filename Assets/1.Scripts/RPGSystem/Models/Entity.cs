@@ -80,7 +80,19 @@ public class Entity : MonoBehaviour
         //rb.position = Vector2.Lerp(rb.position, rb.position + new Vector2(moveDirection.x, moveDirection.y), Time.deltaTime * movementSpeed);
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
         AnimationWalk(moveDirection);
-        spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
+        CheckSpriteOrderByPositionY();
+    }
+
+    public void CheckSpriteOrderByPositionY()
+    {
+        try
+        {
+            spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
+        }
+        catch
+        {
+            GetComponent<SpriteRenderer>().sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
+        }
     }
 
     public void AnimationWalk(Vector3 moveDirection)

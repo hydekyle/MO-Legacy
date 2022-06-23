@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    void OnValidate()
+    {
+        CheckSpriteOrderByPositionY();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl)) boxCollider2D.enabled = false;
