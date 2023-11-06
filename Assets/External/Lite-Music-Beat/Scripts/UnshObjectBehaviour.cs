@@ -65,7 +65,7 @@ public class UnshObjectBehaviour : MonoBehaviour
 
     void Start()
     {
-        //audioController = GameManager.Instance.musicController;
+        //audioController = RPGManager.Instance.musicController;
         startScale = transform.localScale;      //Vector3 that will store the original scale
         OriginalBounds = transform.lossyScale;  //Gets the original bounds of the mesh for gizmos in play mode
 

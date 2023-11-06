@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Cysharp.Threading.Tasks;
+using RPGSystem;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;

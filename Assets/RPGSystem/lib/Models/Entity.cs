@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using RPGSystem;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
@@ -60,7 +61,7 @@ public class Entity : MonoBehaviour
             if (_resolvedHits.Contains(hitID)) return;
             if (hit && hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
             {
-                var page = interactedEvent.GetActivePage();
+                var page = interactedEvent.ActivePage;
                 if (page.trigger == TriggerType.PlayerInteraction)
                     page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
             }
