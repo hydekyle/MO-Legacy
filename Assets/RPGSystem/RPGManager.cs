@@ -22,10 +22,8 @@ namespace RPGSystem
         public static bool isMovementAvailable = true;
         public static AudioManager AudioManager { get => RPGManager.Instance.audioManager; }
         public AudioManager audioManager;
-        public static GameData GameData { get => _gameData; }
-        public static GameData _gameData = new();
+        public GameData gameData = new();
         public static GameReferences refs = new();
-        public TextManager textManager;
 
         private void Awake()
         {
@@ -42,8 +40,8 @@ namespace RPGSystem
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F6)) _gameData.SaveGameDataSlot(0);
-            if (Input.GetKeyDown(KeyCode.F9)) _gameData.LoadGameDataSlot(0).Forget();
+            if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
+            if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0).Forget();
         }
 
         void OnActiveSceneChanged(Scene arg0, Scene arg1)
@@ -53,10 +51,10 @@ namespace RPGSystem
 
         public void SpawnPlayer()
         {
-            refs.player.LookAtDirection(_gameData.savedFaceDir);
-            refs.player.transform.position = _gameData.savedMapSpawnIndex >= 0 ?
-                GameObject.Find("[SPAWN]").transform.GetChild(_gameData.savedMapSpawnIndex).position
-                : _gameData.savedPosition;
+            refs.player.LookAtDirection(gameData.savedFaceDir);
+            refs.player.transform.position = gameData.savedMapSpawnIndex >= 0 ?
+                GameObject.Find("[SPAWN]").transform.GetChild(gameData.savedMapSpawnIndex).position
+                : gameData.savedPosition;
             CameraController.SetPosition(refs.player.transform.position);
         }
     }

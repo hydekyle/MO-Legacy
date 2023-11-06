@@ -30,7 +30,7 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            RPGManager.GameData.ResolveSetVariables(setVariables);
+            RPGManager.Instance.gameData.ResolveSetVariables(setVariables);
         }
     }
 
@@ -182,7 +182,7 @@ namespace RPGSystem
         public int amount;
         public async UniTask Resolve()
         {
-            RPGManager.GameData.AddItem(item, amount);
+            RPGManager.Instance.gameData.AddItem(item, amount);
         }
     }
 
@@ -276,7 +276,7 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            var gameData = RPGManager.GameData;
+            var gameData = RPGManager.Instance.gameData;
             var playerEntity = RPGManager.refs.player;
             gameData.savedMapSpawnIndex = mapSpawnIndex;
             gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;

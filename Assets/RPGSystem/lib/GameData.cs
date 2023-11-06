@@ -52,6 +52,7 @@ namespace RPGSystem
             FileStream file = File.Create(savePath);
             bf.Serialize(file, saveData);
             file.Close();
+            Debug.Log(Application.persistentDataPath);
         }
 
         public async UniTaskVoid LoadGameDataSlot(int slotIndex)

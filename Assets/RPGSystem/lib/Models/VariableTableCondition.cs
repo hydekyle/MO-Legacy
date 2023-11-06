@@ -66,14 +66,14 @@ namespace RPGSystem
             {
                 var ID = s.ID();
                 if (_subscribedSwitchList.Contains(ID)) continue; // Avoiding resubscription
-                RPGManager.GameData.SubscribeToSwitchChangedEvent(ID, action);
+                RPGManager.Instance.gameData.SubscribeToSwitchChangedEvent(ID, action);
                 _subscribedSwitchList.Add(ID);
             }
             foreach (var v in variableTable)
             {
                 var ID = v.ID();
                 if (_subscribedVariableList.Contains(ID)) continue;
-                RPGManager.GameData.SubscribeToVariableChangedEvent(ID, action);
+                RPGManager.Instance.gameData.SubscribeToVariableChangedEvent(ID, action);
                 _subscribedVariableList.Add(ID);
             }
             foreach (var lv in localVariableTable)
@@ -82,16 +82,16 @@ namespace RPGSystem
                 if (!_subscribedLocalVariableList.Contains(ID))
                 {
                     _subscribedLocalVariableList.Add(ID);
-                    RPGManager.GameData.SubscribeToLocalVariableChangedEvent(ID, action);
+                    RPGManager.Instance.gameData.SubscribeToLocalVariableChangedEvent(ID, action);
                 }
             }
         }
 
         public void UnsubscribeConditionTable(ref List<int> _subscribedSwitchList, ref List<int> _subscribedVariableList, ref List<int> _subscribedLocalVariableList, Action action)
         {
-            foreach (var id in _subscribedLocalVariableList) RPGManager.GameData.UnsubscribeToLocalVariableChangedEvent(id, action);
-            foreach (var id in _subscribedSwitchList) RPGManager.GameData.UnsubscribeToSwitchChangedEvent(id, action);
-            foreach (var id in _subscribedVariableList) RPGManager.GameData.UnsubscribeToVariableChangedEvent(id, action);
+            foreach (var id in _subscribedLocalVariableList) RPGManager.Instance.gameData.UnsubscribeToLocalVariableChangedEvent(id, action);
+            foreach (var id in _subscribedSwitchList) RPGManager.Instance.gameData.UnsubscribeToSwitchChangedEvent(id, action);
+            foreach (var id in _subscribedVariableList) RPGManager.Instance.gameData.UnsubscribeToVariableChangedEvent(id, action);
             _subscribedSwitchList.Clear();
             _subscribedVariableList.Clear();
         }
@@ -100,7 +100,7 @@ namespace RPGSystem
         {
             foreach (var requiredLocalVariable in localVariableTable)
             {
-                var variableValue = RPGManager.GameData.GetLocalVariable(requiredLocalVariable.ID());
+                var variableValue = RPGManager.Instance.gameData.GetLocalVariable(requiredLocalVariable.ID());
                 switch (requiredLocalVariable.conditionality)
                 {
                     case Conditionality.Equals: if (requiredLocalVariable.value == variableValue) continue; break;
@@ -111,12 +111,12 @@ namespace RPGSystem
             }
             foreach (var requiredSwitch in switchTable)
             {
-                var switchValue = RPGManager.GameData.GetSwitch(requiredSwitch.ID());
+                var switchValue = RPGManager.Instance.gameData.GetSwitch(requiredSwitch.ID());
                 if (requiredSwitch.value != switchValue) return false;
             }
             foreach (var requiredVariable in variableTable)
             {
-                var variableValue = RPGManager.GameData.GetVariable(requiredVariable.ID());
+                var variableValue = RPGManager.Instance.gameData.GetVariable(requiredVariable.ID());
                 switch (requiredVariable.conditionality)
                 {
                     case Conditionality.Equals: if (requiredVariable.value == variableValue) continue; break;
