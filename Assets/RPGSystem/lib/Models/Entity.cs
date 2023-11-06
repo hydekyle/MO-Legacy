@@ -114,7 +114,7 @@ public class Entity : MonoBehaviour
                 break;
         }
         // Animation Steps
-        if (Time.time > _lastTimeAnimationChanged + animationFrameTime)
+        if (Time.time > _lastTimeAnimationChanged + animationFrameTime * (2 - moveDirection.magnitude))
         {
             _indexStepAnim = _indexStepAnim < stepAnimOrder.Count - 1 ? _indexStepAnim + 1 : 0;
             _lastTimeAnimationChanged = Time.time;

@@ -9,7 +9,7 @@ namespace RPGSystem
     [Serializable]
     public class AudioManager
     {
-        public AudioMixerGroup mixerSFX;
+        public AudioMixerGroup mixerSFX, mixerMusic;
         AudioSource audioMusic;
         Dictionary<int, AudioSource> audioSources = new Dictionary<int, AudioSource>();
 

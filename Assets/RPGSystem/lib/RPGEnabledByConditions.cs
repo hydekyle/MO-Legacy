@@ -40,7 +40,7 @@ public class RPGEnabledByConditions : MonoBehaviour
     {
         var isAllOK = conditionTable.IsAllConditionOK();
         if (isAllOK == gameObject.activeSelf) return;
-        if (onEnabledSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnabledSound, gameObject);
+        //if (onEnabledSound && !gameObject.activeSelf && isAllOK) AudioManager.PlaySoundFromGameobject(onEnabledSound, gameObject);
         gameObject.SetActive(isAllOK);
     }
 
