@@ -112,7 +112,7 @@ public class Entity : MonoBehaviour
                 break;
         }
         // Animation Steps
-        if (Time.time > _lastTimeAnimationChanged + animationFrameTime * (2 - moveDirection.magnitude))
+        if (Time.time > _lastTimeAnimationChanged + animationFrameTime * (2 - Mathf.Clamp(moveDirection.magnitude, 0f, 1f)))
         {
             _indexStepAnim = _indexStepAnim < stepAnimOrder.Count - 1 ? _indexStepAnim + 1 : 0;
             _lastTimeAnimationChanged = Time.time;
