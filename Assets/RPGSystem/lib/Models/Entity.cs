@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using RPGSystem;
@@ -78,8 +77,7 @@ public class Entity : MonoBehaviour
 
     public void Move(Vector3 moveDirection)
     {
-        //rb.position = Vector2.Lerp(rb.position, rb.position + new Vector2(moveDirection.x, moveDirection.y), Time.deltaTime * movementSpeed);
-        transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(moveDirection.x, moveDirection.y, 0), Time.deltaTime * movementSpeed);
+        rb.MovePosition(rb.position + new Vector2(moveDirection.x, moveDirection.y) * movementSpeed * Time.fixedDeltaTime);
         AnimationWalk(moveDirection);
         CheckSpriteOrderByPositionY();
     }

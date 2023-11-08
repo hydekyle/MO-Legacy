@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Cysharp.Threading.Tasks;
 using RPGSystem;
 using UnityEditor;
 using UnityEngine;
@@ -30,6 +24,20 @@ public class Helpers
         FaceDirection.East => FaceDirection.West,
         _ => FaceDirection.South
     };
+
+    public static bool IsColliderAtPosition(Vector3 worldPosition)
+    {
+        var hits = Physics2D.CircleCastAll(worldPosition, 0.02f, Vector2.one, 1f, LayerMask.GetMask("Default"));
+        foreach (var hit in hits)
+        {
+            if (hit.transform.TryGetComponent<Collider2D>(out var collider) && collider.isTrigger == false)
+            {
+                Debug.Log(hit.transform.name);
+                return true;
+            }
+        }
+        return false;
+    }
 
     [MenuItem("RPG/Sprite Order Fix All")]
     public static void UISpriteOrderFixMapAll()
