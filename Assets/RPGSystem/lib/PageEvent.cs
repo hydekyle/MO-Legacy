@@ -54,7 +54,7 @@ namespace RPGSystem
                     if (action is IWaitable)
                     {
                         IWaitable waitableAction = (IWaitable)action;
-                        if (waitableAction.WaitEnd)
+                        if (waitableAction.waitEnd)
                         {
                             await action.Resolve().AttachExternalCancellation(cts);
                             continue;
@@ -73,15 +73,16 @@ namespace RPGSystem
         {
             switch (freezePlayerAtRun)
             {
-                case FreezeType.FreezeAll: RPGManager.isInteractionAvailable = RPGManager.isMovementAvailable = false; break;
-                case FreezeType.FreezeInteraction: RPGManager.isInteractionAvailable = false; break;
-                case FreezeType.FreezeMovement: RPGManager.isMovementAvailable = false; break;
+                case FreezeType.FreezeAll: RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = false; break;
+                case FreezeType.FreezeInteraction: RPGManager.Instance.isInteractionAvailable = false; break;
+                case FreezeType.FreezeMovement: RPGManager.Instance.isMovementAvailable = false; break;
             }
         }
 
         void UnfreezeWhile()
         {
-            RPGManager.isInteractionAvailable = RPGManager.isMovementAvailable = true;
+            if (freezePlayerAtRun != FreezeType.None)
+                RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = true;
         }
     }
 }

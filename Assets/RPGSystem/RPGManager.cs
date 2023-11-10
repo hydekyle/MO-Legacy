@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Doublsb.Dialog;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,12 +19,19 @@ namespace RPGSystem
     public class RPGManager : MonoBehaviour
     {
         public static RPGManager Instance;
-        public static bool isInteractionAvailable = true;
-        public static bool isMovementAvailable = true;
+
         public static AudioManager AudioManager { get => RPGManager.Instance.audioManager; }
         public AudioManager audioManager;
-        public GameData gameData = new();
+
+        public static DialogManager DialogManager { get => RPGManager.Instance.dialogManager; }
+        public DialogManager dialogManager;
+
         public static GameReferences refs = new();
+        public GameData gameData = new();
+
+        public bool isInteractionAvailable = true;
+        public bool isMovementAvailable = true;
+
 
         private void Awake()
         {
@@ -40,6 +48,7 @@ namespace RPGSystem
 
         void Update()
         {
+            if (Input.GetButtonDown("Interact")) dialogManager.Click_Window();
             if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
             if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0).Forget();
         }

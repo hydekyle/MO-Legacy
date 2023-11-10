@@ -19,7 +19,6 @@ namespace RPGSystem
 
     public abstract class IWaitable
     {
-        public bool WaitEnd { get => waitEnd; set => waitEnd = value; }
         public bool waitEnd = false;
     }
 
@@ -70,12 +69,19 @@ namespace RPGSystem
     }
 
     [Serializable]
-    public class ShowText : IAction
+    public class ShowText : IWaitable, IAction
     {
         public string text;
         public async UniTask Resolve()
         {
-            Debug.Log(text);
+            RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = false;
+            RPGManager.DialogManager.Show(new Doublsb.Dialog.DialogData(text, callback: () =>
+            {
+                RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = true;
+                RPGManager.DialogManager.cancellationTokenSource.Cancel();
+            }));
+            if (waitEnd) await UniTask.WaitUntilCanceled(RPGManager.DialogManager.cancellationTokenSource.Token);
+            RPGManager.DialogManager.cancellationTokenSource = new();
         }
     }
 
@@ -164,9 +170,9 @@ namespace RPGSystem
             switch (type)
             {
                 case TweenType.PunchScale:
-                    targetTransform.DOPunchScale(punch, duration, vibrato, elasticity); break;
+                    targetTransform.DOPunchScale(punch, duration, vibrato, elasticity).ToUniTask().Forget(); break;
                 case TweenType.PunchRotation:
-                    targetTransform.DOPunchRotation(punch, duration, vibrato, elasticity); break;
+                    targetTransform.DOPunchRotation(punch, duration, vibrato, elasticity).ToUniTask().Forget(); break;
                 default:
                     return;
             }
@@ -242,7 +248,6 @@ namespace RPGSystem
             targetRenderer = Selection.activeGameObject.GetComponent<MeshRenderer>();
         }
 #endif
-
 
         public async UniTask Resolve()
         {
