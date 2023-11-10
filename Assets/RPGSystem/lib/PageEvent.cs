@@ -51,9 +51,9 @@ namespace RPGSystem
                     if (!Application.isPlaying) return;
                     var action = actionList[x];
 
-                    if (action is IWaitable)
+                    if (action is WaitableAction)
                     {
-                        IWaitable waitableAction = (IWaitable)action;
+                        WaitableAction waitableAction = (WaitableAction)action;
                         if (waitableAction.waitEnd)
                         {
                             await action.Resolve().AttachExternalCancellation(cts);

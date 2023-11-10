@@ -17,7 +17,7 @@ namespace RPGSystem
         public async UniTask Resolve() { }
     }
 
-    public abstract class IWaitable
+    public abstract class WaitableAction
     {
         public bool waitEnd = false;
     }
@@ -69,7 +69,7 @@ namespace RPGSystem
     }
 
     [Serializable]
-    public class ShowText : IWaitable, IAction
+    public class ShowText : WaitableAction, IAction
     {
         public string text;
         public async UniTask Resolve()
@@ -99,7 +99,7 @@ namespace RPGSystem
     /// Plays a sound effect
     ///</summary>
     [Serializable]
-    public class PlaySE : IWaitable, IAction
+    public class PlaySE : WaitableAction, IAction
     {
         public AudioClip clip;
         public SoundOptions soundOptions = new SoundOptions()
@@ -136,7 +136,7 @@ namespace RPGSystem
     }
 
     [Serializable]
-    public class Await : IWaitable, IAction
+    public class Await : WaitableAction, IAction
     {
         public float seconds;
 
@@ -149,7 +149,7 @@ namespace RPGSystem
     public enum TweenType { PunchScale, PunchRotation }
 
     [Serializable]
-    public class Tween : IWaitable, IAction
+    public class Tween : WaitableAction, IAction
     {
         public TweenType type;
         public Vector3 punch;
@@ -234,7 +234,7 @@ namespace RPGSystem
     }
 
     [Serializable]
-    public class ModifyMaterial : IWaitable, IAction
+    public class ModifyMaterial : WaitableAction, IAction
     {
         public MeshRenderer targetRenderer;
         public Color targetColor;

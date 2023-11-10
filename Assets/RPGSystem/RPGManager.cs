@@ -48,7 +48,7 @@ namespace RPGSystem
 
         void Update()
         {
-            if (Input.GetButtonDown("Interact")) dialogManager.Click_Window();
+            if (Input.GetButtonDown("Interact") && dialogManager.Printer.activeSelf) dialogManager.Click_Window();
             if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
             if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0).Forget();
         }
