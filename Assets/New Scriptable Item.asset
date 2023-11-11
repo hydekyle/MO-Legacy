@@ -13,7 +13,18 @@ MonoBehaviour:
   m_Name: New Scriptable Item
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
-  title: 
+  title:
+    m_TableReference:
+      m_TableCollectionName: GUID:5997a7a303820b64897680f660ef9643
+    m_TableEntryReference:
+      m_KeyId: 155086516224
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   description: 
   isUsable: 0
   isStackable: 0
+  references:
+    version: 2
+    RefIds: []

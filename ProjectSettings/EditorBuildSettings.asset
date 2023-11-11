@@ -14,4 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Recuerdo Cloacas.unity
     guid: b4326611c42415547a9f3a4b806bbd53
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 04d8ec207dca0ff49a8ba4dba7192418, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: a8cf667e6d8c0bb4d8cf5cdc7b4fb720, type: 2}

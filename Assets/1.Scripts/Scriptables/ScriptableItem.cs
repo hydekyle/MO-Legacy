@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Localization;
 
 [CreateAssetMenu(menuName = "Scriptables/New Item")]
 public class ScriptableItem : ScriptableObject
@@ -11,7 +10,7 @@ public class ScriptableItem : ScriptableObject
     [HideLabel]
     public Sprite sprite;
     [VerticalGroup("Item Data/Stats")]
-    public string title;
+    public LocalizedString title;
     [VerticalGroup("Item Data/Stats")]
     [TextArea]
     public string description;

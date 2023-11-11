@@ -785,6 +785,7 @@ MonoBehaviour:
   audioManager:
     mixerSFX: {fileID: -6203382548450763303, guid: 5dcac345d3897f54cbb8579aac352f8f, type: 2}
     mixerMusic: {fileID: -2230901803033494495, guid: 5dcac345d3897f54cbb8579aac352f8f, type: 2}
+  dialogManager: {fileID: 0}
   gameData:
     switches:
       keyData: 
@@ -802,3 +803,5 @@ MonoBehaviour:
     savedMapSpawnIndex: 0
     savedPosition: {x: 0, y: 0, z: 0}
     savedFaceDir: 0
+  isInteractionAvailable: 1
+  isMovementAvailable: 1
