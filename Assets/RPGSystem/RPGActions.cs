@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Localization;
 using UnityEngine.SceneManagement;
 
 namespace RPGSystem
@@ -71,11 +72,12 @@ namespace RPGSystem
     [Serializable]
     public class ShowText : WaitableAction, IAction
     {
-        public string text;
+        public LocalizedString localizedText;
+
         public async UniTask Resolve()
         {
             RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = false;
-            RPGManager.DialogManager.Show(new Doublsb.Dialog.DialogData(text, callback: () =>
+            RPGManager.DialogManager.Show(new Doublsb.Dialog.DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
             {
                 RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = true;
                 RPGManager.DialogManager.cancellationTokenSource.Cancel();
@@ -83,6 +85,7 @@ namespace RPGSystem
             if (waitEnd) await UniTask.WaitUntilCanceled(RPGManager.DialogManager.cancellationTokenSource.Token);
             RPGManager.DialogManager.cancellationTokenSource = new();
         }
+
     }
 
     [Serializable]
@@ -163,7 +166,6 @@ namespace RPGSystem
             targetTransform = Selection.activeGameObject.transform;
         }
 #endif
-
 
         public async UniTask Resolve()
         {

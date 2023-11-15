@@ -33,7 +33,9 @@ namespace RPGSystem
                 else inventory[item] = amount;
             }
             else
+            {
                 inventory.Add(item, amount);
+            }
         }
 
         public void SaveGameDataSlot(int slotIndex)

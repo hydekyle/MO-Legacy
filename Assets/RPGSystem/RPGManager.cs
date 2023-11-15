@@ -31,7 +31,7 @@ namespace RPGSystem
         public bool isMovementAvailable = true;
 
 
-        private void Awake()
+        void Awake()
         {
             if (Instance != null) Destroy(this.gameObject);
             else
@@ -46,7 +46,10 @@ namespace RPGSystem
 
         void Update()
         {
+            // Remove Dialog if opened
             if (Input.GetButtonDown("Interact") && dialogManager.Printer.activeSelf) dialogManager.Click_Window();
+
+            // Save & Load
             if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
             if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0).Forget();
         }

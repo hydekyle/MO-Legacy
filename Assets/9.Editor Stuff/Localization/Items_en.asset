@@ -19,7 +19,11 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 155086516224
-    m_Localized: 
+    m_Localized: helloooouuu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1143569253429248
+    m_Localized: do you want to get ripped my buddy?
     m_Metadata:
       m_Items: []
   references:

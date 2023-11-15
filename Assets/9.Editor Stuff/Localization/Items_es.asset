@@ -17,7 +17,15 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 5997a7a303820b64897680f660ef9643, type: 2}
   m_Metadata:
     m_Items: []
-  m_TableData: []
+  m_TableData:
+  - m_Id: 155086516224
+    m_Localized: holiiiiiiiiiiiiii
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1143569253429248
+    m_Localized: "\xBFQuieres que te pele, hermano?"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
