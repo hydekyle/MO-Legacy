@@ -14,6 +14,12 @@ namespace RPGSystem
     public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
     public enum OperationType { Replace, Add }
 
+    // Interfaces
+    public interface IInteractable
+    {
+        public void InteractionFrom(Entity interactionEmmiter);
+    }
+
     // RPGSystem Serialized Dictionary with Observable Values
     [Serializable] public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
     [Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }

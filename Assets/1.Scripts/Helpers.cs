@@ -45,7 +45,7 @@ public class Helpers
         var target = Selection.activeTransform ? Selection.activeTransform : GameObject.Find("Decoration").transform;
         foreach (Transform t in target)
         {
-            var sortingOrder = GetSpriteOrderByPositionY(t.position);
+            var sortingOrder = Entity.GetSpriteOrderByPositionY(t.position);
             if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
             {
                 if (t.TryGetComponent<SortingGroup>(out var sortingGroupComponent))
@@ -57,29 +57,9 @@ public class Helpers
         }
     }
 
-    public static int GetSpriteOrderByPositionY(Vector3 position)
-    {
-        return (int)(-position.y * 10);
-    }
 
-    public static FaceDirection GetFaceDirectionByMoveDirection(Vector3 dir)
-    {
-        // Face priority by higher axis
-        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-        {
-            if (dir.x < 0) return FaceDirection.West;
-            else if (dir.x > 0) return FaceDirection.East;
-            else if (dir.y < 0) return FaceDirection.South;
-            else return FaceDirection.North;
-        }
-        else
-        {
-            if (dir.y < 0) return FaceDirection.South;
-            else if (dir.y > 0) return FaceDirection.North;
-            else if (dir.x < 0) return FaceDirection.West;
-            else return FaceDirection.East;
-        }
-    }
+
+
 }
 
 // Switches .txt Placeholder 

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Player : Entity
 {
+    public LayerMask interactionLayerMask;
+
     void OnValidate()
     {
         CheckSpriteOrderByPositionY();
@@ -15,7 +17,7 @@ public class Player : Entity
             if (Input.GetKeyDown(KeyCode.LeftControl)) boxCollider2D.enabled = false;
             if (Input.GetKeyUp(KeyCode.LeftControl)) boxCollider2D.enabled = true;
         }
-        if (Input.GetButtonDown("Interact") && RPGManager.Instance.isInteractionAvailable) CastInteraction();
+        if (Input.GetButtonDown("Interact") && RPGManager.Instance.isInteractionAvailable) CastInteraction(interactionLayerMask);
     }
 
     void FixedUpdate()

@@ -8,14 +8,16 @@ public class Entity : MonoBehaviour
     public Sprite[] spriteList;
     public float movementSpeed;
     public float animationFrameTime = 0.1f;
-    [HideInInspector]
-    public FaceDirection faceDirection;
-    SpriteRenderer spriteRenderer;
+
+    [Header("Entity Dependencies")]
+    public BoxCollider2D boxCollider2D;
+    public Rigidbody2D rb;
+    public SpriteRenderer spriteRenderer;
+
+    [HideInInspector] public FaceDirection faceDirection;
     float _lastTimeAnimationChanged = -1;
     int _indexStepAnim = 0;
     List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
-    public BoxCollider2D boxCollider2D;
-    Rigidbody2D rb;
     // 0 (down) walking
     // 1 (down) idle
     // 2 (down) walking
@@ -23,7 +25,7 @@ public class Entity : MonoBehaviour
     // 6 (right) walking
     // 9 (up) walking
 
-    void Awake()
+    void OnValidate()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
@@ -49,29 +51,41 @@ public class Entity : MonoBehaviour
         return castPoint;
     }
 
-    public void CastInteraction()
+    public void CastInteraction(int layerMask)
     {
         var castPoint = GetCastPoint();
-        var hits = Physics2D.CircleCastAll(castPoint, 0.3f, Vector2.one, 1f, LayerMask.GetMask("Default"));
+        var hits = Physics2D.CircleCastAll(castPoint, 0.3f, Vector2.one, 1f, layerMask);
         var _resolvedHits = new List<int>(); // Avoid reinteract when multiple collider
         foreach (var hit in hits)
         {
             var hitID = hit.transform.GetHashCode();
             if (_resolvedHits.Contains(hitID)) return;
-            if (hit && hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
+            if (hit)
             {
-                var page = interactedEvent.ActivePage;
-                if (page.trigger == TriggerType.PlayerInteraction)
-                    page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
+                // Trigger any RPGEvent from the selected layerMask
+                if (hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
+                {
+                    var page = interactedEvent.ActivePage;
+                    if (page.trigger == TriggerType.PlayerInteraction)
+                    {
+                        page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
+                    }
+                }
+
+                // Trigger any Interactable from the selected layerMask
+                if (hit.transform.TryGetComponent<IInteractable>(out IInteractable _interactable))
+                {
+                    _interactable.InteractionFrom(this);
+                }
             }
             _resolvedHits.Add(hitID);
         }
         //LookAtDirection(GetFaceDirectionByMoveDirection(castPoint - transform.position));
     }
 
-    public void CastUsableItem(ScriptableItem item)
+    public void CastUsableItem(ScriptableItem item, int layerMask)
     {
-        var hit = Physics2D.CircleCast(GetCastPoint(), 1f, Vector2.one, 1f, LayerMask.GetMask("Usable Item Zone"));
+        var hit = Physics2D.CircleCast(GetCastPoint(), 1f, Vector2.one, 1f, layerMask);
         if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone)) usableItemZone.UsedItem(item);
     }
 
@@ -86,11 +100,11 @@ public class Entity : MonoBehaviour
     {
         try
         {
-            spriteRenderer.sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
+            spriteRenderer.sortingOrder = GetSpriteOrderByPositionY(transform.position);
         }
         catch
         {
-            GetComponent<SpriteRenderer>().sortingOrder = Helpers.GetSpriteOrderByPositionY(transform.position);
+            GetComponent<SpriteRenderer>().sortingOrder = GetSpriteOrderByPositionY(transform.position);
         }
     }
 
@@ -116,7 +130,7 @@ public class Entity : MonoBehaviour
         {
             _indexStepAnim = _indexStepAnim < stepAnimOrder.Count - 1 ? _indexStepAnim + 1 : 0;
             _lastTimeAnimationChanged = Time.time;
-            faceDirection = Helpers.GetFaceDirectionByMoveDirection(moveDirection);
+            faceDirection = GetFaceDirectionByMoveDirection(moveDirection);
         }
     }
 
@@ -144,6 +158,36 @@ public class Entity : MonoBehaviour
                 break;
         }
         faceDirection = fDir;
+    }
+
+    public void LookAtWorldPosition(Vector3 worldPosition)
+    {
+        var vDif = worldPosition - transform.position;
+        LookAtDirection(GetFaceDirectionByMoveDirection(vDif));
+    }
+
+    public static FaceDirection GetFaceDirectionByMoveDirection(Vector3 dir)
+    {
+        // Face priority by higher axis
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            if (dir.x < 0) return FaceDirection.West;
+            else if (dir.x > 0) return FaceDirection.East;
+            else if (dir.y < 0) return FaceDirection.South;
+            else return FaceDirection.North;
+        }
+        else
+        {
+            if (dir.y < 0) return FaceDirection.South;
+            else if (dir.y > 0) return FaceDirection.North;
+            else if (dir.x < 0) return FaceDirection.West;
+            else return FaceDirection.East;
+        }
+    }
+
+    public static int GetSpriteOrderByPositionY(Vector3 position)
+    {
+        return (int)(-position.y * 10);
     }
 
 }
