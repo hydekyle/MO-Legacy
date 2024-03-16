@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityObservables;
 
 namespace RPGSystem
 {
-    // RPGSystem Structs
+    // RPGSystem Enums
     public enum CollisionType { player, other, any }
     public enum FaceDirection { North, West, East, South }
     public enum Conditionality { Equals, GreaterThan, LessThan }
@@ -14,10 +15,19 @@ namespace RPGSystem
     public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
     public enum OperationType { Replace, Add }
 
-    // Interfaces
+    // RPGSystem Interfaces
     public interface IInteractable
     {
         public void InteractionFrom(Entity interactionEmmiter);
+    }
+
+    // RPGSystem Structs
+    [Serializable]
+    public struct FogData
+    {
+        public Image image;
+        [Tooltip("Used for FogSettings Action to make it easy select fogs from same folder")]
+        public Sprite defaultSprite;
     }
 
     // RPGSystem Serialized Dictionary with Observable Values

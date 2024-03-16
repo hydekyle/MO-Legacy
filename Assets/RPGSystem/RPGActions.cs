@@ -1,3 +1,5 @@
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +23,45 @@ namespace RPGSystem
     public abstract class WaitableAction
     {
         public bool waitEnd = false;
+    }
+
+    // ADD YOUR GAME ACTIONS HERE
+
+    [Serializable]
+    public class FogSettings : IAction
+    {
+        [PreviewField(75)]
+        [Tooltip("If null we disable fog gameobject directly")]
+        public Sprite fogSprite;
+        public Color fogColor = Color.white;
+        public float scrollSpeedX, scrollSpeedY;
+        public float transitionTime = 0f;
+
+        [Button()]
+        public void SetDefaultFogSprite()
+        {
+            fogSprite = RPGManager.Instance.fogData.defaultSprite;
+        }
+
+        public async UniTask Resolve()
+        {
+            if (fogSprite != null)
+            {
+                RPGManager.Instance.fogData.image.gameObject.SetActive(true);
+                RPGManager.Instance.fogData.image.gameObject.SetActive(true);
+                RPGManager.Instance.fogData.image.sprite = fogSprite;
+                RPGManager.Instance.fogData.image.material.All1ModifyProperty("_Color", fogColor, transitionTime);
+                RPGManager.Instance.fogData.image.material.All1ModifyProperty("_TextureScrollXSpeed", scrollSpeedX, transitionTime);
+                RPGManager.Instance.fogData.image.material.All1ModifyProperty("_TextureScrollYSpeed", scrollSpeedY, transitionTime);
+
+
+            }
+            else
+            {
+                RPGManager.Instance.fogData.image.gameObject.SetActive(false);
+            }
+
+        }
     }
 
     [Serializable]

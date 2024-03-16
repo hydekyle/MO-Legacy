@@ -30,6 +30,7 @@ namespace RPGSystem
         public bool isInteractionAvailable = true;
         public bool isMovementAvailable = true;
 
+        public FogData fogData;
 
         void Awake()
         {

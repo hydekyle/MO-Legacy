@@ -16,6 +16,7 @@ namespace DigitalRuby.RainMaker
     public class BaseRainScript : MonoBehaviour
     {
         [Tooltip("Camera the rain should hover over, defaults to main camera")]
+        [HideInInspector]
         public Camera Camera;
 
         [Tooltip("Whether rain should follow the camera. If false, rain must be moved manually and will not follow the camera.")]
