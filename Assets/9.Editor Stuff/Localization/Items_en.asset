@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: do you want to get ripped my buddy?
     m_Metadata:
       m_Items: []
+  - m_Id: 245054337024
+    m_Localized: oooomg
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -34,7 +34,8 @@ namespace Doublsb.Dialog
 {
     public class DialogManager : MonoBehaviour
     {
-        public CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        public CancellationTokenSource cancellationTokenSource = new();
+        public static DialogManager Instance;
 
         //================================================
         //Public Variable
@@ -58,8 +59,7 @@ namespace Doublsb.Dialog
         public GameObject SelectorItem;
         public Text SelectorItemText;
 
-        [HideInInspector]
-        public State state;
+        public State state = State.Deactivate;
 
         [HideInInspector]
         public string Result;
@@ -74,6 +74,14 @@ namespace Doublsb.Dialog
         private float _lastDelay;
         private Coroutine _textingRoutine;
         private Coroutine _printingRoutine;
+
+        void Awake()
+        {
+            if (Instance != null) Destroy(this.gameObject);
+            {
+                Instance = this;
+            }
+        }
 
         //================================================
         //Public Method

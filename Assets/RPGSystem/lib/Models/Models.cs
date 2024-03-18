@@ -14,6 +14,7 @@ namespace RPGSystem
     public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
     public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
     public enum OperationType { Replace, Add }
+    public enum CameraTarget { Player, Transform }
 
     // RPGSystem Interfaces
     public interface IInteractable

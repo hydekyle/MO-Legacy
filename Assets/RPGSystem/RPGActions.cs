@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Doublsb.Dialog;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -28,6 +29,43 @@ namespace RPGSystem
     // ADD YOUR GAME ACTIONS HERE
 
     [Serializable]
+    public class ChangePlayerFreeze : IAction
+    {
+        public FreezeType playerFreeze;
+
+        public async UniTask Resolve()
+        {
+            RPGManager.Instance.SetPlayerFreeze(playerFreeze);
+        }
+    }
+
+    [Serializable]
+    public class CameraMove : IAction
+    {
+        public CameraTarget cameraTarget;
+        [ShowIf("@cameraTarget == CameraTarget.Transform")]
+        public Transform target;
+        public bool changeCameraSpeed;
+        [ShowIf("@changeCameraSpeed")]
+        public float cameraSpeed = 1f;
+        public ChangePlayerFreeze changePlayerMobility;
+
+        public async UniTask Resolve()
+        {
+            changePlayerMobility.Resolve().Forget();
+
+            if (cameraTarget == CameraTarget.Player)
+            {
+                CameraController.Instance.SetTarget(RPGManager.refs.player.transform, changeCameraSpeed ? cameraSpeed : null);
+            }
+            else if (cameraTarget == CameraTarget.Transform)
+            {
+                CameraController.Instance.SetTarget(target, changeCameraSpeed ? cameraSpeed : null);
+            }
+        }
+    }
+
+    [Serializable]
     public class FogSettings : IAction
     {
         [PreviewField(75)]
@@ -45,20 +83,19 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
+            var fogImage = RPGManager.Instance.fogData.image;
             if (fogSprite != null)
             {
-                RPGManager.Instance.fogData.image.gameObject.SetActive(true);
-                RPGManager.Instance.fogData.image.gameObject.SetActive(true);
-                RPGManager.Instance.fogData.image.sprite = fogSprite;
-                RPGManager.Instance.fogData.image.material.All1ModifyProperty("_Color", fogColor, transitionTime);
-                RPGManager.Instance.fogData.image.material.All1ModifyProperty("_TextureScrollXSpeed", scrollSpeedX, transitionTime);
-                RPGManager.Instance.fogData.image.material.All1ModifyProperty("_TextureScrollYSpeed", scrollSpeedY, transitionTime);
-
-
+                fogImage.gameObject.SetActive(true);
+                fogImage.gameObject.SetActive(true);
+                fogImage.sprite = fogSprite;
+                fogImage.material.All1ModifyProperty("_Color", fogColor, transitionTime);
+                fogImage.material.All1ModifyProperty("_TextureScrollXSpeed", scrollSpeedX, transitionTime);
+                fogImage.material.All1ModifyProperty("_TextureScrollYSpeed", scrollSpeedY, transitionTime);
             }
             else
             {
-                RPGManager.Instance.fogData.image.gameObject.SetActive(false);
+                fogImage.gameObject.SetActive(false);
             }
 
         }
@@ -117,14 +154,12 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = false;
-            RPGManager.DialogManager.Show(new Doublsb.Dialog.DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
+            DialogManager.Instance.Show(new Doublsb.Dialog.DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
             {
-                RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = true;
-                RPGManager.DialogManager.cancellationTokenSource.Cancel();
+                //RPGManager.DialogManager.cancellationTokenSource.Cancel();
             }));
-            if (waitEnd) await UniTask.WaitUntilCanceled(RPGManager.DialogManager.cancellationTokenSource.Token);
-            RPGManager.DialogManager.cancellationTokenSource = new();
+            if (waitEnd) await UniTask.WaitUntil(() => DialogManager.Instance.state == State.Deactivate);
+            //RPGManager.DialogManager.cancellationTokenSource = new();
         }
 
     }

@@ -43,7 +43,8 @@ namespace RPGSystem
         {
             if (isResolvingActionList) return;
             isResolvingActionList = true;
-            DoFreezeWhile();
+            FreezeWhile();
+
             do
             {
                 for (var x = 0; x < actionList.Count; x++)
@@ -65,24 +66,19 @@ namespace RPGSystem
                 }
                 await UniTask.Yield();
             } while (isLoop && RPGEventParent.ActivePage == this);
-            UnfreezeWhile();
+
+            if (freezePlayerAtRun != FreezeType.None) UnfreezeWhile();
             isResolvingActionList = false;
         }
 
-        void DoFreezeWhile()
+        void FreezeWhile()
         {
-            switch (freezePlayerAtRun)
-            {
-                case FreezeType.FreezeAll: RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = false; break;
-                case FreezeType.FreezeInteraction: RPGManager.Instance.isInteractionAvailable = false; break;
-                case FreezeType.FreezeMovement: RPGManager.Instance.isMovementAvailable = false; break;
-            }
+            RPGManager.Instance.SetPlayerFreeze(freezePlayerAtRun);
         }
 
         void UnfreezeWhile()
         {
-            if (freezePlayerAtRun != FreezeType.None)
-                RPGManager.Instance.isInteractionAvailable = RPGManager.Instance.isMovementAvailable = true;
+            RPGManager.Instance.SetPlayerFreeze(FreezeType.None);
         }
     }
 }

@@ -26,6 +26,10 @@ MonoBehaviour:
     m_Localized: "\xBFQuieres que te pele, hermano?"
     m_Metadata:
       m_Items: []
+  - m_Id: 245054337024
+    m_Localized: vaaaaaaya
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

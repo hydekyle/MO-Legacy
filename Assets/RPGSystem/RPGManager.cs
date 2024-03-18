@@ -18,19 +18,19 @@ namespace RPGSystem
     {
         public static RPGManager Instance;
 
-        public static AudioManager AudioManager { get => RPGManager.Instance.audioManager; }
+        public static AudioManager AudioManager { get => Instance.audioManager; }
         public AudioManager audioManager;
-
-        public static DialogManager DialogManager { get => RPGManager.Instance.dialogManager; }
-        public DialogManager dialogManager;
 
         public static GameReferences refs = new();
         public GameData gameData = new();
 
-        public bool isInteractionAvailable = true;
-        public bool isMovementAvailable = true;
+        bool isInteractionAvailable = true;
+        bool isMovementAvailable = true;
 
         public FogData fogData;
+
+        public bool IsInteractionAvailable() => isInteractionAvailable && DialogManager.Instance.state == State.Deactivate;
+        public bool IsMovementAvailable() => isInteractionAvailable && DialogManager.Instance.state == State.Deactivate;
 
         void Awake()
         {
@@ -47,8 +47,9 @@ namespace RPGSystem
 
         void Update()
         {
+            print(DialogManager.Instance.state);
             // Remove Dialog if opened
-            if (Input.GetButtonDown("Interact") && dialogManager.Printer.activeSelf) dialogManager.Click_Window();
+            if (Input.GetButtonDown("Interact") && DialogManager.Instance.Printer.activeSelf) DialogManager.Instance.Click_Window();
 
             // Save & Load
             if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
@@ -67,6 +68,17 @@ namespace RPGSystem
                 GameObject.Find("[SPAWN]").transform.GetChild(gameData.savedMapSpawnIndex).position
                 : gameData.savedPosition;
             CameraController.SetPosition(refs.player.transform.position);
+        }
+
+        public void SetPlayerFreeze(FreezeType freezeType)
+        {
+            switch (freezeType)
+            {
+                case FreezeType.FreezeAll: isInteractionAvailable = isMovementAvailable = false; break;
+                case FreezeType.FreezeInteraction: isInteractionAvailable = false; isMovementAvailable = true; break;
+                case FreezeType.FreezeMovement: isInteractionAvailable = true; isMovementAvailable = false; break;
+                case FreezeType.None: isInteractionAvailable = isMovementAvailable = true; break;
+            }
         }
     }
 

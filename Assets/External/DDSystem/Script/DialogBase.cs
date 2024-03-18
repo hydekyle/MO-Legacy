@@ -33,6 +33,7 @@ using System.Linq;
 namespace Doublsb.Dialog
 {
     #region Enum
+    [Serializable]
     public enum State
     {
         Active,

@@ -27,4 +27,10 @@ public class CameraController : MonoBehaviour
         var camPos = new Vector3(targetPos.x, targetPos.y, -10);
         Instance.transform.position = camPos;
     }
+
+    public void SetTarget(Transform target, float? cameraVelocity = null)
+    {
+        if (cameraVelocity.HasValue) velocity = cameraVelocity.Value;
+        this.target = target;
+    }
 }

@@ -17,17 +17,17 @@ public class Player : Entity
             if (Input.GetKeyDown(KeyCode.LeftControl)) boxCollider2D.enabled = false;
             if (Input.GetKeyUp(KeyCode.LeftControl)) boxCollider2D.enabled = true;
         }
-        if (Input.GetButtonDown("Interact") && RPGManager.Instance.isInteractionAvailable) CastInteraction(interactionLayerMask);
+        if (Input.GetButtonDown("Interact") && RPGManager.Instance.IsInteractionAvailable()) CastInteraction(interactionLayerMask);
     }
 
     void FixedUpdate()
     {
-        if (RPGManager.Instance.isMovementAvailable) MovementControl();
+        if (RPGManager.Instance.IsMovementAvailable()) MovementControl();
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent<RPGEvent>(out RPGEvent _event))
+        if (other.TryGetComponent(out RPGEvent _event))
             _event.TouchPlayer();
     }
 
