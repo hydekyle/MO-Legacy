@@ -47,7 +47,6 @@ namespace RPGSystem
 
         void Update()
         {
-            print(DialogManager.Instance.state);
             // Remove Dialog if opened
             if (Input.GetButtonDown("Interact") && DialogManager.Instance.Printer.activeSelf) DialogManager.Instance.Click_Window();
 
