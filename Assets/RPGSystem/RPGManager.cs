@@ -13,13 +13,10 @@ namespace RPGSystem
         public Image flashScreen;
     }
 
-    [Serializable]
+    [RequireComponent(typeof(AudioManager))]
     public class RPGManager : MonoBehaviour
     {
         public static RPGManager Instance;
-
-        public static AudioManager AudioManager { get => Instance.audioManager; }
-        public AudioManager audioManager;
 
         public static GameReferences refs = new();
         public static GameState gameState = new();

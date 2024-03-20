@@ -64,7 +64,7 @@ namespace RPGSystem
             {
                 if (page.trigger == TriggerType.Autorun && page.actionList.Count > 0) page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
                 activePageIndex = pageIndex;
-                if (page.playSFXOnEnabled) RPGManager.AudioManager.PlaySound(page.playSFXOnEnabled, page.soundOptions, gameObject);
+                if (page.playSFXOnEnabled) AudioManager.Instance.PlaySound(page.playSFXOnEnabled, page.soundOptions, gameObject);
             }
         }
 
@@ -74,7 +74,7 @@ namespace RPGSystem
             {
                 if (pages[x].sprite != null)
                 {
-                    if (TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+                    if (TryGetComponent(out SpriteRenderer spriteRenderer))
                     {
                         spriteRenderer.sprite = pages[x].sprite;
                         spriteRenderer.sortingOrder = 3;
