@@ -9,7 +9,7 @@ using UnityObservables;
 namespace RPGSystem
 {
     [Serializable]
-    public class GameData
+    public class GameState
     {
         public SwitchDictionary switches = new();
         public VariableDictionary variables = new();
@@ -38,7 +38,7 @@ namespace RPGSystem
             }
         }
 
-        public void SaveGameDataSlot(int slotIndex)
+        public void SaveGameStateSlot(int slotIndex)
         {
             savedMapSpawnIndex = -1;
             savedPosition = RPGManager.refs.player.transform.position;
@@ -54,7 +54,7 @@ namespace RPGSystem
             Debug.Log(Application.persistentDataPath);
         }
 
-        public async UniTaskVoid LoadGameDataSlot(int slotIndex)
+        public async UniTaskVoid LoadGameStateSlot(int slotIndex)
         {
             var fileName = "/savegame" + slotIndex;
             var savePath = string.Concat(Application.persistentDataPath, fileName);

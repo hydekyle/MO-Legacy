@@ -6,8 +6,8 @@ namespace RPGSystem
 {
     public static class RPGFileManager
     {
-        static string switchesPath = Application.dataPath + "/RPGSystem/Editor/switches.txt";
-        static string variablesPath = Application.dataPath + "/RPGSystem/Editor/variables.txt";
+        static readonly string switchesPath = Application.dataPath + "/RPGSystem/Assets/switches.txt";
+        static readonly string variablesPath = Application.dataPath + "/RPGSystem/Assets/variables.txt";
 
         public static IEnumerable<string> UIReadSwitchesFromTXT()
         {

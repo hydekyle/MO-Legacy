@@ -5,16 +5,16 @@ using UnityEngine.Audio;
 
 namespace RPGSystem
 {
-    [Serializable]
-    public class AudioManager
+    public class AudioManager : MonoBehaviour
     {
+        public static AudioManager Instance;
         public AudioMixerGroup mixerSFX, mixerMusic;
-        AudioSource audioMusic;
-        Dictionary<int, AudioSource> audioSources = new Dictionary<int, AudioSource>();
+        Dictionary<int, AudioSource> audioSources = new();
 
-        public void StopMusic()
+        void Awake()
         {
-            audioMusic.Stop();
+            if (Instance != null) Destroy(this.gameObject);
+            else Instance = this;
         }
 
         public void PlaySound(AudioClip soundClip, SoundOptions soundOptions, GameObject emitter = null)

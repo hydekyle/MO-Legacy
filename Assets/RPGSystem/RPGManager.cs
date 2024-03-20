@@ -22,7 +22,7 @@ namespace RPGSystem
         public AudioManager audioManager;
 
         public static GameReferences refs = new();
-        public GameData gameData = new();
+        public static GameState gameState = new();
 
         bool isInteractionAvailable = true;
         bool isMovementAvailable = true;
@@ -30,7 +30,7 @@ namespace RPGSystem
         public FogData fogData;
 
         public bool IsInteractionAvailable() => isInteractionAvailable && DialogManager.Instance.state == State.Deactivate;
-        public bool IsMovementAvailable() => isInteractionAvailable && DialogManager.Instance.state == State.Deactivate;
+        public bool IsMovementAvailable() => isMovementAvailable && DialogManager.Instance.state == State.Deactivate;
 
         void Awake()
         {
@@ -51,8 +51,8 @@ namespace RPGSystem
             if (Input.GetButtonDown("Interact") && DialogManager.Instance.Printer.activeSelf) DialogManager.Instance.Click_Window();
 
             // Save & Load
-            if (Input.GetKeyDown(KeyCode.F6)) gameData.SaveGameDataSlot(0);
-            if (Input.GetKeyDown(KeyCode.F9)) gameData.LoadGameDataSlot(0).Forget();
+            if (Input.GetKeyDown(KeyCode.F6)) gameState.SaveGameStateSlot(0);
+            if (Input.GetKeyDown(KeyCode.F9)) gameState.LoadGameStateSlot(0).Forget();
         }
 
         void OnActiveSceneChanged(Scene arg0, Scene arg1)
@@ -62,10 +62,10 @@ namespace RPGSystem
 
         public void SpawnPlayer()
         {
-            refs.player.LookAtDirection(gameData.savedFaceDir);
-            refs.player.transform.position = gameData.savedMapSpawnIndex >= 0 ?
-                GameObject.Find("[SPAWN]").transform.GetChild(gameData.savedMapSpawnIndex).position
-                : gameData.savedPosition;
+            refs.player.LookAtDirection(gameState.savedFaceDir);
+            refs.player.transform.position = gameState.savedMapSpawnIndex >= 0 ?
+                GameObject.Find("[SPAWN]").transform.GetChild(gameState.savedMapSpawnIndex).position
+                : gameState.savedPosition;
             CameraController.SetPosition(refs.player.transform.position);
         }
 

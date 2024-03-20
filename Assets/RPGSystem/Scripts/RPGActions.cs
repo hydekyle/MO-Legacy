@@ -47,21 +47,15 @@ namespace RPGSystem
         public Transform target;
         public bool changeCameraSpeed;
         [ShowIf("@changeCameraSpeed")]
-        public float cameraSpeed = 1f;
+        public CameraVelocity cameraVelocity;
         public ChangePlayerFreeze changePlayerMobility;
 
         public async UniTask Resolve()
         {
+            if (changeCameraSpeed) CameraController.Instance.SetVelocity(cameraVelocity);
+            var myTarget = cameraTarget == CameraTarget.Player ? RPGManager.refs.player.transform : target;
+            CameraController.Instance.SetTarget(myTarget);
             changePlayerMobility.Resolve().Forget();
-
-            if (cameraTarget == CameraTarget.Player)
-            {
-                CameraController.Instance.SetTarget(RPGManager.refs.player.transform, changeCameraSpeed ? cameraSpeed : null);
-            }
-            else if (cameraTarget == CameraTarget.Transform)
-            {
-                CameraController.Instance.SetTarget(target, changeCameraSpeed ? cameraSpeed : null);
-            }
         }
     }
 
@@ -108,7 +102,7 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            RPGManager.Instance.gameData.ResolveSetVariables(setVariables);
+            RPGManager.gameState.ResolveSetVariables(setVariables);
         }
     }
 
@@ -154,7 +148,7 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            DialogManager.Instance.Show(new Doublsb.Dialog.DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
+            DialogManager.Instance.Show(new DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
             {
                 //RPGManager.DialogManager.cancellationTokenSource.Cancel();
             }));
@@ -209,7 +203,7 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            RPGManager.AudioManager.PlaySound(clip, soundOptions, emitter);
+            AudioManager.Instance.PlaySound(clip, soundOptions, emitter);
             await UniTask.Delay(TimeSpan.FromSeconds(clip.length), ignoreTimeScale: true);
         }
     }
@@ -266,7 +260,7 @@ namespace RPGSystem
         public int amount;
         public async UniTask Resolve()
         {
-            RPGManager.Instance.gameData.AddItem(item, amount);
+            RPGManager.gameState.AddItem(item, amount);
         }
     }
 
@@ -359,7 +353,7 @@ namespace RPGSystem
 
         public async UniTask Resolve()
         {
-            var gameData = RPGManager.Instance.gameData;
+            var gameData = RPGManager.gameState;
             var playerEntity = RPGManager.refs.player;
             gameData.savedMapSpawnIndex = mapSpawnIndex;
             gameData.savedFaceDir = changeFaceDirection ? newFaceDirection : playerEntity.faceDirection;

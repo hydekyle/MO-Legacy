@@ -15,6 +15,7 @@ namespace RPGSystem
     public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
     public enum OperationType { Replace, Add }
     public enum CameraTarget { Player, Transform }
+    public enum CameraVelocity { Stopped, VerySlow, Slow, Normal, High, Instant }
 
     // RPGSystem Interfaces
     public interface IInteractable
