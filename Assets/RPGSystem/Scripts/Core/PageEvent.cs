@@ -18,8 +18,14 @@ namespace RPGSystem
         [ListDrawerSettings(ShowFoldout = true)]
         [SerializeReference]
         public List<IAction> actionList = new();
+
         [ShowIf("@this.actionList.Count > 0")]
         public TriggerType trigger = TriggerType.Autorun;
+        [ShowIf("@this.trigger != TriggerType.Autorun && this.actionList.Count > 0")]
+        public LayerMask triggerLayerMask;
+        [ShowIf("@this.trigger != TriggerType.Autorun && this.actionList.Count > 0")]
+        public FaceDirection requiredFaceDirection = FaceDirection.Any;
+
         [ShowIf("@this.actionList.Count > 0")]
         public bool isLoop;
         [ShowIf("@this.actionList.Count > 0")]
@@ -27,7 +33,7 @@ namespace RPGSystem
         [Space(25)]
         public AudioClip playSFXOnEnabled;
         [ShowIf("@playSFXOnEnabled != null")]
-        public SoundOptions soundOptions = new SoundOptions()
+        public SoundOptions soundOptions = new()
         {
             soundLoop = false,
             volume = 1f,
@@ -44,7 +50,6 @@ namespace RPGSystem
             if (isResolvingActionList) return;
             isResolvingActionList = true;
             FreezeWhile();
-
             do
             {
                 for (var x = 0; x < actionList.Count; x++)

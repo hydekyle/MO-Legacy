@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Localization.SmartFormat.Utilities;
 
 namespace RPGSystem
 {
@@ -16,13 +17,28 @@ namespace RPGSystem
         List<int> _subscribedVariableList = new();
         SpriteRenderer spriteRenderer;
 
-        /// <summary> 
-        /// Fire RPG Actions from active page of this RPG Event
-        /// Call this function for Player Interaction !
-        /// </summary>
-        public void TriggerEvent()
+        void OnValidate()
         {
-            if (ActivePage.conditions.IsAllConditionOK()) ActivePage.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
+            foreach (var page in pages)
+            {
+                page.RPGEventParent = this;
+                if (page.conditions != null) page.conditions.Refresh();
+                if (page.actionList != null)
+                    foreach (var action in page.actionList)
+                    {
+                        var actionType = action.GetType();
+                        if (actionType == typeof(AddVariables))
+                        {
+                            AddVariables sv = (AddVariables)action;
+                            sv.setVariables?.Refresh();
+                        }
+                        else if (actionType == typeof(CheckConditions))
+                        {
+                            CheckConditions sv = (CheckConditions)action;
+                            sv.conditionList?.Refresh();
+                        }
+                    }
+            }
         }
 
         void Awake()
@@ -36,7 +52,44 @@ namespace RPGSystem
             CheckAllPageCondition();
         }
 
-        // Called every time a switch or variable required by any condition from this RPG Event
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (ActivePage.requiredFaceDirection != FaceDirection.Any) return;
+            if (ActivePage.trigger == TriggerType.Touch && (ActivePage.triggerLayerMask.value & (1 << other.gameObject.layer)) != 0)
+            {
+                TriggerEvent();
+            }
+        }
+
+        // We need to check while stay on event if faceDirection is met
+        void OnTriggerStay2D(Collider2D other)
+        {
+            if (ActivePage.requiredFaceDirection == FaceDirection.Any) return;
+            if (other.TryGetComponent(out Entity entity))
+            {
+                if (entity.faceDirection == ActivePage.requiredFaceDirection)
+                {
+                    // Verify that entity layer is in Event LayerMask
+                    if (ActivePage.trigger == TriggerType.Touch && (ActivePage.triggerLayerMask.value & (1 << other.gameObject.layer)) != 0)
+                    {
+
+                        entity.LookAtDirection(ActivePage.requiredFaceDirection); // This avoid anim delay visual incongruence
+                        TriggerEvent();
+                    }
+                }
+            }
+        }
+
+        /// <summary> 
+        /// Fire RPG Actions from active page of this RPG Event
+        /// Call this function for Player Interaction !
+        /// </summary>
+        public void TriggerEvent()
+        {
+            if (ActivePage.conditions.IsAllConditionOK()) ActivePage.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        // Called every time a switch or variable required by any condition from this RPG Event is changed
         void CheckAllPageCondition()
         {
             for (var x = pages.Count - 1; x >= 0; x--)
@@ -99,26 +152,9 @@ namespace RPGSystem
             DestroyImmediate(GetComponent(typeof(SpriteRenderer)));
         }
 
-        void UIShowBoxCollider2D()
-        {
-            if (pages.Exists(page => page.trigger == TriggerType.PlayerInteraction || page.trigger == TriggerType.PlayerTouch))
-            {
-                if (!TryGetComponent<BoxCollider2D>(out BoxCollider2D boxCollider))
-                {
-                    var newCollider = gameObject.AddComponent<BoxCollider2D>();
-                    newCollider.isTrigger = true;
-                }
-            }
-            else
-            {
-                if (TryGetComponent<BoxCollider2D>(out BoxCollider2D boxCollider))
-                    if (boxCollider.isTrigger) DestroyImmediate(boxCollider);
-            }
-        }
-
         void UIShowBoxCollider()
         {
-            if (pages.Exists(page => page.trigger == TriggerType.PlayerInteraction || page.trigger == TriggerType.PlayerTouch))
+            if (pages.Exists(page => page.trigger == TriggerType.PlayerInteraction || page.trigger == TriggerType.Touch))
             {
                 if (!TryGetComponent<Collider>(out Collider collider))
                 {
@@ -167,30 +203,6 @@ namespace RPGSystem
             });
         }
 
-        void OnValidate()
-        {
-            foreach (var page in pages)
-            {
-                page.RPGEventParent = this;
-                if (page.conditions != null) page.conditions.Refresh();
-                if (page.actionList != null)
-                    foreach (var action in page.actionList)
-                    {
-                        var actionType = action.GetType();
-                        if (actionType == typeof(AddVariables))
-                        {
-                            AddVariables sv = (AddVariables)action;
-                            sv.setVariables?.Refresh();
-                        }
-                        else if (actionType == typeof(CheckConditions))
-                        {
-                            CheckConditions sv = (CheckConditions)action;
-                            sv.conditionList?.Refresh();
-                        }
-                    }
-            }
-        }
-
         public void InteractionPlayer()
         {
             if (ActivePage.trigger == TriggerType.PlayerInteraction) TriggerEvent();
@@ -198,7 +210,7 @@ namespace RPGSystem
 
         public void TouchPlayer()
         {
-            if (ActivePage.trigger == TriggerType.PlayerTouch) TriggerEvent();
+            if (ActivePage.trigger == TriggerType.Touch) TriggerEvent();
         }
 
 

@@ -11,11 +11,14 @@ scopes = {
 	"last_search.7BEC51F9" = "sprite"
 	"OpenInspectorPreview.7BEC51F9" = "0"
 	"currentGroup.7BEC51F9" = "asset"
-	"picker_window_position_offset.45F317DD" = "193;128;320;550"
+	"picker_window_position_offset.45F317DD" = "102;128;320;550"
 	"picker_search_text.45F317DD" = ""
 	"last_search.45F317DD" = ""
 	"OpenInspectorPreview.45F317DD" = "0"
 	"currentGroup.45F317DD" = "all"
+	"last_search.3BE404DF" = ""
+	"OpenInspectorPreview.3BE404DF" = "0"
+	"currentGroup.3BE404DF" = "all"
 }
 providers = {
 	adb = {

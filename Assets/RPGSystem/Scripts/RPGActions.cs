@@ -23,7 +23,7 @@ namespace RPGSystem
 
     public abstract class WaitableAction
     {
-        public bool waitEnd = false;
+        public bool waitEnd = true;
     }
 
     // ADD YOUR GAME ACTIONS HERE
@@ -144,16 +144,27 @@ namespace RPGSystem
     [Serializable]
     public class ShowText : WaitableAction, IAction
     {
+        public bool hideFrame;
+        public TextAnchor textAlignment = TextAnchor.UpperLeft;
         public LocalizedString localizedText;
 
         public async UniTask Resolve()
         {
-            DialogManager.Instance.Show(new DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
+            var dialogManager = DialogManager.Instance;
+
+            var prevPrinterImageVisibility = dialogManager.PrinterImage.enabled;
+            dialogManager.PrinterImageVisibility(!hideFrame);
+
+            var prevTextAlign = dialogManager.Printer_Text.alignment;
+            dialogManager.TextAlign(textAlignment);
+
+            dialogManager.Show(new DialogData(await localizedText.GetLocalizedStringAsync(), callback: () =>
             {
-                //RPGManager.DialogManager.cancellationTokenSource.Cancel();
+                dialogManager.PrinterImageVisibility(prevPrinterImageVisibility);
+                dialogManager.TextAlign(prevTextAlign);
             }));
-            if (waitEnd) await UniTask.WaitUntil(() => DialogManager.Instance.state == State.Deactivate);
-            //RPGManager.DialogManager.cancellationTokenSource = new();
+
+            if (waitEnd) await UniTask.WaitUntil(() => dialogManager.state == State.Deactivate);
         }
 
     }

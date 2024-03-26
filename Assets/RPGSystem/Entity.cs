@@ -6,7 +6,7 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     public Sprite[] spriteList;
-    public float movementSpeed;
+    public float movementSpeed = 5f;
     public float animationFrameTime = 0.1f;
 
     [Header("Entity Dependencies")]
@@ -17,7 +17,7 @@ public class Entity : MonoBehaviour
     [HideInInspector] public FaceDirection faceDirection;
     float _lastTimeAnimationChanged = -1;
     int _indexStepAnim = 0;
-    List<int> stepAnimOrder = new List<int>() { 0, 1, 2, 1 };
+    readonly List<int> stepAnimOrder = new() { 0, 1, 2, 1 };
     // 0 (down) walking
     // 1 (down) idle
     // 2 (down) walking
@@ -30,6 +30,18 @@ public class Entity : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    public void Run()
+    {
+        movementSpeed *= 2;
+        animationFrameTime /= 2;
+    }
+
+    public void RunStop()
+    {
+        movementSpeed /= 2;
+        animationFrameTime *= 2;
     }
 
     public void SetSortingLayer(string layerName)
@@ -86,7 +98,7 @@ public class Entity : MonoBehaviour
     public void CastUsableItem(ScriptableItem item, int layerMask)
     {
         var hit = Physics2D.CircleCast(GetCastPoint(), 1f, Vector2.one, 1f, layerMask);
-        if (hit.transform.TryGetComponent<RPGUsableItemZone>(out RPGUsableItemZone usableItemZone)) usableItemZone.UsedItem(item);
+        if (hit.transform.TryGetComponent(out RPGUsableItemZone usableItemZone)) usableItemZone.UsedItem(item);
     }
 
     public void Move(Vector3 moveDirection)

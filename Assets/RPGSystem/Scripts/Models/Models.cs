@@ -8,10 +8,10 @@ namespace RPGSystem
 {
     // RPGSystem Enums
     public enum CollisionType { player, other, any }
-    public enum FaceDirection { North, West, East, South }
+    public enum FaceDirection { North, West, East, South, Any }
     public enum Conditionality { Equals, GreaterThan, LessThan }
     public enum VariableSetType { Set, Add, Sub, Multiply, Random }
-    public enum TriggerType { PlayerInteraction, PlayerTouch, Autorun }
+    public enum TriggerType { PlayerInteraction, Touch, Autorun }
     public enum FreezeType { None, FreezeMovement, FreezeInteraction, FreezeAll }
     public enum OperationType { Replace, Add }
     public enum CameraTarget { Player, Transform }
@@ -42,10 +42,10 @@ namespace RPGSystem
     public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
         [SerializeField, HideInInspector]
-        private List<TKey> keyData = new List<TKey>();
+        private List<TKey> keyData = new();
 
         [SerializeField, HideInInspector]
-        private List<TValue> valueData = new List<TValue>();
+        private List<TValue> valueData = new();
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {

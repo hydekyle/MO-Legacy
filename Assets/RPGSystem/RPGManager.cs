@@ -44,9 +44,6 @@ namespace RPGSystem
 
         void Update()
         {
-            // Remove Dialog if opened
-            if (Input.GetButtonDown("Interact") && DialogManager.Instance.Printer.activeSelf) DialogManager.Instance.Click_Window();
-
             // Save & Load
             if (Input.GetKeyDown(KeyCode.F6)) gameState.SaveGameStateSlot(0);
             if (Input.GetKeyDown(KeyCode.F9)) gameState.LoadGameStateSlot(0).Forget();

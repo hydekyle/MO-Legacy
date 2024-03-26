@@ -37,7 +37,6 @@ public class CameraController : MonoBehaviour
 
     public void SetVelocity(CameraVelocity cameraVelocity)
     {
-        print("why");
         switch (cameraVelocity)
         {
             case CameraVelocity.Instant: smoothTime = 0f; break;

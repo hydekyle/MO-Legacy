@@ -18,17 +18,13 @@ public class Player : Entity
             if (Input.GetKeyUp(KeyCode.LeftControl)) boxCollider2D.enabled = true;
         }
         if (Input.GetButtonDown("Interact") && RPGManager.Instance.IsInteractionAvailable()) CastInteraction(interactionLayerMask);
+        if (Input.GetKeyDown(KeyCode.Space)) Run();
+        if (Input.GetKeyUp(KeyCode.Space)) RunStop();
     }
 
     void FixedUpdate()
     {
         if (RPGManager.Instance.IsMovementAvailable()) MovementControl();
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent(out RPGEvent _event))
-            _event.TouchPlayer();
     }
 
     void MovementControl()

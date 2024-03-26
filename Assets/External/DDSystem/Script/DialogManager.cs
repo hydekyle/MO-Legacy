@@ -29,12 +29,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Threading;
+using System.Drawing.Printing;
 
 namespace Doublsb.Dialog
 {
     public class DialogManager : MonoBehaviour
     {
-        public CancellationTokenSource cancellationTokenSource = new();
         public static DialogManager Instance;
 
         //================================================
@@ -42,6 +42,7 @@ namespace Doublsb.Dialog
         //================================================
         [Header("Game Objects")]
         public GameObject Printer;
+        public Image PrinterImage;
         public GameObject Characters;
 
         [Header("UI Objects")]
@@ -78,14 +79,28 @@ namespace Doublsb.Dialog
         void Awake()
         {
             if (Instance != null) Destroy(this.gameObject);
-            {
-                Instance = this;
-            }
+            else Instance = this;
+        }
+
+        void Update()
+        {
+            if (Input.GetButtonDown("Interact") && Instance.Printer.activeSelf) Instance.Click_Window();
         }
 
         //================================================
         //Public Method
         //================================================
+
+        public void PrinterImageVisibility(bool enabled)
+        {
+            PrinterImage.enabled = enabled;
+        }
+
+        public void TextAlign(TextAnchor textAnchor)
+        {
+            Printer_Text.alignment = textAnchor;
+        }
+
         #region Show & Hide
         public void Show(DialogData Data)
         {
