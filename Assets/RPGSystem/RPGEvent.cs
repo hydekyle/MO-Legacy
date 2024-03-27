@@ -8,7 +8,7 @@ namespace RPGSystem
 {
     public class RPGEvent : MonoBehaviour
     {
-        [OnValueChanged("OnValuePageChanged", true)]
+        [OnValueChanged("OnUIValuePageChanged", true)]
         public List<PageEvent> pages = new();
         int activePageIndex = -1;
         public PageEvent ActivePage { get => pages[activePageIndex]; }
@@ -49,7 +49,7 @@ namespace RPGSystem
         void Start()
         {
             SubscribeToRequiredValueConditions();
-            CheckAllPageCondition();
+            CheckAllPageCondition(false); // We only play sound on enabled when switches changes in the scene, not now
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -90,7 +90,7 @@ namespace RPGSystem
         }
 
         // Called every time a switch or variable required by any condition from this RPG Event is changed
-        void CheckAllPageCondition()
+        void CheckAllPageCondition(bool playSFXOnEnabled = true)
         {
             for (var x = pages.Count - 1; x >= 0; x--)
             {
@@ -100,16 +100,22 @@ namespace RPGSystem
                 else if (isAllOK)
                 {
                     gameObject.SetActive(true);
-                    ApplyPage(x);
+                    ApplyPage(x, playSFXOnEnabled);
                     return;
                 }
             }
-            // If any of all pages met the conditions we disable the GameObject
+            // If no page met the conditions we disable the GameObject (but still subscribed to changes to enable it again if any page met conditions)
             gameObject.SetActive(false);
             activePageIndex = -1;
         }
 
-        void ApplyPage(int pageIndex)
+        // Required to avoid calling anonymous function from SubscribeToRequiredValueConditions (gameobject destroyed when change scene and return to it)
+        void CheckAllPageConditionWithSound()
+        {
+            CheckAllPageCondition(true);
+        }
+
+        void ApplyPage(int pageIndex, bool playSFXOnEnabled = true)
         {
             var page = pages[pageIndex];
             if (spriteRenderer) spriteRenderer.sprite = page.sprite;
@@ -117,8 +123,49 @@ namespace RPGSystem
             {
                 if (page.trigger == TriggerType.Autorun && page.actionList.Count > 0) page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
                 activePageIndex = pageIndex;
-                if (page.playSFXOnEnabled) AudioManager.Instance.PlaySound(page.playSFXOnEnabled, page.soundOptions, gameObject);
+                if (page.playSFXOnEnabled && playSFXOnEnabled) AudioManager.Instance.PlaySound(page.playSFXOnEnabled, page.soundOptions, gameObject);
             }
+        }
+
+        void SubscribeToRequiredValueConditions()
+        {
+            foreach (var page in pages) page.conditions.SubscribeToConditionTable(_subscribedSwitchList, _subscribedVariableList, _subscribedLocalVariableList, CheckAllPageConditionWithSound);
+        }
+
+        void UnSubscribeToRequiredConditions()
+        {
+            foreach (var page in pages) page.conditions.UnsubscribeConditionTable(_subscribedSwitchList, _subscribedVariableList, _subscribedLocalVariableList, CheckAllPageConditionWithSound);
+        }
+
+        void OnDestroy()
+        {
+            UnSubscribeToRequiredConditions();
+        }
+
+        // Called when the component is added for first time
+        void Reset()
+        {
+            pages.Add(new PageEvent()
+            {
+                sprite = TryGetComponent(out SpriteRenderer s) ? s.sprite : null
+            });
+        }
+
+        public void InteractionPlayer()
+        {
+            if (ActivePage.trigger == TriggerType.PlayerInteraction) TriggerEvent();
+        }
+
+        public void TouchPlayer()
+        {
+            if (ActivePage.trigger == TriggerType.Touch) TriggerEvent();
+        }
+
+        // Called only in editor when changing page values to update GameObject components accordingly
+        void OnUIValuePageChanged()
+        {
+            UIShowSprite();
+            UIShowBoxCollider();
         }
 
         void UIShowSprite()
@@ -149,16 +196,16 @@ namespace RPGSystem
                 }
             }
             // If pages has no sprite
-            DestroyImmediate(GetComponent(typeof(SpriteRenderer)));
+            DestroyImmediate(GetComponent<SpriteRenderer>());
         }
 
         void UIShowBoxCollider()
         {
             if (pages.Exists(page => page.trigger == TriggerType.PlayerInteraction || page.trigger == TriggerType.Touch))
             {
-                if (!TryGetComponent<Collider>(out Collider collider))
+                if (!TryGetComponent(out Collider collider))
                 {
-                    if (TryGetComponent<MeshRenderer>(out var component))
+                    if (TryGetComponent(out MeshRenderer component))
                     {
                         var newCollider = gameObject.AddComponent<MeshCollider>();
                         newCollider.convex = true;
@@ -168,51 +215,10 @@ namespace RPGSystem
             }
             else
             {
-                if (TryGetComponent<MeshCollider>(out MeshCollider boxCollider))
+                if (TryGetComponent(out MeshCollider boxCollider))
                     if (boxCollider.isTrigger) DestroyImmediate(boxCollider);
             }
         }
-
-        void OnValuePageChanged()
-        {
-            UIShowSprite();
-            UIShowBoxCollider();
-        }
-
-        void SubscribeToRequiredValueConditions()
-        {
-            foreach (var page in pages) page.conditions.SubscribeToConditionTable(ref _subscribedSwitchList, ref _subscribedVariableList, ref _subscribedLocalVariableList, CheckAllPageCondition);
-        }
-
-        void UnSubscribeToRequiredConditions()
-        {
-            foreach (var page in pages) page.conditions.UnsubscribeConditionTable(ref _subscribedSwitchList, ref _subscribedVariableList, ref _subscribedLocalVariableList, CheckAllPageCondition);
-        }
-
-        void OnDestroy()
-        {
-            UnSubscribeToRequiredConditions();
-        }
-
-        // Called when the component is added for first time
-        void Reset()
-        {
-            pages.Add(new PageEvent()
-            {
-                sprite = TryGetComponent<SpriteRenderer>(out SpriteRenderer s) ? s.sprite : null
-            });
-        }
-
-        public void InteractionPlayer()
-        {
-            if (ActivePage.trigger == TriggerType.PlayerInteraction) TriggerEvent();
-        }
-
-        public void TouchPlayer()
-        {
-            if (ActivePage.trigger == TriggerType.Touch) TriggerEvent();
-        }
-
 
     }
 

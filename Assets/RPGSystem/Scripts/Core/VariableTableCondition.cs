@@ -59,7 +59,7 @@ namespace RPGSystem
             }
         }
 
-        public void SubscribeToConditionTable(ref List<int> _subscribedSwitchList, ref List<int> _subscribedVariableList, ref List<int> _subscribedLocalVariableList, Action action)
+        public void SubscribeToConditionTable(List<int> _subscribedSwitchList, List<int> _subscribedVariableList, List<int> _subscribedLocalVariableList, Action action)
         {
             foreach (var s in switchTable)
             {
@@ -86,7 +86,7 @@ namespace RPGSystem
             }
         }
 
-        public void UnsubscribeConditionTable(ref List<int> _subscribedSwitchList, ref List<int> _subscribedVariableList, ref List<int> _subscribedLocalVariableList, Action action)
+        public void UnsubscribeConditionTable(List<int> _subscribedSwitchList, List<int> _subscribedVariableList, List<int> _subscribedLocalVariableList, Action action)
         {
             foreach (var id in _subscribedLocalVariableList) RPGManager.gameState.UnsubscribeToLocalVariableChangedEvent(id, action);
             foreach (var id in _subscribedSwitchList) RPGManager.gameState.UnsubscribeToSwitchChangedEvent(id, action);

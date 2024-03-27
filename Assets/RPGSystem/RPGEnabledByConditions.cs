@@ -43,12 +43,12 @@ public class RPGEnabledByConditions : MonoBehaviour
 
     void SubscribeToRequiredValueConditions()
     {
-        conditionTable.SubscribeToConditionTable(ref _subscribedSwitchID, ref _subscribedVariableID, ref _subscribedLocalVariableList, SetActiveIfAllConditionsOK);
+        conditionTable.SubscribeToConditionTable(_subscribedSwitchID, _subscribedVariableID, _subscribedLocalVariableList, SetActiveIfAllConditionsOK);
     }
 
     void UnSubscribeToRequiredConditions()
     {
-        conditionTable.UnsubscribeConditionTable(ref _subscribedSwitchID, ref _subscribedVariableID, ref _subscribedLocalVariableList, SetActiveIfAllConditionsOK);
+        conditionTable.UnsubscribeConditionTable(_subscribedSwitchID, _subscribedVariableID, _subscribedLocalVariableList, SetActiveIfAllConditionsOK);
     }
 
 }
