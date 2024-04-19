@@ -40,10 +40,10 @@ public class Helpers
         return false;
     }
 
-    [MenuItem("RPG/Sprite Order Fix All")]
+    [MenuItem("RPG/Sprite Order Fix All Children")]
     public static void UISpriteOrderFixMapAll()
     {
-        var target = Selection.activeTransform ? Selection.activeTransform : GameObject.Find("Decoration").transform;
+        var target = Selection.activeTransform;
         foreach (Transform t in target)
         {
             var sortingOrder = Entity.GetSpriteOrderByPositionY(t.position);

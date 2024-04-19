@@ -75,19 +75,21 @@ public class Entity : MonoBehaviour
             if (hit)
             {
                 // Trigger any RPGEvent from the selected layerMask
-                if (hit.transform.TryGetComponent<RPGEvent>(out RPGEvent interactedEvent))
+                if (hit.transform.TryGetComponent(out RPGEvent interactedEvent))
                 {
                     var page = interactedEvent.ActivePage;
                     if (page.trigger == TriggerType.PlayerInteraction)
                     {
                         page.ResolveActionList(this.GetCancellationTokenOnDestroy()).Forget();
+                        return;
                     }
                 }
 
                 // Trigger any Interactable from the selected layerMask
-                if (hit.transform.TryGetComponent<IInteractable>(out IInteractable _interactable))
+                if (hit.transform.TryGetComponent(out IInteractable _interactable))
                 {
                     _interactable.InteractionFrom(this);
+                    return;
                 }
             }
             _resolvedHits.Add(hitID);

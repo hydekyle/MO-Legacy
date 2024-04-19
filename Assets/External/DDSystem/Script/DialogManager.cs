@@ -30,6 +30,7 @@ using UnityEngine.UI;
 using System;
 using System.Threading;
 using System.Drawing.Printing;
+using Cysharp.Threading.Tasks;
 
 namespace Doublsb.Dialog
 {
@@ -142,13 +143,19 @@ namespace Doublsb.Dialog
             Characters.SetActive(false);
             Selector.SetActive(false);
 
-            state = State.Deactivate;
+            DeactivateDelayed().Forget();
 
             if (_current_Data.Callback != null)
             {
                 _current_Data.Callback.Invoke();
                 _current_Data.Callback = null;
             }
+        }
+
+        async UniTaskVoid DeactivateDelayed()
+        {
+            await UniTask.Yield();
+            state = State.Deactivate;
         }
         #endregion
 
