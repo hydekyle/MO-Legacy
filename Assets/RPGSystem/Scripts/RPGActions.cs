@@ -1,5 +1,6 @@
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
+using System.Data.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.SceneManagement;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 
 namespace RPGSystem
 {
@@ -324,6 +326,7 @@ namespace RPGSystem
         public float transitionTime;
         [Tooltip("Set a new material. Leave it null if you want to keep the existing material")]
         public Material newMaterial;
+
 #if UNITY_EDITOR
         [Button()]
         public void TargetMyself()
@@ -348,6 +351,26 @@ namespace RPGSystem
                 }
             }
             material.color = targetColor;
+        }
+    }
+
+    [Serializable]
+    public class ChangeSprite : IAction
+    {
+        public SpriteRenderer targetSpriteRenderer;
+        public Sprite newSprite;
+
+#if UNITY_EDITOR
+        [Button()]
+        public void TargetMyself()
+        {
+            targetSpriteRenderer = Selection.activeGameObject.GetComponent<SpriteRenderer>();
+        }
+#endif
+
+        public async UniTask Resolve()
+        {
+            targetSpriteRenderer.sprite = newSprite;
         }
     }
 

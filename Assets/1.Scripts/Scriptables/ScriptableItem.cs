@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Localization;
 
-[CreateAssetMenu(menuName = "Scriptables/New Item")]
+[CreateAssetMenu(menuName = "Scriptables/Item")]
 public class ScriptableItem : ScriptableObject
 {
     [HorizontalGroup("Item Data", 75)]
