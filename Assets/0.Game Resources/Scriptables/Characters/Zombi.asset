@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab0c2528c04047f40bc29e7a3617aee4, type: 3}
+  m_Name: Zombi
+  m_EditorClassIdentifier: 
+  alias: 
+  spriteList:
+  - {fileID: 819619572, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 1780466272, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 1210691536, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 869097724, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 1760945859, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: -899670824, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 938425453, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 783883317, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: -1605204164, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: -929627319, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: 1368161559, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  - {fileID: -246114889, guid: 7dbe2fbf6a4eb7f4db12bde1c417ea8d, type: 3}
+  stats:
+    strength: 0
+    dexterity: 0
+    constitution: 0
+    intelligence: 0
+    wisdom: 0
+    charisma: 0
+    luck: 0
+  skills: []

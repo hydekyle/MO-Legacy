@@ -4,7 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Stair
+  - WallRun
+  - Climb
+  - Fly
   - EntityNPC
+  - Selector
   layers:
   - Default
   - TransparentFX
@@ -21,22 +26,22 @@ TagManager:
   - 
   - 
   - 
+  - BodyPart
+  - 
+  - 
+  - 
+  - 
+  - Animal
+  - 
+  - 
+  - Enemy
   - 
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Item
   - 
   m_SortingLayers:
   - name: Outside

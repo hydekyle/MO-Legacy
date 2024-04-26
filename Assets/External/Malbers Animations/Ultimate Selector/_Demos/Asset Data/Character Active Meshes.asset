@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321effbd808f350469a1c45b3486a580, type: 3}
+  m_Name: Character Active Meshes
+  m_EditorClassIdentifier: 
+  usePlayerPref: 1
+  PlayerPrefKey: SaveSelectorData
+  Save:
+    Coins: 900
+    RestoreCoins: 1000
+    FocusedItem: 0
+    Locked: 000000010101
+    RestoreLocked: 010000010101
+    ItemsAmount: 010000000100000001000000010000000100000001000000
+    RestoreItemsAmount: 010000000100000001000000010000000100000001000000
+    UseMaterialChanger: 1
+    MaterialIndex:
+    - '4 '
+    - '0 '
+    - '1 '
+    - '2 '
+    - '3 '
+    - '5 '
+    RestoreMaterialIndex:
+    - '3 '
+    - '0 '
+    - '1 '
+    - '2 '
+    - '3 '
+    - '5 '
+    UseActiveMesh: 0
+    ActiveMeshIndex: []
+    RestoreActiveMeshIndex: []

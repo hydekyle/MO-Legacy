@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab0c2528c04047f40bc29e7a3617aee4, type: 3}
+  m_Name: Arbol
+  m_EditorClassIdentifier: 
+  alias: 
+  spriteList:
+  - {fileID: -890513531, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -1630575916, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: 2087410656, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -329340432, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -151961377, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -263615340, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: 100015082, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: 509512052, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -142623472, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -1432963306, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: -1586791816, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  - {fileID: 1561601040, guid: a9010cc0b8b7c6147abff640cb1d2d9a, type: 3}
+  stats:
+    strength: 0
+    dexterity: 0
+    constitution: 0
+    intelligence: 0
+    wisdom: 0
+    charisma: 0
+    luck: 0
+  skills: []

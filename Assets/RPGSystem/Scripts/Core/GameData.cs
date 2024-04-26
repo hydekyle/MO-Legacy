@@ -25,7 +25,7 @@ namespace RPGSystem
         [HideInInspector]
         public FaceDirection savedFaceDir;
 
-        public void AddItem(ScriptableItem item, int amount)
+        public void AddItem(Item item, int amount)
         {
             if (inventory.ContainsKey(item))
             {

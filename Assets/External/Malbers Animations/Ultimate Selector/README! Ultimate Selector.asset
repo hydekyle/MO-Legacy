@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00fcb0528820550499d051030855ca6d, type: 3}
+  m_Name: README! Ultimate Selector
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2800000, guid: 6e2bce8bc3031fe4b966ac31ed6b54da, type: 3}
+  title: Ultimate Selector
+  sections:
+  - heading: What is Ultimate Selector
+    text: Ultimate Selector is a Saving time and Great/Fun way to setup and display
+      characters, items or props
+    linkText: 
+    url: 
+    reference: {fileID: 0}
+  - heading: Find out what every script does...
+    text: 
+    linkText: Documentation
+    url: https://docs.google.com/document/d/1FC5VnaUmF9Q6xfViL5pNGx9gg7poFxuuttYZ6A9FKp8/edit
+    reference: {fileID: 0}
+  - heading: Feedback and Support
+    text: 'Let us know what you think or ask any questions you might have on our
+      FORUM. '
+    linkText: Forum Thread
+    url: https://forum.unity3d.com/threads/488791/
+    reference: {fileID: 0}
+  - heading: 
+    text: Chat with me on the official Facebook page
+    linkText: Malbers Animations
+    url: https://www.facebook.com/MalberSAnimations
+    reference: {fileID: 0}
+  - heading: 
+    text: 'leave me a message '
+    linkText: malbers.shark87@gmail.com
+    url: mailto:malbers.shark87@gmail.com
+    reference: {fileID: 0}
+  - heading: Social
+    text: Stay Tunned for great updates
+    linkText: Facebook
+    url: https://www.facebook.com/MalberSAnimations
+    reference: {fileID: 0}
+  - heading: 
+    text: 
+    linkText: Twitter
+    url: https://twitter.com/MalberShark
+    reference: {fileID: 0}
+  packages: []
