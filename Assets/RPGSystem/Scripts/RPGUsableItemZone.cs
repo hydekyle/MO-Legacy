@@ -9,7 +9,7 @@ public class RPGUsableItemZone : MonoBehaviour
     // [SerializeReference]
     // public List<RPGAction> actions;
 
-    public void UsedItem(ScriptableItem ustedItem)
+    public void UsedItem(Item ustedItem)
     {
         if (requiredItemName == ustedItem.name) onUsed.Invoke();
     }

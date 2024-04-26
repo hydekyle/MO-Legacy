@@ -268,7 +268,7 @@ namespace RPGSystem
     [Serializable]
     public class AddItem : IAction
     {
-        public ScriptableItem item;
+        public Item item;
         [ShowIf("@item && item.isStackable")]
         public int amount;
         public async UniTask Resolve()

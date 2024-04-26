@@ -36,7 +36,7 @@ namespace RPGSystem
     [Serializable] public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
     [Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
     [Serializable] public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
-    [Serializable] public class Inventory : UnitySerializedDictionary<ScriptableItem, int> { }
+    [Serializable] public class Inventory : UnitySerializedDictionary<Item, int> { }
 
     // This class is required for Odin to serialize dictionaries
     public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver

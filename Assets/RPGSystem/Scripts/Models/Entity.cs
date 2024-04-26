@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    public Sprite[] spriteList;
+    public Character character;
     public float movementSpeed = 5f;
     public float animationFrameTime = 0.1f;
 
@@ -97,7 +97,7 @@ public class Entity : MonoBehaviour
         //LookAtDirection(GetFaceDirectionByMoveDirection(castPoint - transform.position));
     }
 
-    public void CastUsableItem(ScriptableItem item, int layerMask)
+    public void CastUsableItem(Item item, int layerMask)
     {
         var hit = Physics2D.CircleCast(GetCastPoint(), 1f, Vector2.one, 1f, layerMask);
         if (hit.transform.TryGetComponent(out RPGUsableItemZone usableItemZone)) usableItemZone.UsedItem(item);
@@ -127,16 +127,16 @@ public class Entity : MonoBehaviour
         switch (faceDirection)
         {
             case FaceDirection.South:
-                spriteRenderer.sprite = spriteList[0 + stepAnimOrder[_indexStepAnim]];
+                spriteRenderer.sprite = character.spriteList[0 + stepAnimOrder[_indexStepAnim]];
                 break;
             case FaceDirection.West:
-                spriteRenderer.sprite = spriteList[3 + stepAnimOrder[_indexStepAnim]];
+                spriteRenderer.sprite = character.spriteList[3 + stepAnimOrder[_indexStepAnim]];
                 break;
             case FaceDirection.East:
-                spriteRenderer.sprite = spriteList[6 + stepAnimOrder[_indexStepAnim]];
+                spriteRenderer.sprite = character.spriteList[6 + stepAnimOrder[_indexStepAnim]];
                 break;
             case FaceDirection.North:
-                spriteRenderer.sprite = spriteList[9 + stepAnimOrder[_indexStepAnim]];
+                spriteRenderer.sprite = character.spriteList[9 + stepAnimOrder[_indexStepAnim]];
                 break;
         }
         // Animation Steps
@@ -148,30 +148,30 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public async UniTaskVoid StopMovement()
-    {
-        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time, PlayerLoopTiming.LastUpdate, this.GetCancellationTokenOnDestroy());
-        try { LookAtDirection(faceDirection); } catch { }
-    }
-
     public void LookAtDirection(FaceDirection fDir)
     {
         switch (fDir)
         {
             case FaceDirection.South:
-                spriteRenderer.sprite = spriteList[1];
+                spriteRenderer.sprite = character.spriteList[1];
                 break;
             case FaceDirection.West:
-                spriteRenderer.sprite = spriteList[4];
+                spriteRenderer.sprite = character.spriteList[4];
                 break;
             case FaceDirection.East:
-                spriteRenderer.sprite = spriteList[7];
+                spriteRenderer.sprite = character.spriteList[7];
                 break;
             case FaceDirection.North:
-                spriteRenderer.sprite = spriteList[10];
+                spriteRenderer.sprite = character.spriteList[10];
                 break;
         }
         faceDirection = fDir;
+    }
+
+    public async UniTaskVoid StopMovement()
+    {
+        await UniTask.WaitUntil(() => _lastTimeAnimationChanged + animationFrameTime < Time.time, PlayerLoopTiming.LastUpdate, this.GetCancellationTokenOnDestroy());
+        try { LookAtDirection(faceDirection); } catch { }
     }
 
     public void LookAtWorldPosition(Vector3 worldPosition)
@@ -201,7 +201,7 @@ public class Entity : MonoBehaviour
 
     public static int GetSpriteOrderByPositionY(Vector3 position)
     {
-        return (int)(-position.y * 10);
+        return (int)(-position.y * 10); // We remove the first decimal point
     }
 
 }
