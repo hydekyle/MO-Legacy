@@ -21,7 +21,7 @@ namespace MalbersAnimations
         [Hide("option", false, true, true, 2, 6, -1)]
         public bool isTrigger;
         [Hide("option", false, true, true, 5, 6, -1)]
-        public PhysicMaterial material;
+        public PhysicsMaterial material;
 
         protected override bool _TryReact(Component reactor)
         {

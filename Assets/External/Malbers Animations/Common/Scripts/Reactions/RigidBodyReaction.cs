@@ -39,10 +39,10 @@ namespace MalbersAnimations.Reactions
                     rb.useGravity = m_value;
                     break;
                 case RB_Reaction.Drag:
-                    rb.drag = value;
+                    rb.linearDamping = value;
                     break;
                 case RB_Reaction.AngularDrag:
-                    rb.angularDrag = value;
+                    rb.angularDamping = value;
                     break;
                 case RB_Reaction.Constraints:
                     rb.constraints = _value;

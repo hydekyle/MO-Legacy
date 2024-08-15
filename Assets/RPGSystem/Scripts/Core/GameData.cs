@@ -69,7 +69,7 @@ namespace RPGSystem
                 Debug.Log("Starting New Game");
             }
             //TODO: Remove when Title Menu is completed
-            await SceneManager.LoadSceneAsync(savedMapName);
+            await SceneManager.LoadSceneAsync(savedMapName).ToUniTask();
             var playerT = RPGManager.refs.player.transform;
             playerT.position = savedPosition;
             playerT.GetComponent<Entity>().LookAtDirection(savedFaceDir);
