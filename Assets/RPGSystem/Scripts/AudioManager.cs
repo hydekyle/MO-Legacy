@@ -17,6 +17,12 @@ namespace RPGSystem
             else Instance = this;
         }
 
+        /// <summary>
+        ///  Play a Audio Clip globally or from emitter position
+        /// </summary>
+        /// <param name="soundClip">Audio Clip</param>
+        /// <param name="soundOptions">Sound Options</param>
+        /// <param name="emitter">Use AudioSource from emitter GameObject. If not present, the AudioSource component will be added automatically</param>
         public void PlaySound(AudioClip soundClip, SoundOptions soundOptions, GameObject emitter = null)
         {
             if (soundOptions.keepPlayingWhenDisabled)

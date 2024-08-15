@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 namespace RPGSystem
 {
     [Serializable]
@@ -33,8 +34,7 @@ namespace RPGSystem
 
         IEnumerable<string> ReadSwitches()
         {
-            var path = Application.dataPath + "/RPGSystem/Editor/switches.txt";
-            var dataLines = File.ReadAllLines(path);
+            var dataLines = File.ReadAllLines(Constants.switchesData);
 
             foreach (var line in dataLines)
             {
@@ -65,13 +65,12 @@ namespace RPGSystem
 
         public int ID()
         {
-            return int.Parse(variableID.Substring(0, 4));
+            return int.Parse(variableID[..4]);
         }
 
         IEnumerable ReadVariables()
         {
-            var path = Application.dataPath + "/RPGSystem/Editor/variables.txt"; ;
-            var dataLines = File.ReadAllLines(path);
+            var dataLines = File.ReadAllLines(Constants.variablesData);
 
             foreach (var line in dataLines)
             {
@@ -103,13 +102,12 @@ namespace RPGSystem
 
         public int ID()
         {
-            return int.Parse(variableID.Substring(0, 4));
+            return int.Parse(variableID[..4]);
         }
 
         IEnumerable ReadVariables()
         {
-            var path = Application.dataPath + "/RPGSystem/Editor/variables.txt"; ;
-            var dataLines = File.ReadAllLines(path);
+            var dataLines = File.ReadAllLines(Constants.variablesData);
 
             foreach (var line in dataLines)
             {
@@ -121,6 +119,7 @@ namespace RPGSystem
     [Serializable]
     public class UILocalVariableCondition
     {
+        int? _id;
         [HorizontalGroup("target")]
         [TableColumnWidth(90)]
         [HideLabel]
@@ -134,6 +133,15 @@ namespace RPGSystem
         public void SaveID()
         {
             target = Selection.activeGameObject;
+            if (target.TryGetComponent<UniqueIdentifier>(out var uniqueIdentifier))
+            {
+                _id = uniqueIdentifier.ID;
+            }
+            else
+            {
+                var newUniqueIdentifier = target.AddComponent<UniqueIdentifier>();
+                _id = newUniqueIdentifier.ID;
+            }
         }
 #endif
 
@@ -142,7 +150,15 @@ namespace RPGSystem
 
         public int ID()
         {
-            return String.Concat(target.name, SceneManager.GetActiveScene().name).GetHashCode();
+            try
+            {
+                _id ??= target.GetComponent<UniqueIdentifier>().ID;
+                return _id.Value;
+            }
+            catch
+            {
+                throw new Exception("RPG Error: Using RPG local variable for GameObject without UniqueIdentifier component detected. Did you remove it? You can fix it adding it manually");
+            }
         }
 
     }
@@ -150,6 +166,7 @@ namespace RPGSystem
     [Serializable]
     public class UILocalVariableSet
     {
+        int? _id;
         [HorizontalGroup("target")]
         [TableColumnWidth(90)]
         [HideLabel]
@@ -168,13 +185,30 @@ namespace RPGSystem
         public void SaveID()
         {
             target = Selection.activeGameObject;
+            if (target.TryGetComponent<UniqueIdentifier>(out var uniqueIdentifier))
+            {
+                _id = uniqueIdentifier.ID;
+            }
+            else
+            {
+                var newUniqueIdentifier = target.AddComponent<UniqueIdentifier>();
+                _id = newUniqueIdentifier.ID;
+            }
         }
 #endif
 
 
         public int ID()
         {
-            return String.Concat(target.name, SceneManager.GetActiveScene().name).GetHashCode();
+            try
+            {
+                _id ??= target.GetComponent<UniqueIdentifier>().ID;
+                return _id.Value;
+            }
+            catch
+            {
+                throw new Exception("RPG Error: Using RPG local variable for GameObject without UniqueIdentifier component detected. Did you remove it? You can fix it adding it manually");
+            }
         }
 
     }
@@ -190,8 +224,8 @@ namespace RPGSystem
 
         public UIPopupEditableVariableName(string varID, bool isVariable)
         {
-            ID = int.Parse(varID.Substring(0, 4));
-            editingName = inputText = varID.Substring(4, varID.Length - 4); ;
+            ID = int.Parse(varID[..4]);
+            editingName = inputText = varID[4..]; ;
             this.isVariable = isVariable;
         }
 
@@ -202,7 +236,7 @@ namespace RPGSystem
 
         public override void OnGUI(Rect rect)
         {
-            var title = String.Format("Renaming '{0}'", editingName);
+            var title = string.Format("Renaming '{0}'", editingName);
             GUILayout.Label(title, EditorStyles.boldLabel);
             inputText = GUILayout.TextField(inputText);
 
@@ -247,7 +281,7 @@ namespace RPGSystem
         void SaveNewSwitch(int ID, string newName, bool isVariable)
         {
             var path = Application.dataPath;
-            path += isVariable ? "/RPGSystem/Editor/variables.txt" : "/RPGSystem/Editor/switches.txt";
+            path += isVariable ? Constants.variablesData : Constants.switchesData;
             var dataLines = File.ReadAllLines(path);
             var textID = "";
             if (ID < 10) textID = "00" + ID;
@@ -258,8 +292,7 @@ namespace RPGSystem
 
         IEnumerable<string> ReadSwitches()
         {
-            var path = Application.dataPath + "/RPGSystem/Editor/switches.txt";
-            var dataLines = File.ReadAllLines(path);
+            var dataLines = File.ReadAllLines(Constants.switchesData);
 
             foreach (var line in dataLines)
             {
