@@ -20,9 +20,9 @@ TagManager:
   - Usable Item Zone
   - Interactable
   - Player
-  - 
-  - 
-  - 
+  - WaterPostProcessing
+  - Reflections
+  - Obstructors
   - 
   - 
   - 
@@ -44,9 +44,6 @@ TagManager:
   - Item
   - 
   m_SortingLayers:
-  - name: Outside
-    uniqueID: 1952970847
-    locked: 0
   - name: Inside
     uniqueID: 102742699
     locked: 0
@@ -55,6 +52,9 @@ TagManager:
     locked: 0
   - name: No Light
     uniqueID: 1598042183
+    locked: 0
+  - name: Outside
+    uniqueID: 1952970847
     locked: 0
   m_RenderingLayers:
   - Default

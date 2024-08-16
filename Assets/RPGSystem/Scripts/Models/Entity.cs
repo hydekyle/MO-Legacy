@@ -10,7 +10,7 @@ public class Entity : MonoBehaviour
     public float animationFrameTime = 0.1f;
 
     [Header("Entity Dependencies")]
-    public BoxCollider2D boxCollider2D;
+    public new Collider2D collider2D;
     public Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
 
@@ -28,7 +28,7 @@ public class Entity : MonoBehaviour
     void OnValidate()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
+        collider2D = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -51,7 +51,7 @@ public class Entity : MonoBehaviour
 
     Vector3 GetCastPoint()
     {
-        var castPoint = boxCollider2D.bounds.center;
+        var castPoint = collider2D.bounds.center;
         var castDistance = 0.5f;
         switch (faceDirection)
         {

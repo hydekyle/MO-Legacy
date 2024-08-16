@@ -44,7 +44,8 @@ public class Helpers
     public static void UISpriteOrderFixMapAll()
     {
         var target = Selection.activeTransform;
-        foreach (Transform t in target)
+
+        static void TrySortingOrder(Transform t)
         {
             var sortingOrder = Entity.GetSpriteOrderByPositionY(t.position);
             if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
@@ -56,6 +57,9 @@ public class Helpers
             else if (t.TryGetComponent<TilemapRenderer>(out var tilemapRenderer))
                 tilemapRenderer.sortingOrder = sortingOrder;
         }
+
+        foreach (Transform t in target) TrySortingOrder(t);
+        TrySortingOrder(target);
     }
 
 

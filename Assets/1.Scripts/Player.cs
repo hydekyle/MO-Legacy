@@ -14,8 +14,8 @@ public class Player : Entity
     {
         if (Application.isEditor)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl)) boxCollider2D.enabled = false;
-            if (Input.GetKeyUp(KeyCode.LeftControl)) boxCollider2D.enabled = true;
+            if (Input.GetKeyDown(KeyCode.LeftControl)) collider2D.enabled = false;
+            if (Input.GetKeyUp(KeyCode.LeftControl)) collider2D.enabled = true;
         }
         if (Input.GetButtonDown("Interact") && RPGManager.Instance.IsInteractionAvailable()) CastInteraction(interactionLayerMask);
         if (Input.GetKeyDown(KeyCode.Space)) Run();
