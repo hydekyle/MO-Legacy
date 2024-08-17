@@ -40,30 +40,34 @@ public class Helpers
         return false;
     }
 
-    [MenuItem("RPG/Sprite Order Fix All Children")]
-    public static void UISpriteOrderFixMapAll()
-    {
-        var target = Selection.activeTransform;
+    // THIS IS NOT NEEDED ANYMORE !!
+    // Finally found a solution to sort sprites by their Y position automatically
 
-        static void TrySortingOrder(Transform t)
-        {
-            var sortingOrder = Entity.GetSpriteOrderByPositionY(t.position);
-            if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
-            {
-                if (t.TryGetComponent<SortingGroup>(out var sortingGroupComponent))
-                    sortingGroupComponent.sortingOrder = sortingOrder;
-                else spriteRendererComponent.sortingOrder = sortingOrder;
-            }
-            else if (t.TryGetComponent<TilemapRenderer>(out var tilemapRenderer))
-                tilemapRenderer.sortingOrder = sortingOrder;
-        }
+    // Project Settings > Graphics > Camera Settings (in our case, this setting is in Renderer2D scriptable object)
+    // Transparency Sort Mode: Custom Axis
+    // Transparency Sort Azis: X = 0, Y = 1, Z = 0
 
-        foreach (Transform t in target) TrySortingOrder(t);
-        TrySortingOrder(target);
-    }
+    // [MenuItem("RPG/Sprite Order Fix All Children")]
+    // public static void UISpriteOrderFixMapAll()
+    // {
+    //     var target = Selection.activeTransform;
 
+    //     static void TrySortingOrder(Transform t)
+    //     {
+    //         var sortingOrder = Entity.GetSpriteOrderByPositionY(t.position);
+    //         if (t.TryGetComponent<SpriteRenderer>(out var spriteRendererComponent))
+    //         {
+    //             if (t.TryGetComponent<SortingGroup>(out var sortingGroupComponent))
+    //                 sortingGroupComponent.sortingOrder = sortingOrder;
+    //             else spriteRendererComponent.sortingOrder = sortingOrder;
+    //         }
+    //         else if (t.TryGetComponent<TilemapRenderer>(out var tilemapRenderer))
+    //             tilemapRenderer.sortingOrder = sortingOrder;
+    //     }
 
-
+    //     foreach (Transform t in target) TrySortingOrder(t);
+    //     TrySortingOrder(target);
+    // }
 
 }
 

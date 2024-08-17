@@ -5,11 +5,6 @@ public class Player : Entity
 {
     public LayerMask interactionLayerMask;
 
-    void OnValidate()
-    {
-        CheckSpriteOrderByPositionY();
-    }
-
     void Update()
     {
         if (Application.isEditor)

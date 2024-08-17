@@ -44,11 +44,6 @@ public class Entity : MonoBehaviour
         animationFrameTime *= 2;
     }
 
-    public void SetSortingLayer(string layerName)
-    {
-        spriteRenderer.sortingLayerName = layerName;
-    }
-
     Vector3 GetCastPoint()
     {
         var castPoint = collider2D.bounds.center;
@@ -107,19 +102,6 @@ public class Entity : MonoBehaviour
     {
         rb.MovePosition(rb.position + new Vector2(moveDirection.x, moveDirection.y) * movementSpeed * Time.fixedDeltaTime);
         AnimationWalk(moveDirection);
-        CheckSpriteOrderByPositionY();
-    }
-
-    public void CheckSpriteOrderByPositionY()
-    {
-        try
-        {
-            spriteRenderer.sortingOrder = GetSpriteOrderByPositionY(transform.position);
-        }
-        catch
-        {
-            GetComponent<SpriteRenderer>().sortingOrder = GetSpriteOrderByPositionY(transform.position);
-        }
     }
 
     public void AnimationWalk(Vector3 moveDirection)
@@ -197,11 +179,6 @@ public class Entity : MonoBehaviour
             else if (dir.x < 0) return FaceDirection.West;
             else return FaceDirection.East;
         }
-    }
-
-    public static int GetSpriteOrderByPositionY(Vector3 position)
-    {
-        return (int)(-position.y * 10); // We remove the first decimal point
     }
 
 }
