@@ -1,5 +1,6 @@
 trackSelection = true
 refreshSearchWindowsInPlayMode = false
+pickerAdvancedUI = false
 fetchPreview = true
 defaultFlags = 0
 keepOpen = false
@@ -19,6 +20,10 @@ scopes = {
 	"last_search.3BE404DF" = ""
 	"OpenInspectorPreview.3BE404DF" = "0"
 	"currentGroup.3BE404DF" = "all"
+	"picker_window_position_offset.075BCD15" = "307;661;320;550"
+	"picker_visibility_flags.075BCD15" = "264"
+	"picker_item_size.075BCD15" = "96"
+	"picker_inspector.075BCD15" = "0"
 }
 providers = {
 	adb = {
@@ -74,6 +79,11 @@ providers = {
 	profilermarkers = {
 		active = false
 		priority = 100
+		defaultAction = null
+	}
+	presets_provider = {
+		active = false
+		priority = -10
 		defaultAction = null
 	}
 }

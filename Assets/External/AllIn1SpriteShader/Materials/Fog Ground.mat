@@ -60,8 +60,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Scale: {x: 11, y: 6}
+        m_Offset: {x: 1.64, y: 0.29}
     - _MaskTex:
         m_Texture: {fileID: 2800000, guid: 839adabbc5de26041bac66450214a831, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -119,8 +119,8 @@ Material:
     - _Contrast: 1
     - _CullingOption: 0
     - _DistortAmount: 0.182
-    - _DistortTexXSpeed: 0.5
-    - _DistortTexYSpeed: 1
+    - _DistortTexXSpeed: 0.2
+    - _DistortTexYSpeed: 0.2
     - _EditorDrawers: 7
     - _FadeAmount: -0.1
     - _FadeBurnGlow: 2
@@ -135,7 +135,7 @@ Material:
     - _GhostTransparency: 0
     - _GlitchAmount: 3
     - _GlitchSize: 1
-    - _Glow: 0
+    - _Glow: 0.2
     - _GlowAffectLight: 1
     - _GlowGlobal: 1
     - _GradBlend: 1
@@ -204,13 +204,13 @@ Material:
     - _RadialStartAngle: 90
     - _RandomSeed: 0
     - _RectSize: 1
-    - _RotateUvAmount: 0
+    - _RotateUvAmount: 2.24
     - _RoundWaveSpeed: 2
     - _RoundWaveStrength: 0.7
     - _ShadowAlpha: 0.5
     - _ShadowX: 0.1
     - _ShadowY: -0.05
-    - _ShakeUvSpeed: 0.05
+    - _ShakeUvSpeed: 0.13
     - _ShakeUvX: 1.5
     - _ShakeUvY: 1
     - _ShineGlow: 1
@@ -223,9 +223,9 @@ Material:
     - _TwistUvPosX: 0.5
     - _TwistUvPosY: 0.5
     - _TwistUvRadius: 0.75
-    - _WarpScale: 0.5
-    - _WarpSpeed: 0.59
-    - _WarpStrength: 0.025
+    - _WarpScale: 0.538
+    - _WarpSpeed: 0.3
+    - _WarpStrength: 0.0197
     - _WaveAmount: 6.15
     - _WaveSpeed: 1.93
     - _WaveStrength: 7.5
@@ -233,7 +233,7 @@ Material:
     - _WaveY: 0.373
     - _ZTestMode: 4
     - _ZWrite: 0
-    - _ZoomUvAmount: 0.46
+    - _ZoomUvAmount: 0.38
     m_Colors:
     - _AlphaOutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -247,7 +247,7 @@ Material:
     - _ColorSwapGreen: {r: 1, g: 1, b: 1, a: 1}
     - _ColorSwapRed: {r: 1, g: 1, b: 1, a: 1}
     - _FadeBurnColor: {r: 1, g: 1, b: 0, a: 1}
-    - _GlowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GlowColor: {r: 0.8443396, g: 1, b: 0.8470106, a: 1}
     - _GradBotLeftCol: {r: 0, g: 0, b: 1, a: 1}
     - _GradBotRightCol: {r: 0, g: 1, b: 0, a: 1}
     - _GradTopLeftCol: {r: 1, g: 0, b: 0, a: 1}
