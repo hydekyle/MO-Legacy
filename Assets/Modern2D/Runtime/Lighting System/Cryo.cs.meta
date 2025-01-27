@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: dc4ba3258af30e248911adf69c55cbb1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Runtime/Lighting System/Cryo.cs
+  uploadId: 667506

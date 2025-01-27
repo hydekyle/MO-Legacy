@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: c32ebc1bd4f0ef74a8fd1bfe0efa9e79
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 60072b568d64c40a485e0fc55012dc9f, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Resources/Shaders/shadows and others/CustomCameraScreenPosition.shadersubgraph
+  uploadId: 667506

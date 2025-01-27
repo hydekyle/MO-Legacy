@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using RPGSystem;
 using UnityEngine;
 
-public class EntityNPC : Entity, IInteractable
+public class EntityNPC : Entity, IInteractionFrom
 {
-    public void InteractionFrom(Entity interactionEmmiter)
+    public void InteractionFrom(GameObject interactionEmmiter)
     {
         LookAtWorldPosition(interactionEmmiter.transform.position);
     }

@@ -16,13 +16,9 @@ namespace RPGSystem
         public LocalVariableDictionary localVariableDic = new();
         public Inventory inventory = new();
 
-        [HideInInspector]
         public string savedMapName;
-        [HideInInspector]
         public int savedMapSpawnIndex;
-        [HideInInspector]
         public Vector3 savedPosition;
-        [HideInInspector]
         public FaceDirection savedFaceDir;
 
         public void AddItem(Item item, int amount)
@@ -41,8 +37,8 @@ namespace RPGSystem
         public void SaveGameStateSlot(int slotIndex)
         {
             savedMapSpawnIndex = -1;
-            savedPosition = RPGManager.refs.player.transform.position;
-            savedFaceDir = RPGManager.refs.player.faceDirection;
+            savedPosition = RPGManager.Refs.player.transform.position;
+            savedFaceDir = RPGManager.Refs.player.faceDirection;
             savedMapName = SceneManager.GetActiveScene().name;
             var fileName = "/savegame" + slotIndex;
             var savePath = string.Concat(Application.persistentDataPath, fileName);
@@ -70,7 +66,7 @@ namespace RPGSystem
             }
             //TODO: Remove when Title Menu is completed
             await SceneManager.LoadSceneAsync(savedMapName).ToUniTask();
-            var playerT = RPGManager.refs.player.transform;
+            var playerT = RPGManager.Refs.player.transform;
             playerT.position = savedPosition;
             playerT.GetComponent<Entity>().LookAtDirection(savedFaceDir);
         }

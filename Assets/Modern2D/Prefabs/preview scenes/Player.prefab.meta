@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d32d6df7e21eb234197a5d10dc279bea
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Prefabs/preview scenes/Player.prefab
+  uploadId: 667506

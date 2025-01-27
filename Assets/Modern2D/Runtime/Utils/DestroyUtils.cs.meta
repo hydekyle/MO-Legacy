@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 15693ac2ab5ba284b8cfd2bd286316be
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Runtime/Utils/DestroyUtils.cs
+  uploadId: 667506

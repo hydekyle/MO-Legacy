@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: dea303896d1748c458cb67c1d464839c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Render Pipeline settings/New Universal Render Pipeline
+    Asset_Renderer.asset
+  uploadId: 667506

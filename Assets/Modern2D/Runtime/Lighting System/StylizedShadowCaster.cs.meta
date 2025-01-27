@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f0978ee728043474ca1d69c995bd391a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Runtime/Lighting System/StylizedShadowCaster.cs
+  uploadId: 667506

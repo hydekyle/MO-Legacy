@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 61f366b4d54da9b4ea425a90cf99f6bf
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2655988077585873504
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/import presets/PixelArt.preset
+  uploadId: 667506

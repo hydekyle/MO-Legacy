@@ -11,7 +11,7 @@ There are a lot of default RPG Actions, like Show Text, change variables, play S
 
 ## How to start
 
-- Download repository (it uses Unity 2022.3.10f1, but it should work with any 2019+)
+- Download repository (it uses Unity 6)
 - Open TEST LEVEL to check how it works
 
 ## Features
@@ -32,3 +32,7 @@ I also want to make this project a framework for any new project that wants to u
 ## License
 
 You are free to use the RPG System, but you will need license for Odin Inspector.
+
+## Other features
+
+2D pathfinding: https://github.com/h8man/NavMeshPlus

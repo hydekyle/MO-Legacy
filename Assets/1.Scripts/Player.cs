@@ -12,14 +12,14 @@ public class Player : Entity
             if (Input.GetKeyDown(KeyCode.LeftControl)) collider2D.enabled = false;
             if (Input.GetKeyUp(KeyCode.LeftControl)) collider2D.enabled = true;
         }
-        if (Input.GetButtonDown("Interact") && RPGManager.Instance.IsInteractionAvailable()) CastInteraction(interactionLayerMask);
+        if (Input.GetButtonDown("Interact") && RPGManager.IsInteractionAvailable) CastInteraction(interactionLayerMask);
         if (Input.GetKeyDown(KeyCode.Space)) Run();
         if (Input.GetKeyUp(KeyCode.Space)) RunStop();
     }
 
     void FixedUpdate()
     {
-        if (RPGManager.Instance.IsMovementAvailable()) MovementControl();
+        if (RPGManager.IsMovementAvailable) MovementControl();
     }
 
     void MovementControl()

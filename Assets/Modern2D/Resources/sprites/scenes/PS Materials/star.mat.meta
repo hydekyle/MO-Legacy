@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cf7ea4097f3185c4197875f4ebe24baf
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Resources/sprites/scenes/PS Materials/star.mat
+  uploadId: 667506

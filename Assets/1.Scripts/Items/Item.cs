@@ -12,8 +12,7 @@ public class Item : ScriptableObject
     [VerticalGroup("Item Data/Stats")]
     public LocalizedString title;
     [VerticalGroup("Item Data/Stats")]
-    [TextArea]
-    public string description;
+    public LocalizedString description;
     [VerticalGroup("Item Data/Stats")]
     public bool isUsable;
     [VerticalGroup("Item Data/Stats")]

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 8623cddc98407f54fb4082c0fb0f0fab
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Prefabs/light rays/lightRay 3.prefab
+  uploadId: 667506

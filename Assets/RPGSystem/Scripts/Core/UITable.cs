@@ -32,9 +32,9 @@ namespace RPGSystem
             return int.Parse(switchID.Substring(0, 4));
         }
 
-        IEnumerable<string> ReadSwitches()
+        public IEnumerable<string> ReadSwitches()
         {
-            var dataLines = File.ReadAllLines(Constants.switchesData);
+            var dataLines = RPGFileManager.UIReadSwitchesFromTXT();
 
             foreach (var line in dataLines)
             {
@@ -70,7 +70,7 @@ namespace RPGSystem
 
         IEnumerable ReadVariables()
         {
-            var dataLines = File.ReadAllLines(Constants.variablesData);
+            var dataLines = RPGFileManager.UIReadVariablesFromTXT();
 
             foreach (var line in dataLines)
             {

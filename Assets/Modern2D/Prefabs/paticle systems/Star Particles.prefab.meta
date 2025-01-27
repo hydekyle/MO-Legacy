@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 602bef60be346074b8e0d65863935b07
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Prefabs/paticle systems/Star Particles.prefab
+  uploadId: 667506

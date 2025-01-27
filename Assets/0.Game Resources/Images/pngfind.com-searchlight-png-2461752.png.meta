@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pngfind.com-searchlight-png-2461752_0: -2992506115025580796
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

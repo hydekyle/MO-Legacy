@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using RPGSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class Entity : MonoBehaviour
 {
+    [OnValueChanged("OnCharacterChanged", true)]
     public Character character;
     public float movementSpeed = 5f;
     public float animationFrameTime = 0.1f;
@@ -24,6 +29,11 @@ public class Entity : MonoBehaviour
     // 3 (left) walking
     // 6 (right) walking
     // 9 (up) walking
+
+    void OnCharacterChanged()
+    {
+        spriteRenderer.sprite = character.spriteList[0];
+    }
 
     void OnValidate()
     {
@@ -81,9 +91,9 @@ public class Entity : MonoBehaviour
                 }
 
                 // Trigger any Interactable from the selected layerMask
-                if (hit.transform.TryGetComponent(out IInteractable _interactable))
+                if (hit.transform.TryGetComponent(out IInteractionFrom _interactable))
                 {
-                    _interactable.InteractionFrom(this);
+                    _interactable.InteractionFrom(gameObject);
                     return;
                 }
             }
@@ -108,6 +118,9 @@ public class Entity : MonoBehaviour
     {
         switch (faceDirection)
         {
+            case FaceDirection.North:
+                spriteRenderer.sprite = character.spriteList[9 + stepAnimOrder[_indexStepAnim]];
+                break;
             case FaceDirection.South:
                 spriteRenderer.sprite = character.spriteList[0 + stepAnimOrder[_indexStepAnim]];
                 break;
@@ -117,9 +130,7 @@ public class Entity : MonoBehaviour
             case FaceDirection.East:
                 spriteRenderer.sprite = character.spriteList[6 + stepAnimOrder[_indexStepAnim]];
                 break;
-            case FaceDirection.North:
-                spriteRenderer.sprite = character.spriteList[9 + stepAnimOrder[_indexStepAnim]];
-                break;
+
         }
         // Animation Steps
         if (Time.time > _lastTimeAnimationChanged + animationFrameTime * (2 - Mathf.Clamp(moveDirection.magnitude, 0f, 1f)))
@@ -130,10 +141,18 @@ public class Entity : MonoBehaviour
         }
     }
 
+    public void LookAtDirection(Vector3 fDir)
+    {
+        LookAtDirection(GetFaceDirectionByMoveDirection(fDir));
+    }
+
     public void LookAtDirection(FaceDirection fDir)
     {
         switch (fDir)
         {
+            case FaceDirection.North:
+                spriteRenderer.sprite = character.spriteList[10];
+                break;
             case FaceDirection.South:
                 spriteRenderer.sprite = character.spriteList[1];
                 break;
@@ -143,9 +162,7 @@ public class Entity : MonoBehaviour
             case FaceDirection.East:
                 spriteRenderer.sprite = character.spriteList[7];
                 break;
-            case FaceDirection.North:
-                spriteRenderer.sprite = character.spriteList[10];
-                break;
+
         }
         faceDirection = fDir;
     }

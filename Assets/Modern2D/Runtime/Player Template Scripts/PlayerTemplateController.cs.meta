@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7e43553e0ea277640abcdc5d949e7492
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Runtime/Player Template Scripts/PlayerTemplateController.cs
+  uploadId: 667506

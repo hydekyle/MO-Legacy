@@ -10,6 +10,7 @@ TagManager:
   - Fly
   - EntityNPC
   - Selector
+  - Shadow
   layers:
   - Default
   - TransparentFX
@@ -23,9 +24,9 @@ TagManager:
   - WaterPostProcessing
   - Reflections
   - Obstructors
-  - 
-  - 
-  - 
+  - LightingSystem
+  - 2DWater
+  - ModernShadows
   - BodyPart
   - 
   - 

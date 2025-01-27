@@ -11,32 +11,17 @@ namespace RPGSystem
 
         public static IEnumerable<string> UIReadSwitchesFromTXT()
         {
+            if (!File.Exists(switchesPath)) File.Create(switchesPath);
             var dataLines = File.ReadAllLines(switchesPath);
-
-            foreach (var line in dataLines)
-            {
-                yield return line;
-            }
+            foreach (var line in dataLines) yield return line;
         }
 
         public static IEnumerable<string> UIReadVariablesFromTXT()
         {
-            var dataLines = File.ReadAllLines(variablesPath);
-
-            foreach (var line in dataLines)
-            {
-                yield return line;
-            }
-        }
-
-        public static void CreateSwitchesFileIfNeeded()
-        {
-            if (!File.Exists(switchesPath)) File.Create(switchesPath);
-        }
-
-        public static void CreateVariablesFileIfNeeded()
-        {
             if (!File.Exists(variablesPath)) File.Create(variablesPath);
+            var dataLines = File.ReadAllLines(variablesPath);
+            foreach (var line in dataLines) yield return line;
         }
+
     }
 }

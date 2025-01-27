@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a8e9478aa8e98d444ae9ceb18c5a2a48
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Resources/Materials/water materials/Water2D.mat
+  uploadId: 667506

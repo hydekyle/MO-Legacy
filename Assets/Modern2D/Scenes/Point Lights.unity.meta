@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 89fe24ddf2f31f6409922682bb0fce0d
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 229634
+  packageName: Modern 2D Shadows
+  packageVersion: 2.2.1v
+  assetPath: Assets/Modern2D/Scenes/Point Lights.unity
+  uploadId: 667506

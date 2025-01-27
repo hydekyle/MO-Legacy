@@ -18,9 +18,9 @@ namespace RPGSystem
     public enum CameraVelocity { Stopped, VerySlow, Slow, Normal, High, Instant }
 
     // RPGSystem Interfaces
-    public interface IInteractable
+    public interface IInteractionFrom
     {
-        public void InteractionFrom(Entity interactionEmmiter);
+        public void InteractionFrom(GameObject interactionEmmiter);
     }
 
     // RPGSystem Structs
@@ -37,6 +37,8 @@ namespace RPGSystem
     [Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
     [Serializable] public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
     [Serializable] public class Inventory : UnitySerializedDictionary<Item, int> { }
+
+    [Serializable] public class ObservableCharacter : Observable<Character> { }
 
     // This class is required for Odin to serialize dictionaries
     public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
