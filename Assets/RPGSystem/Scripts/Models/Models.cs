@@ -36,7 +36,7 @@ namespace RPGSystem
     [Serializable] public class SwitchDictionary : UnitySerializedDictionary<int, Observable<bool>> { }
     [Serializable] public class VariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
     [Serializable] public class LocalVariableDictionary : UnitySerializedDictionary<int, Observable<int>> { }
-    [Serializable] public class Inventory : UnitySerializedDictionary<Item, int> { }
+    [Serializable] public class ItemDictionary : UnitySerializedDictionary<Item, int> { }
 
     [Serializable] public class ObservableCharacter : Observable<Character> { }
 

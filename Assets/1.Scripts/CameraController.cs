@@ -17,11 +17,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        var targetPos = new Vector3(target.position.x, target.position.y, -10);
-        transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref currentVelocity, smoothTime);
-    }
+    // void FixedUpdate()
+    // {
+    //     var targetPos = new Vector3(target.position.x, target.position.y, -10);
+    //     transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref currentVelocity, smoothTime);
+    // }
 
     public static void SetPosition(Vector3 targetPos)
     {

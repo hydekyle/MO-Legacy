@@ -10,7 +10,9 @@ namespace RPGSystem
     [Serializable]
     public class PageEvent
     {
-        [PreviewField(50, ObjectFieldAlignment.Center)]
+        [GUIColor("orange")]
+        [Title("Page Event ", "$pageIndex")]
+        [PreviewField(50, ObjectFieldAlignment.Right)]
         public Sprite sprite;
         [GUIColor(0, 1, 1)]
         public VariableTableCondition conditions;
@@ -44,6 +46,9 @@ namespace RPGSystem
         bool isResolvingActionList = false;
         [HideInInspector]
         public RPGEvent RPGEventParent;
+
+        [HideInInspector]
+        public int pageIndex;
 
         public async UniTaskVoid ResolveActionList(CancellationToken cts)
         {

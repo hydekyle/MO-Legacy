@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Localization.SmartFormat.Utilities;
 
 namespace RPGSystem
 {
@@ -166,6 +165,7 @@ namespace RPGSystem
         {
             UIShowSprite();
             UIShowBoxCollider();
+            for (var x = 0; x < pages.Count; x++) pages[x].pageIndex = x;
         }
 
         void UIShowSprite()

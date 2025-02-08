@@ -1,3 +1,4 @@
+using NavMeshPlus.Components;
 using RPGSystem;
 using UnityEditor;
 using UnityEngine;
@@ -38,6 +39,13 @@ public class Helpers
             }
         }
         return false;
+    }
+
+    [MenuItem("RPG/Navigation Bake Collisions")]
+    public static void UISpriteOrderFixMapAll()
+    {
+        var target = GameObject.FindFirstObjectByType<NavMeshSurface>();
+        target.BuildNavMesh();
     }
 
     // THIS IS NOT NEEDED ANYMORE !!

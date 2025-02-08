@@ -13,12 +13,13 @@ GameObject:
   - component: {fileID: 4239394049699214368}
   - component: {fileID: 2115588010796169538}
   - component: {fileID: 7682837252853819619}
+  - component: {fileID: 1149504581112719714}
   m_Layer: 7
   m_Name: barrel_closed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &504755554174643235
 Transform:
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.549999, y: -0.3, z: 2.96393}
-  m_LocalScale: {x: 0.10703635, y: 0.10703635, z: 0.10703635}
+  m_LocalScale: {x: 0.14960471, y: 0.14960471, z: 0.14960471}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 366
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fd42e54ac731e4e4d8678d7c91df42af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -215,17 +216,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.1869855, y: 0.062339425}
+  m_Offset: {x: -0.069354296, y: 1.4738623}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.48886105, y: 0.1823186}
+    pivot: {x: 0.47493744, y: 0.16626553}
     oldSize: {x: 8.96, y: 10.88}
     newSize: {x: 8.96, y: 10.88}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5.3448315, y: 6.0181875}
+  m_Size: {x: 5.109569, y: 3.1951416}
   m_EdgeRadius: 0
 --- !u!114 &7682837252853819619
 MonoBehaviour:
@@ -239,3 +240,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a69c86b5934375c4fbf16e0ccd746745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _id: -104954
+--- !u!114 &1149504581112719714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542884239327880460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
