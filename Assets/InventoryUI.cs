@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using RPGSystem;
 using TMPro;
@@ -10,32 +13,46 @@ public class InventoryUI : MonoBehaviour
     Inventory Inventory { get => RPGManager.GameState.inventory; set => RPGManager.GameState.inventory = value; }
     List<Item> cachedItemList;
 
-    public Canvas inventoryUI;
+    public CanvasGroup inventoryCanvasGroup;
     public TMP_Text itemName, itemCount;
     public Transform itemsDisplayerRotator;
     public Transform itemsDisplayerFollowers;
     public float rotationVelocity = 10f;
 
+    [Range(0, 360)]
+    public int maxAngle = 360;
     public float radius = 100f;
     public int index;
 
-    void Awake()
+    bool IsInventoryOpen => inventoryCanvasGroup.alpha > 0.3f;
+    bool isInteractable = true;
+
+    public MMFeedbacks _MMFOnOpenUI, _MMFOnCloseUI;
+    public float inputDelay = 0.5f;
+    float lastTimeInput = -1f;
+
+    void Start()
     {
         CloseUI();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F1)) OpenUI();
-        if (Input.GetKeyDown(KeyCode.F2)) CloseUI();
-        if (Input.GetKeyDown(KeyCode.F3)) NextIndex();
-        if (Input.GetKeyDown(KeyCode.F4)) PreviousIndex();
-        RotateInventory();
+        if (!isInteractable) return;
+        if (IsInventoryOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.F2)) CloseUI();
+            RotateInventory();
+            if (Time.time < lastTimeInput + inputDelay) return;
+            if (Input.GetAxis("Horizontal") > 0) NextIndex();
+            if (Input.GetAxis("Horizontal") < 0) PreviousIndex();
+        }
+        else if (Input.GetKeyDown(KeyCode.F)) OpenUI();
     }
 
     void RotateInventory()
     {
-        var targetRot = 180 / Inventory.Count * index;
+        var targetRot = maxAngle / Inventory.Count * index;
         itemsDisplayerRotator.rotation = Quaternion.Lerp(itemsDisplayerRotator.rotation, Quaternion.Euler(Vector3.forward * targetRot), Time.deltaTime * rotationVelocity);
     }
 
@@ -44,6 +61,7 @@ public class InventoryUI : MonoBehaviour
         if (index == Inventory.Count - 1) index = 0;
         else index++;
         HighlightCurrentIndex();
+        lastTimeInput = Time.time;
     }
 
     void PreviousIndex()
@@ -51,6 +69,7 @@ public class InventoryUI : MonoBehaviour
         if (index == 0) index = Inventory.Count - 1;
         else index--;
         HighlightCurrentIndex();
+        lastTimeInput = Time.time;
     }
 
     void HighlightCurrentIndex()
@@ -61,15 +80,32 @@ public class InventoryUI : MonoBehaviour
 
     void OpenUI()
     {
-        inventoryUI.enabled = true;
+        _MMFOnOpenUI.PlayFeedbacks();
         cachedItemList = Inventory.GetItemList();
         SetItemImages();
         SetItemPositions();
         HighlightCurrentIndex();
+        isInteractable = true;
+        RPGManager.Instance.SetPlayerFreeze(FreezeType.FreezeAll);
+    }
+
+    void CloseUI()
+    {
+        _MMFOnCloseUI.PlayFeedbacks();
+        isInteractable = false;
+        OnCloseUI().Forget();
+        RPGManager.Instance.SetPlayerFreeze(FreezeType.None);
+    }
+
+    async UniTaskVoid OnCloseUI()
+    {
+        await UniTask.WaitUntil(() => !_MMFOnCloseUI.IsPlaying);
+        isInteractable = true;
     }
 
     /// <summary>
-    /// Create a image item slot when needed or update images
+    /// Create a image item slot when needed or update images.
+    /// Call on opening the UI
     /// </summary>
     private void SetItemImages()
     {
@@ -108,18 +144,13 @@ public class InventoryUI : MonoBehaviour
         int itemCount = Inventory.Count;
         for (var x = 0; x < itemCount; x++)
         {
-            angle += 180 / itemCount;
+            angle += maxAngle / itemCount;
             Vector3 pos = itemsDisplayerRotator.position;
             pos.x += radius * Mathf.Cos(angle * Mathf.Deg2Rad);
             pos.y += radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-            // TODO : Cambiar a 2D amigo
             pos = transform.rotation * pos;
             itemsDisplayerRotator.GetChild(x).position = pos;
         }
     }
 
-    void CloseUI()
-    {
-        inventoryUI.enabled = false;
-    }
 }
