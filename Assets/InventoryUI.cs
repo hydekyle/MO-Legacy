@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    Inventory Inventory { get => RPGManager.GameState.inventory; set => RPGManager.GameState.inventory = value; }
+    Inventory inventory;
     List<Item> cachedItemList;
 
     public CanvasGroup inventoryCanvasGroup;
@@ -31,9 +31,12 @@ public class InventoryUI : MonoBehaviour
     public float inputDelay = 0.5f;
     float lastTimeInput = -1f;
 
+    Item SelectedItem => cachedItemList[index];
+
     void Start()
     {
-        CloseUI();
+        inventory = RPGManager.GameState.inventory;
+        CloseInventory();
     }
 
     void Update()
@@ -41,24 +44,41 @@ public class InventoryUI : MonoBehaviour
         if (!isInteractable) return;
         if (IsInventoryOpen)
         {
-            if (Input.GetKeyDown(KeyCode.F2)) CloseUI();
-            RotateInventory();
-            if (Time.time < lastTimeInput + inputDelay) return;
-            if (Input.GetAxis("Horizontal") > 0) NextIndex();
-            if (Input.GetAxis("Horizontal") < 0) PreviousIndex();
+            if (Input.GetKeyDown(KeyCode.F)) CloseInventory();
+            if (inventory.Count > 0)
+            {
+                RotateInventory();
+                if (Time.time < lastTimeInput + inputDelay) return;
+                if (Input.GetKeyDown(KeyCode.Space)) UseSelectedItem();
+                if (Input.GetAxis("Horizontal") > 0) NextIndex();
+                if (Input.GetAxis("Horizontal") < 0) PreviousIndex();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.F)) OpenUI();
+        else if (Input.GetKeyDown(KeyCode.F)) OpenInventory();
+    }
+
+    void UseSelectedItem()
+    {
+        SelectedItem.Use();
+        RemoveItem();
+        CloseInventory();
+    }
+
+    void RemoveItem()
+    {
+        if (inventory[SelectedItem] <= 1) inventory.Remove(SelectedItem);
+        else inventory[SelectedItem] = inventory[SelectedItem] - 1;
     }
 
     void RotateInventory()
     {
-        var targetRot = maxAngle / Inventory.Count * index;
+        var targetRot = maxAngle / inventory.Count * index;
         itemsDisplayerRotator.rotation = Quaternion.Lerp(itemsDisplayerRotator.rotation, Quaternion.Euler(Vector3.forward * targetRot), Time.deltaTime * rotationVelocity);
     }
 
     void NextIndex()
     {
-        if (index == Inventory.Count - 1) index = 0;
+        if (index == inventory.Count - 1) index = 0;
         else index++;
         HighlightCurrentIndex();
         lastTimeInput = Time.time;
@@ -66,7 +86,7 @@ public class InventoryUI : MonoBehaviour
 
     void PreviousIndex()
     {
-        if (index == 0) index = Inventory.Count - 1;
+        if (index == 0) index = inventory.Count - 1;
         else index--;
         HighlightCurrentIndex();
         lastTimeInput = Time.time;
@@ -74,22 +94,32 @@ public class InventoryUI : MonoBehaviour
 
     void HighlightCurrentIndex()
     {
-        itemName.text = cachedItemList[index].name;
-        itemCount.text = Inventory[cachedItemList[index]].ToString();
+        itemName.text = SelectedItem.name;
+        itemCount.text = inventory[SelectedItem].ToString();
     }
 
-    void OpenUI()
+    void OpenInventory()
     {
-        _MMFOnOpenUI.PlayFeedbacks();
-        cachedItemList = Inventory.GetItemList();
-        SetItemImages();
-        SetItemPositions();
-        HighlightCurrentIndex();
-        isInteractable = true;
+        foreach (Transform t in itemsDisplayerFollowers) t.gameObject.SetActive(false);
         RPGManager.Instance.SetPlayerFreeze(FreezeType.FreezeAll);
+        index = 0;
+        _MMFOnOpenUI.PlayFeedbacks();
+        cachedItemList = inventory.GetItemList();
+        if (cachedItemList.Count > 0)
+        {
+            SetItemImages();
+            SetItemPositions();
+            HighlightCurrentIndex();
+            isInteractable = true;
+        }
+        else
+        {
+            itemName.text = "No items";
+            itemCount.text = "";
+        }
     }
 
-    void CloseUI()
+    void CloseInventory()
     {
         _MMFOnCloseUI.PlayFeedbacks();
         isInteractable = false;
@@ -109,14 +139,16 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     private void SetItemImages()
     {
-        for (var x = 0; x < Inventory.Count; x++)
+        for (var x = 0; x < inventory.Count; x++)
         {
             // Add slot gameobjects if there are more items than slots
             if (itemsDisplayerRotator.childCount - 1 < x)
             {
                 AddNewSlotForItem();
             }
-            itemsDisplayerFollowers.GetChild(x).GetComponent<Image>().sprite = cachedItemList[x].sprite;
+            var child = itemsDisplayerFollowers.GetChild(x);
+            child.GetComponent<Image>().sprite = cachedItemList[x].sprite;
+            child.gameObject.SetActive(true);
         }
     }
 
@@ -133,6 +165,7 @@ public class InventoryUI : MonoBehaviour
         var newDisplayerFollower = Instantiate(itemsDisplayerFollowers.GetChild(0));
         newDisplayerFollower.transform.SetParent(itemsDisplayerFollowers);
         newDisplayerFollower.GetComponent<MMFollowTarget>().Target = newRotatorItem;
+
     }
 
     /// <summary>
@@ -141,7 +174,7 @@ public class InventoryUI : MonoBehaviour
     void SetItemPositions()
     {
         float angle = 0f;
-        int itemCount = Inventory.Count;
+        int itemCount = inventory.Count;
         for (var x = 0; x < itemCount; x++)
         {
             angle += maxAngle / itemCount;

@@ -17,4 +17,9 @@ public class Item : ScriptableObject
     public bool isUsable;
     [VerticalGroup("Item Data/Stats")]
     public bool isStackable;
+
+    public void Use()
+    {
+
+    }
 }
